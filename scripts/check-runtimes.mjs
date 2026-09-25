@@ -176,15 +176,31 @@ async function checkGit({ url, manifest }) {
 
 const CHECKERS = { npm: checkNpm, pypi: checkPypi, pub: checkPub, go: checkGo, crates: checkCrates, git: checkGit };
 
-/** The command shown must install what the check queries, or the check proves nothing. */
+/**
+ * The command shown must install what the check queries, or the check proves
+ * nothing. Each expected part must be a whole word of the command: a substring
+ * match would let `pip install awesome-python-authx` pass for awesome-python-auth.
+ * A command that pins a version (`npm i name@1.2.3`) must be expected in that
+ * pinned form, as Go already is.
+ */
 function commandDrift({ command, registry }) {
-  const expected =
-    registry.kind === 'go'
-      ? [`${registry.module}@${registry.version}`]
-      : registry.kind === 'git'
-        ? [registry.url, ...(registry.manifest ? [registry.manifest.name] : [])]
-        : [registry.name];
-  const missing = expected.filter((part) => !command.includes(part));
+  let expected;
+  if (registry.kind === 'go') {
+    expected = [`${registry.module}@${registry.version}`];
+  } else if (registry.kind === 'git') {
+    expected = [registry.url];
+    if (registry.manifest) {
+      expected.push(registry.manifest.name);
+      // A manifest in a subdirectory is reached through that directory
+      // (`--git-path packages/awesome_dart_auth`), so the command must name it.
+      const dir = registry.manifest.path.split('/').slice(0, -1).join('/');
+      if (dir) expected.push(dir);
+    }
+  } else {
+    expected = [registry.name];
+  }
+  const words = command.trim().split(/\s+/);
+  const missing = expected.filter((part) => !words.includes(part));
   return missing.length ? `the command does not mention ${missing.join(', ')}` : null;
 }
 
