@@ -13,7 +13,8 @@ import ReactSvg from '@site/static/img/icons/react.svg';
 import FlutterSvg from '@site/static/img/icons/flutter.svg';
 import styles from './styles.module.css';
 
-const ICONS: Record<RuntimeId, ComponentType<SVGProps<SVGSVGElement>>> = {
+// The SVGR type Docusaurus declares for *.svg, `title` included (see below).
+const ICONS: Record<RuntimeId, ComponentType<SVGProps<SVGSVGElement> & { title?: string }>> = {
   node: NodeSvg,
   go: GoSvg,
   lambda: LambdaSvg,
