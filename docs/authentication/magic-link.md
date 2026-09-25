@@ -54,6 +54,23 @@ For native/mobile clients, add `X-Auth-Strategy: bearer` to `/auth/magic-link/ve
 
 ---
 
+## Login mode and 2FA mode
+
+Both endpoints take an optional `mode` in the request body:
+
+| `mode` | `POST /auth/magic-link/send` body | `POST /auth/magic-link/verify` body | What the link does |
+|--------|-----------------------------------|-------------------------------------|--------------------|
+| `'login'` (default) | `{ email, emailLang? }` | `{ token }` | Passwordless login |
+| `'2fa'` | `{ mode: '2fa', tempToken, emailLang? }` | `{ mode: '2fa', token, tempToken }` | Second factor after the password |
+
+:::note Passwordless login and 2FA
+In `mode: 'login'`, `POST /auth/magic-link/verify` issues a session directly and does not ask for the second factor, even for accounts with TOTP enabled.
+
+The second-factor flow is `mode: '2fa'`, after the password: `POST /auth/login` answers `{ requiresTwoFactor: true, tempToken, available2faMethods }`, `POST /auth/magic-link/send` with `{ mode: '2fa', tempToken }` emails a link to that user, and `POST /auth/magic-link/verify` with `{ mode: '2fa', token, tempToken }` issues the session.
+:::
+
+---
+
 ## **Step 1**: Configure AuthConfig
 
 Magic links are enabled by providing a `sendMagicLink` callback (or a `mailer` configuration) in your `AuthConfig`:
@@ -134,12 +151,12 @@ curl -X POST http://localhost:3000/auth/magic-link/verify \
 
 | Method | Path | Description |
 |--------|------|-------------|
-| `POST` | `/auth/magic-link/send` | Generate token + send magic-link email |
-| `POST` | `/auth/magic-link/verify` | Verify token → issue session tokens |
+| `POST` | `/auth/magic-link/send` | Generate token + send magic-link email. Body: `{ email }` for login; `{ mode: '2fa', tempToken }` for the second factor |
+| `POST` | `/auth/magic-link/verify` | Verify token → issue session tokens. Body: `{ token }` for login; `{ mode: '2fa', token, tempToken }` for the second factor |
 
 ## Related
 
 - [Email and password authentication](/docs/authentication/local) — the classic alternative to magic links
 - [Built-in HTTP mailer](/docs/advanced/mailer) — how the magic-link email is delivered
 - [Email verification modes](/docs/advanced/email-verification) — why the first magic-link click verifies the address
-- [TOTP two-factor authentication](/docs/authentication/totp) — add a second factor on top of passwordless login
+- [TOTP two-factor authentication](/docs/authentication/totp) — the authenticator-app second factor after a password login
