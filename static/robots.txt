@@ -1,8 +1,7 @@
 User-agent: *
 Allow: /
 
-# App pages — login-gated or ephemeral, not useful to index
-Disallow: /account
+# App page — ephemeral, not useful to index
 Disallow: /demo-live
 
 # Search result page (Docusaurus client-side search)

@@ -1,7 +1,8 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-// Load wiki/.env so AI_LLM_ENDPOINT etc. are available at dev/build time
+// Load .env so the optional GOOGLE_ANALYTICS_ID is available at dev/build time
+// (the Docker build gets it the same way: .env is part of the build context)
 import * as dotenv from 'dotenv';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
@@ -33,24 +34,6 @@ const LIB_VERSION: string = (() => {
 })();
 const CHANGELOG_URL = 'https://github.com/nik2208/awesome-node-auth/releases';
 
-/**
- * Validated account API origin (protocol + host + port, no path/query/fragment).
- * Returns empty string when ACCOUNT_API_URL is absent or not a valid http/https URL.
- * Using only the URL origin prevents any environment-variable injection into
- * <script src> or inline script attributes at build time.
- */
-const ACCOUNT_API_ORIGIN = (() => {
-  const raw = process.env.ACCOUNT_API_URL ?? '';
-  if (!raw) return '';
-  try {
-    const parsed = new URL(raw);
-    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') return '';
-    return parsed.origin; // e.g. "https://api.example.com"
-  } catch {
-    return '';
-  }
-})();
-
 // JSON-LD structured data — injected into every page <head>
 const JSON_LD_SOFTWARE: object = {
   '@context': 'https://schema.org',
@@ -64,8 +47,8 @@ const JSON_LD_SOFTWARE: object = {
   description:
     `${SITE_DESCRIPTION} ` +
     'Works with Express, NestJS, Next.js and Fastify, and with any database through ' +
-    'a store interface. Also ships real-time SSE, webhooks, API keys, telemetry, ' +
-    'SMS OTP and an MCP server, with Python, Dart and Rust backend ports.',
+    'a store interface. Also ships real-time SSE, webhooks, API keys, telemetry ' +
+    'and SMS OTP, with Python, Dart and Rust backend ports.',
   url: SITE_URL,
   // Free and open source — stated explicitly so it is machine-readable.
   offers: {
@@ -116,41 +99,6 @@ const config: Config = {
 
   // ── Structured data (JSON-LD) injected into every page ─────────────────────
   headTags: [
-    // ── awesome-node-auth global script ──────────────────────────────────────
-    // Load the library's auth.js before React so it patches window.fetch early.
-    // This gives AiAssistant and account.tsx a single shared refresh singleton
-    // (window.AwesomeNodeAuth.refresh()) instead of each firing their own HTTP
-    // refresh request — which with token rotation causes a 401 on the second call.
-    //
-    // The MCP server mounts auth.js in headless mode, which means:
-    //   - auth.js is served at /auth/ui/auth.js
-    //   - the /auth/ui/config endpoint reports { headless: true }
-    //   - auth.js automatically installs no-op onSessionExpired / onLogout /
-    //     onRefreshFail handlers so it never redirects away from Docusaurus pages
-    //
-    // Only injected when ACCOUNT_API_URL is set (cross-domain deployment).
-    // For same-domain deployments the wiki components reach /auth/… via relative
-    // paths and the window-scoped singleton in authRefresh.ts deduplicates calls.
-    ...(ACCOUNT_API_ORIGIN
-      ? ([
-          {
-            tagName: 'script',
-            attributes: {
-              src: `${ACCOUNT_API_ORIGIN}/auth/ui/auth.js`,
-              crossorigin: 'anonymous',
-            },
-          },
-          {
-            tagName: 'script',
-            attributes: {},
-            // Configure the API prefix and enable headless mode immediately.
-            // headless:true installs no-op onSessionExpired/onLogout/onRefreshFail
-            // handlers right away (before AuthService.init() fetches the config) so
-            // auth.js never redirects window.location away from Docusaurus pages.
-            innerHTML: `if(window.AwesomeNodeAuth){window.AwesomeNodeAuth.init({apiPrefix:${JSON.stringify(`${ACCOUNT_API_ORIGIN}/auth`)},headless:true});}`,
-          },
-        ] as object[])
-      : []),
     {
       tagName: 'script',
       attributes: {
@@ -172,15 +120,7 @@ const config: Config = {
     },
   ],
 
-  // Inject AI assistant config from environment variables at build time.
-  // See wiki/.env.example for all available variables.
   customFields: {
-    aiEndpoint: process.env.AI_LLM_ENDPOINT ?? '',
-    aiModel: process.env.AI_MODEL ?? '',
-    aiTemperature: process.env.AI_TEMPERATURE ?? '',
-    aiMaxTokens: process.env.AI_MAX_TOKENS ?? '',
-    aiSystemPrompt: process.env.AI_SYSTEM_PROMPT ?? '',
-    accountApiUrl: ACCOUNT_API_ORIGIN,
     // Read by src/pages/index.tsx so the homepage meta description and the
     // JSON-LD description stay the same string.
     siteDescription: SITE_DESCRIPTION,
@@ -240,14 +180,11 @@ const config: Config = {
           priority: null,
           // Exclude pages that are not useful to index.
           // These are glob patterns matched against the generated route paths,
-          // and the site uses trailingSlash: true — so '/account' alone never
-          // matched '/account/' and both pages kept showing up in the sitemap
-          // while robots.txt disallowed them (a sitemap/robots conflict in
-          // Search Console). Keep every variant listed.
+          // and the site uses trailingSlash: true — so '/demo-live' alone would
+          // not match the generated '/demo-live/' route, and a page that
+          // robots.txt disallows would stay in the sitemap (a sitemap/robots
+          // conflict in Search Console). Keep every variant listed.
           ignorePatterns: [
-            '/account',
-            '/account/',
-            '/account/**',
             '/demo-live',
             '/demo-live/',
             '/demo-live/**',
@@ -315,11 +252,6 @@ const config: Config = {
           label: 'API Reference',
           position: 'left',
         },
-        {
-          to: '/account',
-          label: '👤 My Account',
-          position: 'right',
-        },
         // Version badge — links to GitHub Releases (single source of truth for changelog)
         ...(LIB_VERSION
           ? ([{
@@ -345,7 +277,6 @@ const config: Config = {
             { label: 'Getting Started', to: '/docs/intro' },
             { label: 'Installation & Configuration', to: '/docs/installation' },
             { label: 'API Reference', to: '/docs/api-reference' },
-            { label: 'AI Setup (MCP)', to: '/docs/mcp-server' },
             { label: '▶ Live Demo', to: '/docs/live-demo' },
           ],
         },
