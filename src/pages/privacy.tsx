@@ -5,7 +5,7 @@ export default function PrivacyPage(): React.ReactElement {
   return (
     <Layout
       title="Privacy Policy"
-      description="node-auth library Privacy Policy"
+      description="Privacy Policy of the awesome-lang-auth documentation site"
     >
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '2rem 1rem' }}>
         <h1>Privacy Policy</h1>
@@ -14,8 +14,8 @@ export default function PrivacyPage(): React.ReactElement {
         <h2>1. Who We Are</h2>
         <p>
           This service is operated by <strong>nik2208</strong> and provides the
-          <strong> awesome-node-auth</strong> library — a database-agnostic JWT
-          authentication toolkit for Node.js.
+          documentation of <strong>awesome-lang-auth</strong>, a family of
+          self-hosted authentication libraries for Node.js and other languages.
         </p>
 
         <h2>2. Data We Collect</h2>
@@ -48,7 +48,7 @@ export default function PrivacyPage(): React.ReactElement {
         </ul>
         <p>
           To exercise any of these rights open an issue on{' '}
-          <a href="https://github.com/nik2208/awesome-node-auth/issues" target="_blank" rel="noreferrer">
+          <a href="https://github.com/awesome-lang-auth/awesome-node-auth/issues" target="_blank" rel="noreferrer">
             GitHub
           </a>{' '}
           or contact us directly.
@@ -70,7 +70,7 @@ export default function PrivacyPage(): React.ReactElement {
         <h2>8. Contact</h2>
         <p>
           For privacy-related questions please open an issue on{' '}
-          <a href="https://github.com/nik2208/awesome-node-auth/issues" target="_blank" rel="noreferrer">
+          <a href="https://github.com/awesome-lang-auth/awesome-node-auth/issues" target="_blank" rel="noreferrer">
             GitHub
           </a>.
         </p>
