@@ -10,8 +10,8 @@ sidebar_label: Next.js
 
 A complete working demo is available in the repository — install it and run `npm start` in under a minute.
 
-▶ **[Open live demo in StackBlitz](https://stackblitz.com/github/nik2208/awesome-node-auth/tree/main/demo/nextjs-fullstack?title=awesome-node-auth%20Next.js%20Demo&startScript=start)**  
-Source: [`demo/nextjs-fullstack/`](https://github.com/nik2208/awesome-node-auth/tree/main/demo/nextjs-fullstack)
+▶ **[Open live demo in StackBlitz](https://stackblitz.com/github/awesome-lang-auth/awesome-node-auth/tree/main/demo/nextjs-fullstack?title=awesome-node-auth%20Next.js%20Demo&startScript=start)**  
+Source: [`demo/nextjs-fullstack/`](https://github.com/awesome-lang-auth/awesome-node-auth/tree/main/demo/nextjs-fullstack)
 
 ---
 
@@ -283,7 +283,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
 The App Router request/response model differs from Node.js `http`. Bridging it to an Express router requires a non-trivial adapter. A complete, production-ready implementation is available in:
 
-[`examples/nextjs-integration.example.ts`](https://github.com/nik2208/awesome-node-auth/blob/main/examples/nextjs-integration.example.ts)
+[`examples/nextjs-integration.example.ts`](https://github.com/awesome-lang-auth/awesome-node-auth/blob/main/examples/nextjs-integration.example.ts)
 
 Copy the `runNodeAuthRouter` function and the `GET`/`POST`/`DELETE` exports from that file into `app/api/auth/[...auth]/route.ts`.
 

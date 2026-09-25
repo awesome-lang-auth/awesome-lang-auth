@@ -9,12 +9,12 @@ sidebar_label: Dart
 # Dart Integration — `awesome-dart-auth`
 
 :::tip Official Dart backend library
-For Dart backends, use [`awesome-dart-auth`](https://github.com/nik2208/awesome-dart-auth).
+For Dart backends, use [`awesome-dart-auth`](https://github.com/awesome-lang-auth/awesome-dart-auth).
 :::
 
 ## Resources
 
-- GitHub repository: [nik2208/awesome-dart-auth](https://github.com/nik2208/awesome-dart-auth)
+- GitHub repository: [awesome-lang-auth/awesome-dart-auth](https://github.com/awesome-lang-auth/awesome-dart-auth)
 
 ## Related
 

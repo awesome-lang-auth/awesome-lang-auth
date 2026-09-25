@@ -10,8 +10,8 @@ sidebar_label: Express
 
 Express is the primary target framework for awesome-node-auth. The auth router is Express-compatible out of the box.
 
-▶ **[Open live demo in StackBlitz](https://stackblitz.com/github/nik2208/awesome-node-auth/tree/main/demo?title=awesome-node-auth%20Express%20Demo&startScript=start)**  
-Source: [`demo/`](https://github.com/nik2208/awesome-node-auth/tree/main/demo)
+▶ **[Open live demo in StackBlitz](https://stackblitz.com/github/awesome-lang-auth/awesome-node-auth/tree/main/demo/express-vanilla?title=awesome-node-auth%20Express%20Demo&startScript=start)**  
+Source: [`demo/express-vanilla/`](https://github.com/awesome-lang-auth/awesome-node-auth/tree/main/demo/express-vanilla)
 
 ---
 

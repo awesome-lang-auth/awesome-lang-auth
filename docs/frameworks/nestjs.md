@@ -10,8 +10,8 @@ sidebar_label: NestJS
 
 A complete, production-ready NestJS integration with `AuthModule.forRoot()`, `JwtAuthGuard`, `@CurrentUser()` decorator, and an admin panel.
 
-▶ **[Open live demo in StackBlitz](https://stackblitz.com/github/nik2208/awesome-node-auth/tree/main/demo/nestjs-fullstack?title=awesome-node-auth%20NestJS%20Demo&startScript=start)**  
-Source: [`demo/nestjs-fullstack/`](https://github.com/nik2208/awesome-node-auth/tree/main/demo/nestjs-fullstack)
+▶ **[Open live demo in StackBlitz](https://stackblitz.com/github/awesome-lang-auth/awesome-node-auth/tree/main/demo/nestjs-fullstack?title=awesome-node-auth%20NestJS%20Demo&startScript=start)**  
+Source: [`demo/nestjs-fullstack/`](https://github.com/awesome-lang-auth/awesome-node-auth/tree/main/demo/nestjs-fullstack)
 
 ---
 

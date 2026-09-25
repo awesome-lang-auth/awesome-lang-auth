@@ -9,12 +9,12 @@ sidebar_label: Rust
 # Rust Integration — `awesome-rust-auth`
 
 :::tip Official Rust backend library
-For Rust backends, use [`awesome-rust-auth`](https://github.com/nik2208/awesome-rust-auth).
+For Rust backends, use [`awesome-rust-auth`](https://github.com/awesome-lang-auth/awesome-rust-auth).
 :::
 
 ## Resources
 
-- GitHub repository: [nik2208/awesome-rust-auth](https://github.com/nik2208/awesome-rust-auth)
+- GitHub repository: [awesome-lang-auth/awesome-rust-auth](https://github.com/awesome-lang-auth/awesome-rust-auth)
 
 ## Related
 

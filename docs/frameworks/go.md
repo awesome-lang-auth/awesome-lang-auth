@@ -9,12 +9,12 @@ sidebar_label: Go
 # Go Integration — `awesome-go-auth`
 
 :::tip Official Go backend library
-For Go backends, use [`awesome-go-auth`](https://github.com/nik2208/awesome-go-auth).
+For Go backends, use [`awesome-go-auth`](https://github.com/awesome-lang-auth/awesome-go-auth).
 :::
 
 ## Resources
 
-- GitHub repository: [nik2208/awesome-go-auth](https://github.com/nik2208/awesome-go-auth)
+- GitHub repository: [awesome-lang-auth/awesome-go-auth](https://github.com/awesome-lang-auth/awesome-go-auth)
 
 ## Related
 

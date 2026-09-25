@@ -386,5 +386,5 @@ AwesomeNodeAuth.init({
 ---
 
 :::note Angular
-Angular has a dedicated library (`awesome-node-auth-angular`) with Guards, Interceptors, and a typed `AuthService` — use that instead of `auth.js` for Angular projects.
+Angular has a dedicated library ([`ng-awesome-node-auth`](/docs/frameworks/ng-awesome-node-auth)) with Guards, Interceptors, and a typed `AuthService` — use that instead of `auth.js` for Angular projects.
 :::

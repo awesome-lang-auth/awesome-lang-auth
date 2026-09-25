@@ -50,6 +50,10 @@ dependencies:
 flutter pub get
 ```
 
+:::note Upcoming package name
+The package moves to `awesome_flutter_auth`. Until that package is published, depend on `awesome_node_auth_flutter` as above. The source lives in [awesome-lang-auth/awesome-flutter-auth](https://github.com/awesome-lang-auth/awesome-flutter-auth).
+:::
+
 ---
 
 ## Setup
