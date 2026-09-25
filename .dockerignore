@@ -7,5 +7,5 @@ build
 .docusaurus
 
 # .env stays in the context on purpose: docusaurus.config.ts loads it with
-# dotenv, and it still feeds values that are not compose build args
-# (AI_SYSTEM_PROMPT, GOOGLE_ANALYTICS_ID). Exclude it once those are gone.
+# dotenv, and it is the only way GOOGLE_ANALYTICS_ID reaches the build (there
+# are no compose build args). Exclude it once that is gone.
