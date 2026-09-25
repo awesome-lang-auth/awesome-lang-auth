@@ -13,7 +13,7 @@ node-auth supports two complementary webhook directions:
 | Direction | Purpose | Config |
 |-----------|---------|--------|
 | **Outgoing** | Library fires → external service | `IWebhookStore` + `WebhookSender` |
-| **Inbound (dynamic)** | External service fires → library executes script | `IWebhookStore.findByProvider` + vm sandbox |
+| **Inbound (dynamic)** | External service fires → library executes script | `IWebhookStore.findByProvider` + a script run through `node:vm` |
 
 Both are managed from the **Admin Panel → Webhooks tab**.
 
@@ -156,7 +156,11 @@ Beyond the static `onWebhook` callback, the tools router supports a **governance
 1. Developers expose service methods as injectable actions with `@webhookAction`.
 2. Administrators globally enable/disable actions in the **Control → Webhook Actions** panel.
 3. Each inbound webhook config in the **Webhooks** tab is assigned a `jsScript` + an `allowedActions` subset.
-4. When `POST /tools/webhook/:provider` fires, the script runs in a Node.js `vm` sandbox with only the intersection of globally-enabled **and** per-webhook-allowed actions.
+4. When `POST /tools/webhook/:provider` fires, the script runs through Node.js `node:vm`, and its `actions` object holds only the intersection of globally-enabled **and** per-webhook-allowed actions.
+
+:::danger Inbound scripts run with the server's privileges
+`node:vm` is not a security mechanism, so the script is **not sandboxed**: it runs with the privileges of the server process and can run arbitrary code on the server. Only fully trusted operators may write a `jsScript`, whether through the webhook store or the admin console. The `allowedActions` intersection only decides which functions the script receives in `actions`. The 5-second timeout bounds only the synchronous part of the script, not its asynchronous work. See [awesome-node-auth#10](https://github.com/awesome-lang-auth/awesome-node-auth/issues/10).
+:::
 
 ### Execution flow
 
@@ -166,7 +170,7 @@ sequenceDiagram
     participant Router as Tools Router
     participant Store as IWebhookStore
     participant Sett as ISettingsStore
-    participant VM as vm sandbox
+    participant VM as Node.js vm module
     participant Bus as AuthEventBus
 
     Ext->>Router: POST /tools/webhook/:provider
@@ -176,7 +180,7 @@ sequenceDiagram
     Sett-->>Router: { enabledWebhookActions }
     Router->>Router: intersect(enabledWebhookActions, allowedActions) → actions{}
     Router->>VM: runInContext(jsScript, { body, actions, result:null })
-    VM-->>Router: sandbox.result = { event, data }
+    VM-->>Router: result = { event, data }
     Router->>Bus: track(event, data)
     Router-->>Ext: 200 { ok: true }
 ```
@@ -209,7 +213,7 @@ class SubscriptionService {
   }
 }
 
-// Bind the instance so the vm sandbox can call it
+// Bind the instance so inbound scripts can call it
 const svc = new SubscriptionService();
 ActionRegistry.register({ id: 'subscription.cancel',     label: 'Cancel subscription', category: 'Billing', description: '', fn: svc.cancel.bind(svc) });
 ActionRegistry.register({ id: 'subscription.notifyUser', label: 'Notify user',          category: 'Billing', description: '', dependsOn: ['subscription.cancel'], fn: svc.notifyUser.bind(svc) });
@@ -233,7 +237,7 @@ In the **Webhooks** tab click **+ Register webhook**, switch to **Inbound (dynam
 | Provider name | `stripe` | Matches `:provider` in `POST /tools/webhook/stripe` |
 | Events | `*` | (optional) event filter |
 | Allowed actions | ☑ Cancel subscription | Subset of globally-enabled actions |
-| JavaScript | see below | Script body executed in the vm sandbox |
+| JavaScript | see below | Script body, run through `node:vm` with the server's privileges |
 
 **Example script:**
 
@@ -259,10 +263,10 @@ if (body.type === 'customer.subscription.deleted') {
 
 | Rule | Behaviour |
 |------|-----------|
-| Action not in `enabledWebhookActions` | Excluded from sandbox even if in `allowedActions` |
-| Action's `dependsOn` not enabled | Excluded from sandbox |
+| Action not in `enabledWebhookActions` | Not passed to the script in `actions`, even if in `allowedActions` |
+| Action's `dependsOn` not enabled | Not passed to the script in `actions` |
 | Script throws at runtime | Error logged, HTTP 200 returned (no crash) |
-| Script exceeds 5 s timeout | Error logged, HTTP 200 returned |
+| Synchronous part of the script exceeds 5 s | Error logged, HTTP 200 returned; asynchronous work is not bounded |
 | `result` not set / null | Webhook silently acknowledged, no event emitted |
 
 ### `WebhookConfig` new fields
@@ -270,8 +274,8 @@ if (body.type === 'customer.subscription.deleted') {
 | Field | Type | Description |
 |-------|------|-------------|
 | `provider` | `string` | Inbound provider name (matches `:provider` param) |
-| `allowedActions` | `string[]` | Action IDs permitted for this webhook's sandbox |
-| `jsScript` | `string` | JS body executed inside the vm sandbox |
+| `allowedActions` | `string[]` | Action IDs this webhook's script receives in `actions` |
+| `jsScript` | `string` | JS body run through `node:vm` with the server's privileges; only trusted operators may write it |
 
 ### `IWebhookStore` new method
 
@@ -293,7 +297,7 @@ enabledWebhookActions?: string[];
 /** Provides findByProvider() for dynamic inbound webhook lookup. */
 webhookStore?: IWebhookStore;
 
-/** Reads enabledWebhookActions for the vm sandbox. */
+/** Reads enabledWebhookActions for inbound webhook scripts. */
 settingsStore?: ISettingsStore;
 ```
 

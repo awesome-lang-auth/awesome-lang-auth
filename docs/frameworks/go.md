@@ -21,4 +21,4 @@ For Go backends, use [`awesome-go-auth`](https://github.com/awesome-lang-auth/aw
 - [Rust backend authentication](/docs/frameworks/rust) — the other systems-language port
 - [Python FastAPI authentication](/docs/frameworks/python) — the FastAPI port of the same model
 - [Framework integrations](/docs/frameworks) — every supported backend and client
-- [Auth API endpoints reference](/docs/api-reference/endpoints) — the contract all ports implement
+- [Auth API endpoints reference](/docs/api-reference/endpoints) — the contract the ports target
