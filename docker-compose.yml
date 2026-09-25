@@ -29,7 +29,11 @@ services:
     profiles: ["npm"]
     container_name: docusaurus_docs
     networks:
-      - awesome-node-auth
+      awesome-node-auth:
+        # DNS name of the service before the move (docusaurus-wiki): anything
+        # that resolved it on this network keeps working after the swap.
+        aliases:
+          - docusaurus-wiki
     ports:
       - "${PORT:-3000}:80" # container port 80 → host port 3000 by default
 
@@ -40,7 +44,9 @@ services:
     profiles: ["traefik"]
     container_name: docusaurus_docs
     networks:
-      - awesome-node-auth
+      awesome-node-auth:
+        aliases:
+          - docusaurus-wiki # see site-npm
     ports:
       - "${PORT:-3000}:80" # container port 80 → host port 3000 by default
     labels:
