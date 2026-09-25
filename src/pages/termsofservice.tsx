@@ -9,7 +9,7 @@ export default function TermsOfServicePage(): React.ReactElement {
     >
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '2rem 1rem' }}>
         <h1>Terms of Service</h1>
-        <p style={{ color: '#64748b' }}>Last updated: {new Date().getFullYear()}</p>
+        <p style={{ color: '#64748b' }}>Last updated: 2026-09-25</p>
 
         <h2>1. Acceptance of Terms</h2>
         <p>

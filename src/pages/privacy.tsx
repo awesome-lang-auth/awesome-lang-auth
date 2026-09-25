@@ -9,7 +9,7 @@ export default function PrivacyPage(): React.ReactElement {
     >
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '2rem 1rem' }}>
         <h1>Privacy Policy</h1>
-        <p style={{ color: '#64748b' }}>Last updated: {new Date().getFullYear()}</p>
+        <p style={{ color: '#64748b' }}>Last updated: 2026-09-25</p>
 
         <h2>1. Who We Are</h2>
         <p>
