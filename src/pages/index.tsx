@@ -10,11 +10,12 @@ import { CLIENTS, MATURITY_INFO, SERVERS, type Runtime, type RuntimeId } from '@
 import styles from './index.module.css';
 
 // Homepage <title>, written out instead of Layout's `title` prop (which would
-// append " | awesome-node-auth"). At most 65 characters, keyword first.
+// append the site title, " | awesome-lang-auth"). At most 65 characters,
+// keyword first.
 const HOME_TITLE = 'Multi-language self-hosted authentication | awesome-lang-auth';
 
-// The home's own meta and og description (the sitewide one in
-// docusaurus.config.ts still describes the Node.js library).
+// The home's own meta and og description (the sitewide SITE_DESCRIPTION in
+// docusaurus.config.ts feeds the JSON-LD and llms.txt).
 const HOME_DESCRIPTION =
   'awesome-lang-auth: self-hosted authentication for Node.js, Go, AWS Lambda, Python, Rust ' +
   'and Dart servers, with Angular, React and Flutter clients. MIT.';

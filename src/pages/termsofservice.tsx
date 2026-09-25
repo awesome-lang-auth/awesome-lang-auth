@@ -5,7 +5,7 @@ export default function TermsOfServicePage(): React.ReactElement {
   return (
     <Layout
       title="Terms of Service"
-      description="node-auth library Terms of Service"
+      description="Terms of Service of the awesome-lang-auth documentation site"
     >
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '2rem 1rem' }}>
         <h1>Terms of Service</h1>
@@ -13,15 +13,16 @@ export default function TermsOfServicePage(): React.ReactElement {
 
         <h2>1. Acceptance of Terms</h2>
         <p>
-          By accessing or using the <strong>awesome-node-auth</strong> documentation
+          By accessing or using the <strong>awesome-lang-auth</strong> documentation
           site and its associated services ("Service") you agree to be bound by
           these Terms of Service. If you do not agree, please do not use the Service.
         </p>
 
         <h2>2. Description of Service</h2>
         <p>
-          The Service provides documentation and a live demo for
-          the <strong>awesome-node-auth</strong> library — a database-agnostic JWT
+          The Service provides documentation for the <strong>awesome-lang-auth</strong>{' '}
+          family of self-hosted authentication libraries, and a live demo of its
+          Node.js library, <strong>awesome-node-auth</strong> — a database-agnostic JWT
           authentication toolkit for Node.js. The library can be integrated into any
           Node.js application and configured via code.
         </p>
@@ -38,7 +39,7 @@ export default function TermsOfServicePage(): React.ReactElement {
         <p>
           The awesome-node-auth library is open-source software released
           under the{' '}
-          <a href="https://github.com/nik2208/awesome-node-auth/blob/main/LICENSE" target="_blank" rel="noreferrer">
+          <a href="https://github.com/awesome-lang-auth/awesome-node-auth/blob/main/LICENSE" target="_blank" rel="noreferrer">
             MIT License
           </a>. The documentation and associated content are copyright © nik2208.
         </p>
@@ -86,7 +87,7 @@ export default function TermsOfServicePage(): React.ReactElement {
         <h2>10. Contact</h2>
         <p>
           For questions about these Terms please open an issue on{' '}
-          <a href="https://github.com/nik2208/awesome-node-auth/issues" target="_blank" rel="noreferrer">
+          <a href="https://github.com/awesome-lang-auth/awesome-node-auth/issues" target="_blank" rel="noreferrer">
             GitHub
           </a>.
         </p>
