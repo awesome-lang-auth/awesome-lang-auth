@@ -95,7 +95,10 @@ const config: Config = {
   projectName: 'awesome-node-auth',
   trailingSlash: true,
 
-  onBrokenLinks: 'warn',
+  // A broken link, anchor or Markdown link fails the build rather than
+  // shipping: the log alone is too easy to miss.
+  onBrokenLinks: 'throw',
+  onBrokenAnchors: 'throw',
 
   // ── Structured data (JSON-LD) injected into every page ─────────────────────
   headTags: [
@@ -134,7 +137,7 @@ const config: Config = {
   markdown: {
     mermaid: true,
     hooks: {
-      onBrokenMarkdownLinks: 'warn',
+      onBrokenMarkdownLinks: 'throw',
     }
   },
 
@@ -159,6 +162,12 @@ const config: Config = {
         addMdExtension: false,
         excludeImports: true,
         removeDuplicateHeadings: true,
+        // The docs link each other with root-relative paths (/docs/...): name
+        // the origin they resolve against, since this file is read on its own.
+        fullRootContent:
+          `This file contains all documentation content of ${SITE_URL}/ in a ` +
+          'single document following the llmstxt.org standard. Links that start ' +
+          `with / are relative to ${SITE_URL}.`,
         // Sidebar order (sidebars.ts), as file paths relative to docs/.
         // Pages that are not in the sidebar follow at the end.
         includeOrder: [
