@@ -1,0 +1,339 @@
+:root {
+  --ifm-color-primary: #00a87a;
+  --ifm-color-primary-dark: #00936b;
+  --ifm-color-primary-darker: #008b65;
+  --ifm-color-primary-darkest: #007252;
+  --ifm-color-primary-light: #00bd89;
+  --ifm-color-primary-lighter: #00c591;
+  --ifm-color-primary-lightest: #00daa4;
+  --ifm-code-font-size: 90%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 168, 122, 0.1);
+}
+
+[data-theme='light'] {
+  --ifm-background-color: #ffffff;
+  --ifm-background-surface-color: #f8fafc;
+  --ifm-navbar-link-color: #1f2937;
+  --ifm-navbar-link-hover-color: #00a87a;
+  /* UI Text Colors */
+  --site-color-muted: #64748b;
+  --site-color-emphasis: #374151;
+  --site-color-github-btn: #ffffff;
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #00c896;
+  --ifm-color-primary-dark: #00b386;
+  --ifm-color-primary-darker: #00a87e;
+  --ifm-color-primary-darkest: #008f69;
+  --ifm-color-primary-light: #1dd9a8;
+  --ifm-color-primary-lighter: #2ee0b0;
+  --ifm-color-primary-lightest: #5eeac4;
+  --ifm-background-color: #0e1623;
+  --ifm-background-surface-color: #162033;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 200, 150, 0.12);
+  --ifm-navbar-background-color: #0e1623;
+  --ifm-navbar-link-color: #c8d6e8;
+  --ifm-navbar-link-hover-color: #00c896;
+  --ifm-navbar-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+  --ifm-menu-color: #abb9cf;
+  /* UI Text Colors */
+  --site-color-muted: #94a3b8;
+  --site-color-emphasis: #e2e8f0;
+  --site-color-github-btn: #1f2937;
+}
+
+[data-theme='dark'] .navbar {
+  background-color: #0e1623 !important;
+  border-bottom: 1px solid rgba(0, 200, 150, 0.12);
+}
+
+[data-theme='dark'] .navbar__title {
+  color: #00c896 !important;
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.5px;
+}
+
+[data-theme='dark'] .navbar__link {
+  color: #c8d6e8 !important;
+}
+
+[data-theme='dark'] .navbar__link:hover,
+[data-theme='dark'] .navbar__link--active {
+  color: #00c896 !important;
+}
+
+/* ── Footer — Premium Minimalist ─────────────────────────────────── */
+
+.footer {
+  padding: 4rem 2.5rem 2.5rem !important;
+  background: #06101c !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+
+[data-theme='light'] .footer {
+  background: #f5f7fa !important;
+  border-top-color: rgba(0, 0, 0, 0.07) !important;
+}
+
+/* Limit the inner width and center it */
+.footer__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Link columns in a clean row */
+.footer__links {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  gap: 3rem !important;
+  flex-wrap: wrap !important;
+  max-width: 1100px;
+  margin: 0 auto 3.5rem !important;
+}
+
+.footer__col {
+  flex: 1 1 140px;
+  min-width: 120px;
+}
+
+/* Column headers */
+.footer__title {
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+  color: var(--ifm-color-primary) !important;
+  margin-bottom: 1.25rem !important;
+  opacity: 0.9;
+}
+
+/* Links */
+.footer__items {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.footer__item {
+  margin-bottom: 0.7rem !important;
+}
+
+.footer__link-item {
+  font-size: 0.875rem !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  text-decoration: none !important;
+  transition: color 0.18s ease !important;
+  line-height: 1.5;
+}
+
+[data-theme='light'] .footer__link-item {
+  color: rgba(0, 0, 0, 0.55) !important;
+}
+
+.footer__link-item:hover {
+  color: var(--ifm-color-primary) !important;
+  text-decoration: none !important;
+}
+
+/* Bottom bar */
+.footer__bottom {
+  max-width: 1100px;
+  margin: 0 auto !important;
+  padding-top: 2rem !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+[data-theme='light'] .footer__bottom {
+  border-top-color: rgba(0, 0, 0, 0.07) !important;
+}
+
+.footer__copyright {
+  font-size: 0.8rem !important;
+  color: rgba(255, 255, 255, 0.3) !important;
+  margin: 0 !important;
+}
+
+[data-theme='light'] .footer__copyright {
+  color: rgba(0, 0, 0, 0.38) !important;
+}
+
+/* ── Mobile ─────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .footer {
+    padding: 3rem 1.5rem 2rem !important;
+  }
+
+  .footer__links {
+    flex-direction: column !important;
+    gap: 2rem !important;
+    align-items: flex-start !important;
+    margin-bottom: 2.5rem !important;
+  }
+
+  .footer__col {
+    width: 100% !important;
+  }
+
+  .footer__bottom {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+    padding-top: 1.5rem !important;
+  }
+}
+
+
+@media (min-width: 1280px) {
+  body {
+    transition: padding-right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  body.ai-panel-open {
+    padding-right: var(--ai-panel-width) !important;
+  }
+}
+
+/* ── Canvas background — light & dark mode support ────────────────────────── */
+.auth-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  display: block;
+}
+
+[data-theme='light'] .auth-canvas {
+  filter: invert(1) hue-rotate(180deg) brightness(1.05);
+}
+
+html,
+body,
+.main-wrapper {
+  background-color: transparent !important;
+}
+
+[data-theme='dark'] .navbar {
+  background-color: rgba(14, 22, 35, 0.92) !important;
+}
+
+[data-theme='dark'] .navbar:not(.navbar-sidebar--show) {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ── Mobile Sidebar — dark mode fix ──────────────────────────────── */
+/* The global `body { background: transparent }` rule breaks the sidebar.
+   We must explicitly restore a solid background for every sidebar sub-element.
+   These rules fire in dark mode only; light mode retains Docusaurus defaults. */
+
+[data-theme='dark'] .navbar-sidebar,
+[data-theme='dark'] .navbar-sidebar__backdrop,
+[data-theme='dark'] .navbar-sidebar__item,
+[data-theme='dark'] .navbar-sidebar__items {
+  background: #0e1623 !important;
+}
+
+[data-theme='dark'] .navbar-sidebar {
+  color: #c8d6e8 !important;
+  box-shadow: 2px 0 24px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme='dark'] .navbar-sidebar__backdrop {
+  background: rgba(0, 0, 0, 0.65) !important;
+}
+
+[data-theme='dark'] .navbar-sidebar .navbar__brand .navbar__title {
+  color: #00c896 !important;
+}
+
+[data-theme='dark'] .navbar-sidebar .menu__link {
+  color: #c8d6e8 !important;
+}
+
+[data-theme='dark'] .navbar-sidebar .menu__link:hover,
+[data-theme='dark'] .navbar-sidebar .menu__link--active {
+  color: #00c896 !important;
+  background: rgba(0, 200, 150, 0.08) !important;
+}
+
+/* Sidebar and article surfaces get a frosted glass effect */
+.theme-doc-sidebar-container {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+article {
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+[data-theme='dark'] .theme-doc-sidebar-container {
+  background: rgba(14, 22, 35, 0.88) !important;
+}
+
+[data-theme='dark'] article {
+  background: rgba(14, 22, 35, 0.88);
+}
+
+[data-theme='light'] .theme-doc-sidebar-container {
+  background: rgba(255, 255, 255, 0.88) !important;
+}
+
+[data-theme='light'] article {
+  background: rgba(255, 255, 255, 0.88);
+}
+
+/* ── Navbar: GitHub icon link ─────────────────────────────────────────────── */
+.navbar-github-link {
+  display: inline-flex;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23ffffff' d='M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 22px 22px;
+}
+
+[data-theme='light'] .navbar-github-link {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%231f2937' d='M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z'/%3E%3C/svg%3E");
+}
+
+.navbar-github-link:hover {
+  opacity: 0.75;
+}
+
+/* ── Navbar: version badge ───────────────────────────────────────────────── */
+.navbar-version-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  height: 22px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none !important;
+  color: #fff !important;
+  background-color: var(--ifm-color-primary);
+  transition: background-color 0.15s;
+  line-height: 1;
+}
+
+.navbar-version-badge:hover {
+  background-color: var(--ifm-color-primary-dark);
+  color: #fff !important;
+}
