@@ -2,7 +2,7 @@
 id: mcp-server
 title: The hosted MCP server is being retired
 description: >-
-  The hosted awesome-node-auth MCP server is being retired. Everything it offered is in the regular docs: quickstart, framework guides and the backend ports.
+  The hosted awesome-node-auth MCP server is being retired. The library's documentation is unaffected: getting started, framework guides and the configuration reference.
 ---
 
 # The hosted MCP server is being retired
@@ -12,8 +12,7 @@ through an API key, is being retired. The account area of this site, where those
 created, has already been removed.
 
 The library is not affected: awesome-node-auth, its backend ports and its client libraries
-work exactly as before, and everything the MCP server gave access to is in the regular
-documentation:
+work exactly as before, and they are fully documented here:
 
 - **[Getting Started](/docs/intro)** — install awesome-node-auth, mount the auth router,
   choose a store and pick an authentication recipe.
