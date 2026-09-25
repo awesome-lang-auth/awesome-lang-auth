@@ -1,0 +1,11 @@
+# Keep the Docker build context equal to the old wiki/ folder: no git
+# metadata, and nothing the image builds itself. node_modules from the host
+# would also overwrite the ones `npm ci` installs in the Alpine builder.
+.git
+node_modules
+build
+.docusaurus
+
+# .env stays in the context on purpose: docusaurus.config.ts loads it with
+# dotenv, and it still feeds values that are not compose build args
+# (AI_SYSTEM_PROMPT, GOOGLE_ANALYTICS_ID). Exclude it once those are gone.
