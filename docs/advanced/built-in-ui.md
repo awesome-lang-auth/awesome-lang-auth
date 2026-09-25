@@ -34,7 +34,7 @@ sidebar_label: Built-in UI
 
 ```typescript
 import express from 'express';
-import { AuthConfigurator, buildUiRouter } from 'awesome-node-auth';
+import { AuthConfigurator, buildUiRouter } from '@awesome-lang-auth/node';
 import { MyUserStore } from './my-user-store';
 
 const app = express();
@@ -126,7 +126,7 @@ const auth = new AuthConfigurator(
 For **real-time** theme changes without restarting the server (e.g. from an admin panel), implement `ISettingsStore` and pass it to `buildUiRouter`:
 
 ```typescript
-import { ISettingsStore } from 'awesome-node-auth';
+import { ISettingsStore } from '@awesome-lang-auth/node';
 
 class MongoSettingsStore implements ISettingsStore {
   async getSettings() {
@@ -491,7 +491,7 @@ sequenceDiagram
 Pass a `templateStore` to `buildUiRouter`:
 
 ```typescript
-import { buildUiRouter, MemoryTemplateStore } from 'awesome-node-auth';
+import { buildUiRouter, MemoryTemplateStore } from '@awesome-lang-auth/node';
 
 const templateStore = new MemoryTemplateStore();
 

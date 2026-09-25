@@ -111,7 +111,7 @@ Because `awesome-node-auth` uses interfaces for storage, you can mix-and-match t
 If you have a single server and want maximum speed with zero database overhead for session checks, implement `ISessionStore` using a `Map`:
 
 ```typescript
-import { ISessionStore, SessionInfo } from 'awesome-node-auth';
+import { ISessionStore, SessionInfo } from '@awesome-lang-auth/node';
 import crypto from 'node:crypto';
 
 class InMemorySessionStore implements ISessionStore {
@@ -227,7 +227,7 @@ For high-traffic applications, a single database can become a bottleneck when `c
 This strategy gives you **persistence** (database) and **speed** (Redis). Use it as a drop-in `ISessionStore` when deploying with `checkOn: 'allcalls'` and multiple server instances.
 
 ```typescript
-import type { ISessionStore, SessionInfo } from 'awesome-node-auth';
+import type { ISessionStore, SessionInfo } from '@awesome-lang-auth/node';
 import type { Redis } from 'ioredis';
 import type { Knex } from 'knex';
 

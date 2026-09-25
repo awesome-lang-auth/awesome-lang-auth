@@ -67,7 +67,7 @@ https://yourapp.com/auth/oauth/<provider>/callback
   <TabItem value="google" label="Google" default>
 
 ```typescript
-import { GoogleStrategy, AuthConfig } from 'awesome-node-auth';
+import { GoogleStrategy, AuthConfig } from '@awesome-lang-auth/node';
 
 class MyGoogleStrategy extends GoogleStrategy {
   constructor(config: AuthConfig) {
@@ -98,7 +98,7 @@ const googleStrategy = new MyGoogleStrategy(config);
   <TabItem value="github" label="GitHub">
 
 ```typescript
-import { GithubStrategy, AuthConfig } from 'awesome-node-auth';
+import { GithubStrategy, AuthConfig } from '@awesome-lang-auth/node';
 
 class MyGithubStrategy extends GithubStrategy {
   constructor(config: AuthConfig) {
@@ -127,7 +127,7 @@ const githubStrategy = new MyGithubStrategy(config);
   <TabItem value="custom" label="Custom Provider">
 
 ```typescript
-import { GenericOAuthStrategy } from 'awesome-node-auth';
+import { GenericOAuthStrategy } from '@awesome-lang-auth/node';
 
 const discordStrategy = new GenericOAuthStrategy({
   name: 'discord',

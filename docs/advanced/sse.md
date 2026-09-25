@@ -84,7 +84,7 @@ First, ensure SSE is enabled when creating your `AuthTools` instance, and that t
 
 ```typescript
 import express from 'express';
-import { AuthConfigurator, AuthTools, createToolsRouter } from 'awesome-node-auth';
+import { AuthConfigurator, AuthTools, createToolsRouter } from '@awesome-lang-auth/node';
 
 const app = express();
 app.use(express.json());

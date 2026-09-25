@@ -39,7 +39,7 @@ Choose the authentication strategy that fits your application. You can combine m
 ## **Step 1**: Install
 
 ```bash
-npm install awesome-node-auth
+npm install @awesome-lang-auth/node
 ```
 
 ---
@@ -49,7 +49,7 @@ npm install awesome-node-auth
 node-auth is database-agnostic. You connect it to your database by implementing the `IUserStore` interface:
 
 ```typescript
-import { IUserStore, BaseUser } from 'awesome-node-auth';
+import { IUserStore, BaseUser } from '@awesome-lang-auth/node';
 
 export class MyUserStore implements IUserStore {
   async findByEmail(email: string): Promise<BaseUser | null> {
@@ -90,7 +90,7 @@ See [Database Integration](/docs/database) for ready-to-use implementations for 
 
 ```typescript
 import express from 'express';
-import { AuthConfigurator } from 'awesome-node-auth';
+import { AuthConfigurator } from '@awesome-lang-auth/node';
 import { MyUserStore } from './my-user-store';
 
 const app = express();
@@ -113,7 +113,7 @@ const auth = new AuthConfigurator(
 ```typescript
 // auth.module.ts
 import { Module } from '@nestjs/common';
-import { AuthConfigurator } from 'awesome-node-auth';
+import { AuthConfigurator } from '@awesome-lang-auth/node';
 import { MyUserStore } from './my-user-store';
 
 const auth = new AuthConfigurator(
@@ -138,7 +138,7 @@ export class AuthModule {}
 
 ```typescript
 // lib/auth.ts
-import { AuthConfigurator } from 'awesome-node-auth';
+import { AuthConfigurator } from '@awesome-lang-auth/node';
 import { MyUserStore } from './my-user-store';
 
 export const auth = new AuthConfigurator(

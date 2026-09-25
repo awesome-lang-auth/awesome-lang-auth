@@ -92,7 +92,7 @@ sequenceDiagram
 The local strategy is active by default — no extra configuration needed. Just create your `AuthConfigurator`:
 
 ```typescript
-import { AuthConfigurator } from 'awesome-node-auth';
+import { AuthConfigurator } from '@awesome-lang-auth/node';
 
 const auth = new AuthConfigurator(config, userStore);
 ```

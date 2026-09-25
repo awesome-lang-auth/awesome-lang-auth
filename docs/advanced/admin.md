@@ -73,8 +73,8 @@ sequenceDiagram
 
 ```typescript
 import express from 'express';
-import { AuthConfigurator, createAdminRouter } from 'awesome-node-auth';
-import type { AdminOptions, AdminAccessPolicy } from 'awesome-node-auth';
+import { AuthConfigurator, createAdminRouter } from '@awesome-lang-auth/node';
+import type { AdminOptions, AdminAccessPolicy } from '@awesome-lang-auth/node';
 
 const app = express();
 app.use(express.json());
@@ -218,7 +218,7 @@ Each tab is activated automatically when you pass the corresponding store:
 The Control tab lets admins change runtime auth policy. Implement `ISettingsStore`:
 
 ```typescript
-import { ISettingsStore, AuthSettings } from 'awesome-node-auth';
+import { ISettingsStore, AuthSettings } from '@awesome-lang-auth/node';
 
 // Simple in-memory implementation (replace with DB in production)
 let settings: Partial<AuthSettings> = {};
@@ -289,7 +289,7 @@ All admin endpoints require a valid JWT access token in `Authorization: Bearer <
 The Users tab requires a `listUsers` method on your `IUserStore`. Add it to your implementation:
 
 ```typescript
-import { IUserStore, BaseUser } from 'awesome-node-auth';
+import { IUserStore, BaseUser } from '@awesome-lang-auth/node';
 
 export class MyUserStore implements IUserStore {
   // ... other methods ...
@@ -372,7 +372,7 @@ sequenceDiagram
 #### Step 1 — Expose service methods as injectable actions
 
 ```typescript
-import { webhookAction, ActionRegistry } from 'awesome-node-auth';
+import { webhookAction, ActionRegistry } from '@awesome-lang-auth/node';
 
 class BillingService {
   @webhookAction({
@@ -462,7 +462,7 @@ When your application registers `@webhookAction`-decorated methods, the **Contro
 Actions are grouped by category. If an action declares `dependsOn`, its toggle is disabled until all its dependencies are enabled.
 
 ```typescript
-import { webhookAction, ActionRegistry } from 'awesome-node-auth';
+import { webhookAction, ActionRegistry } from '@awesome-lang-auth/node';
 
 class BillingService {
   @webhookAction({
@@ -509,7 +509,7 @@ The **Email & UI** tab is enabled by passing an `ITemplateStore` to `createAdmin
 - **UI translations** — per-page `data-i18n` key/value grid used to localise the built-in login/register/forgot-password pages
 
 ```typescript
-import { MemoryTemplateStore } from 'awesome-node-auth';
+import { MemoryTemplateStore } from '@awesome-lang-auth/node';
 
 const templateStore = new MemoryTemplateStore(); // swap for a DB implementation in production
 

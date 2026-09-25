@@ -13,7 +13,7 @@ sidebar_label: Multi-Tenancy
 ## Interface
 
 ```typescript
-import { ITenantStore, Tenant } from 'awesome-node-auth';
+import { ITenantStore, Tenant } from '@awesome-lang-auth/node';
 
 export class MyTenantStore implements ITenantStore {
   async createTenant(data: Omit<Tenant, 'id'>): Promise<Tenant> { /* ... */ }

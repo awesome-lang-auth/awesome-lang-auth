@@ -13,7 +13,7 @@ sidebar_label: Roles & Permissions
 ## Interface
 
 ```typescript
-import { IRolesPermissionsStore } from 'awesome-node-auth';
+import { IRolesPermissionsStore } from '@awesome-lang-auth/node';
 
 export class MyRbacStore implements IRolesPermissionsStore {
   async addRoleToUser(userId: string, role: string, tenantId?: string): Promise<void> { /* ... */ }

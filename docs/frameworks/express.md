@@ -57,7 +57,7 @@ sequenceDiagram
 ```typescript
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { AuthConfigurator } from 'awesome-node-auth';
+import { AuthConfigurator } from '@awesome-lang-auth/node';
 import { MyUserStore } from './stores/user-store';
 
 const app = express();

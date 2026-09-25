@@ -23,7 +23,7 @@ All capabilities are opt-in. Unused features have zero runtime overhead.
 ## Quick start
 
 ```typescript
-import { AuthTools, AuthEventBus, createToolsRouter } from 'awesome-node-auth';
+import { AuthTools, AuthEventBus, createToolsRouter } from '@awesome-lang-auth/node';
 
 const bus = new AuthEventBus();
 

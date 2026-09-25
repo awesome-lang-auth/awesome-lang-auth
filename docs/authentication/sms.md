@@ -114,7 +114,7 @@ curl -X POST http://localhost:3000/auth/sms/verify \
 The `SmsService` is exported and can be used directly in your own code:
 
 ```typescript
-import { SmsService } from 'awesome-node-auth';
+import { SmsService } from '@awesome-lang-auth/node';
 
 const smsService = new SmsService({
   endpoint:  'https://sms.yourprovider.com/send',

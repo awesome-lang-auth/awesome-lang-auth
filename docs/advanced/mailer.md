@@ -37,7 +37,7 @@ sequenceDiagram
 ## Configuration
 
 ```typescript
-import { AuthConfigurator } from 'awesome-node-auth';
+import { AuthConfigurator } from '@awesome-lang-auth/node';
 
 const auth = new AuthConfigurator({
   accessTokenSecret:  process.env.ACCESS_TOKEN_SECRET!,
@@ -170,7 +170,7 @@ const auth = new AuthConfigurator({
 The `MailerService` class is exported and can be used directly in your own services:
 
 ```typescript
-import { MailerService } from 'awesome-node-auth';
+import { MailerService } from '@awesome-lang-auth/node';
 
 const mailer = new MailerService({
   endpoint:    'https://api.brevo.com/v3/smtp/email',
@@ -219,8 +219,8 @@ When a `templateStore` is provided and a template exists in the store for the re
 ### Setup
 
 ```typescript
-import { AuthConfigurator, MemoryTemplateStore } from 'awesome-node-auth';
-import type { ITemplateStore } from 'awesome-node-auth';
+import { AuthConfigurator, MemoryTemplateStore } from '@awesome-lang-auth/node';
+import type { ITemplateStore } from '@awesome-lang-auth/node';
 
 // Use the built-in in-memory store (good for development / testing)
 const templateStore: ITemplateStore = new MemoryTemplateStore();
@@ -289,7 +289,7 @@ Missing variables or translation keys are rendered as `[key]` so you can spot ga
 For production, implement `ITemplateStore` against your database (the interface is the same regardless of DB):
 
 ```typescript
-import type { ITemplateStore, MailTemplate, UiTranslation } from 'awesome-node-auth';
+import type { ITemplateStore, MailTemplate, UiTranslation } from '@awesome-lang-auth/node';
 
 export class MongoTemplateStore implements ITemplateStore {
   constructor(private readonly db: Db) {}

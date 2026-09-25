@@ -30,7 +30,7 @@ All existing HS256 (cookie / bearer) behaviour is preserved and the two modes ca
 ## Configuration
 
 ```typescript
-import { createAuthRouter } from 'awesome-node-auth';
+import { createAuthRouter } from '@awesome-lang-auth/node';
 
 const auth = createAuthRouter({
   // …standard config…
@@ -145,7 +145,7 @@ curl https://auth.myplatform.com/.well-known/jwks.json
 A downstream service validates incoming tokens against the IdP's JWKS endpoint:
 
 ```typescript
-import { JwksService, TokenService } from 'awesome-node-auth';
+import { JwksService, TokenService } from '@awesome-lang-auth/node';
 
 const tokenService = new TokenService();
 const jwksClient = JwksService.createRemoteClient(
@@ -175,7 +175,7 @@ const payload = await tokenService.verifyWithJwks(
 `JwksService.generateKeypair()` is a convenience helper for step 1:
 
 ```typescript
-import { JwksService } from 'awesome-node-auth';
+import { JwksService } from '@awesome-lang-auth/node';
 
 const { privateKey, publicKey } = JwksService.generateKeypair();
 ```

@@ -34,7 +34,7 @@ sequenceDiagram
 ## Setup
 
 ```typescript
-import { AuthEventBus } from 'awesome-node-auth';
+import { AuthEventBus } from '@awesome-lang-auth/node';
 
 const bus = new AuthEventBus();
 ```
@@ -42,7 +42,7 @@ const bus = new AuthEventBus();
 Pass `bus` to `AuthConfigurator` to have the auth router publish events automatically:
 
 ```typescript
-import { AuthConfigurator } from 'awesome-node-auth';
+import { AuthConfigurator } from '@awesome-lang-auth/node';
 
 const auth = new AuthConfigurator(config, userStore, { eventBus: bus });
 app.use('/auth', auth.router());
@@ -53,7 +53,7 @@ app.use('/auth', auth.router());
 ## Publishing events
 
 ```typescript
-import { AuthEventBus, AuthEventNames } from 'awesome-node-auth';
+import { AuthEventBus, AuthEventNames } from '@awesome-lang-auth/node';
 
 bus.publish(AuthEventNames.AUTH_LOGIN_SUCCESS, {
   userId: 'user-123',

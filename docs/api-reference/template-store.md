@@ -80,7 +80,7 @@ export interface ITemplateStore {
 `MemoryTemplateStore` is a zero-dependency in-memory implementation ready for development and testing:
 
 ```typescript
-import { MemoryTemplateStore } from 'awesome-node-auth';
+import { MemoryTemplateStore } from '@awesome-lang-auth/node';
 
 const templateStore = new MemoryTemplateStore();
 ```
@@ -94,7 +94,7 @@ Replace it with a database-backed implementation in production (see [Mailer → 
 Pass `templateStore` to **both** `AuthConfigurator` and `createAdminRouter`:
 
 ```typescript
-import { AuthConfigurator, createAdminRouter, MemoryTemplateStore, buildUiRouter } from 'awesome-node-auth';
+import { AuthConfigurator, createAdminRouter, MemoryTemplateStore, buildUiRouter } from '@awesome-lang-auth/node';
 
 const templateStore = new MemoryTemplateStore();
 

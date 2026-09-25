@@ -19,7 +19,7 @@ You can provide an implementation of the `ISseDistributor` interface to synchron
 ### 1. Implement the Distributor (e.g. Redis)
 
 ```typescript
-import { ISseDistributor } from 'awesome-node-auth';
+import { ISseDistributor } from '@awesome-lang-auth/node';
 import { createClient } from 'redis';
 
 export class RedisSseDistributor implements ISseDistributor {

@@ -22,7 +22,7 @@ const auth = new AuthConfigurator(config, userStore);
 ## Example Implementation
 
 ```typescript
-import { IUserStore, BaseUser } from 'awesome-node-auth';
+import { IUserStore, BaseUser } from '@awesome-lang-auth/node';
 
 export class InMemoryUserStore implements IUserStore {
   private users: BaseUser[] = [];

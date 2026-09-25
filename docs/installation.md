@@ -17,25 +17,29 @@ import TabItem from '@theme/TabItem';
   <TabItem value="npm" label="npm" default>
 
 ```bash
-npm install awesome-node-auth
+npm install @awesome-lang-auth/node
 ```
 
   </TabItem>
   <TabItem value="yarn" label="yarn">
 
 ```bash
-yarn add awesome-node-auth
+yarn add @awesome-lang-auth/node
 ```
 
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 
 ```bash
-pnpm add awesome-node-auth
+pnpm add @awesome-lang-auth/node
 ```
 
   </TabItem>
 </Tabs>
+
+:::note Package name
+The library is published on npm as `@awesome-lang-auth/node`, formerly published as `awesome-node-auth`. Imports use the same name as the package: `import { AuthConfigurator } from '@awesome-lang-auth/node'`.
+:::
 
 :::info TypeScript
 node-auth is written in TypeScript and ships with its own type declarations — no `@types/` package needed.
@@ -48,7 +52,7 @@ node-auth is written in TypeScript and ships with its own type declarations — 
 Create an `AuthConfig` object and pass it to `AuthConfigurator` along with your `IUserStore` implementation:
 
 ```typescript
-import { AuthConfigurator, AuthConfig } from 'awesome-node-auth';
+import { AuthConfigurator, AuthConfig } from '@awesome-lang-auth/node';
 import { MyUserStore } from './my-user-store';
 
 const config: AuthConfig = {
@@ -104,7 +108,7 @@ app.listen(3000);
 ```typescript
 import express from 'express';
 import rateLimit from 'express-rate-limit';
-import { AuthConfigurator, AuthConfig } from 'awesome-node-auth';
+import { AuthConfigurator, AuthConfig } from '@awesome-lang-auth/node';
 import { MyUserStore } from './stores/user-store';
 import { MySessionStore } from './stores/session-store';
 import { MyRbacStore } from './stores/rbac-store';

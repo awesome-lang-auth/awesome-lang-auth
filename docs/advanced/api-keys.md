@@ -41,7 +41,7 @@ sequenceDiagram
 ### 1. Implement `IApiKeyStore`
 
 ```typescript
-import { IApiKeyStore, ApiKey } from 'awesome-node-auth';
+import { IApiKeyStore, ApiKey } from '@awesome-lang-auth/node';
 
 export class MyApiKeyStore implements IApiKeyStore {
   async save(key: ApiKey): Promise<void> {
@@ -65,7 +65,7 @@ export class MyApiKeyStore implements IApiKeyStore {
 ### 2. Create a key with `ApiKeyService`
 
 ```typescript
-import { ApiKeyService } from 'awesome-node-auth';
+import { ApiKeyService } from '@awesome-lang-auth/node';
 
 const apiKeyService = new ApiKeyService();
 const { rawKey, record } = await apiKeyService.createKey(apiKeyStore, {
@@ -83,7 +83,7 @@ console.log('Your key (shown once):', rawKey);
 ### 3. Protect routes with `createApiKeyMiddleware`
 
 ```typescript
-import { createApiKeyMiddleware } from 'awesome-node-auth';
+import { createApiKeyMiddleware } from '@awesome-lang-auth/node';
 
 app.use(
   '/tools',

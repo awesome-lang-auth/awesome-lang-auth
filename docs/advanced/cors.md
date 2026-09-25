@@ -50,7 +50,7 @@ Pass the `cors` option to `RouterOptions`:
 
 ```typescript
 import express from 'express';
-import { AuthConfigurator } from 'awesome-node-auth';
+import { AuthConfigurator } from '@awesome-lang-auth/node';
 import { MyUserStore } from './my-user-store';
 
 const app = express();

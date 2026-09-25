@@ -57,7 +57,7 @@ sequenceDiagram
 ### 1. Implement `IWebhookStore`
 
 ```typescript
-import { IWebhookStore, WebhookConfig } from 'awesome-node-auth';
+import { IWebhookStore, WebhookConfig } from '@awesome-lang-auth/node';
 
 export class MyWebhookStore implements IWebhookStore {
   async findByEvent(event: string, tenantId?: string): Promise<WebhookConfig[]> {
@@ -106,7 +106,7 @@ Webhooks are now dispatched automatically whenever `tools.track()` is called.
 Every outgoing request includes an `X-Webhook-Signature: sha256=<hex>` header. Verify it on the receiving server using the shared secret:
 
 ```typescript
-import { WebhookSender } from 'awesome-node-auth';
+import { WebhookSender } from '@awesome-lang-auth/node';
 
 const sender = new WebhookSender();
 
@@ -184,7 +184,7 @@ sequenceDiagram
 ### 1. Register actions with `@webhookAction`
 
 ```typescript
-import { webhookAction, ActionRegistry } from 'awesome-node-auth';
+import { webhookAction, ActionRegistry } from '@awesome-lang-auth/node';
 
 class SubscriptionService {
   @webhookAction({

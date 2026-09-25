@@ -20,7 +20,7 @@ As long as you implement `IUserStore`, awesome-node-auth works with any storage 
 ## IUserStore Interface
 
 ```typescript
-import { IUserStore, BaseUser } from 'awesome-node-auth';
+import { IUserStore, BaseUser } from '@awesome-lang-auth/node';
 
 export class MyUserStore implements IUserStore {
   // Core CRUD
