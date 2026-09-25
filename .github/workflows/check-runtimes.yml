@@ -1,0 +1,26 @@
+# Checks that every install command the home page shows still works
+# (src/data/runtimes.ts), by asking npm, PyPI, pub.dev, crates.io, the Go
+# module proxy and GitHub. Weekly and on demand only: a registry outage must
+# never fail a build or a deploy.
+name: Check runtime commands
+
+on:
+  schedule:
+    - cron: '23 6 * * 1' # Mondays, 06:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-runtimes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # runtimes.ts is loaded with Node's TypeScript type stripping.
+          node-version: 24
+      - name: Query the registries
+        run: npm run check-runtimes
