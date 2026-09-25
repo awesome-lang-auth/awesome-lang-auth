@@ -25,8 +25,12 @@ const ICONS: Record<RuntimeId, ComponentType<SVGProps<SVGSVGElement>>> = {
   flutter: FlutterSvg,
 };
 
-/** Decorative runtime logo in the runtime's color; the text next to it names it. */
+/**
+ * Decorative runtime logo in the runtime's color; the text next to it names it.
+ * title="" drops the SVG's own <title> (SVGR titleProp), so the icons add no
+ * tooltips and no stray text to the page.
+ */
 export default function RuntimeIcon({ id, className }: { id: RuntimeId; className?: string }): ReactNode {
   const Icon = ICONS[id];
-  return <Icon className={clsx(styles.icon, className)} data-rt={id} aria-hidden="true" focusable="false" />;
+  return <Icon className={clsx(styles.icon, className)} data-rt={id} title="" aria-hidden="true" focusable="false" />;
 }

@@ -246,12 +246,12 @@
     gap: 16px;
   }
 
+  /* Stacked columns: the same arrow, turned upright (its box stays 120x24). */
   .mixWireLine {
-    width: 24px;
-    height: 56px;
+    width: 120px;
+    height: 24px;
     transform: rotate(90deg);
-    transform-origin: center;
-    margin: -16px 0;
+    margin: 40px 0 44px;
   }
 }
 
