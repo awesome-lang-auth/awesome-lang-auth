@@ -1,0 +1,614 @@
+/* ── Hero: transparent over the AuthBackground canvas ─────────────── */
+.hero {
+  --hero-accent: #00c896;
+  --hero-muted: #7a9ab8;
+  --hero-surface: rgba(14, 22, 35, 0.72);
+  --hero-border: rgba(255, 255, 255, 0.12);
+  /* A damped spring (overshoot ~16%), with a cubic-bezier fallback. */
+  --spring: linear(0, 0.059 3.3%, 0.206 6.7%, 0.397 10%, 0.596 13.3%, 0.779 16.7%, 0.931 20%, 1.044 23.3%, 1.117 26.7%, 1.154 30%, 1.163 33.3%, 1.151 36.7%, 1.125 40%, 1.094 43.3%, 1.061 46.7%, 1.032 50%, 1.008 53.3%, 0.991 56.7%, 0.98 60%, 0.974 63.3%, 0.974 66.7%, 0.976 70%, 0.98 73.3%, 0.986 76.7%, 0.991 80%, 0.995 83.3%, 0.999 86.7%, 1.002 90%, 1.003 93.3%, 1.004 96.7%, 1);
+  color: #ffffff;
+  display: flex;
+  text-align: center;
+  position: relative;
+  min-height: calc(100vh - 60px);
+  padding: 56px 16px 64px;
+  border-bottom: 1px solid rgba(0, 200, 150, 0.15);
+}
+
+[data-theme='light'] .hero {
+  --hero-accent: #00936b;
+  --hero-muted: #5b7690;
+  --hero-surface: rgba(255, 255, 255, 0.86);
+  --hero-border: rgba(15, 40, 70, 0.14);
+  color: #152f5a;
+}
+
+.heroInner {
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  background: rgba(0, 200, 150, 0.12);
+  border: 1px solid rgba(0, 200, 150, 0.3);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 22px;
+  letter-spacing: 0.3px;
+  color: #00c896;
+}
+
+[data-theme='light'] .heroBadge {
+  color: #00785a;
+  border-color: rgba(0, 120, 90, 0.3);
+}
+
+/* ── Title: awesome-${lang}-auth ──────────────────────────────────── */
+.title {
+  /* 20 characters at most ("awesome-flutter-auth"): sized to fit a 320px screen. */
+  font-size: clamp(25px, 7.2vw, 64px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  margin: 0 0 16px;
+  white-space: nowrap;
+}
+
+.slot {
+  position: relative;
+  display: inline-block;
+  white-space: pre;
+  /* Clip sideways only (while the width springs), never the ascenders. */
+  clip-path: inset(-0.45em -0.03em);
+}
+
+.slot[data-motion='spring'] {
+  transition: width 760ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-timing-function: var(--spring);
+}
+
+.slot[data-motion='follow'] {
+  transition: width 70ms linear;
+}
+
+.view {
+  display: inline-block;
+  transition: opacity 300ms ease-out 90ms, filter 300ms ease-out 90ms;
+}
+
+.view[data-fx='out'] {
+  opacity: 0;
+  filter: blur(8px);
+  transition: opacity 170ms ease-in, filter 170ms ease-in;
+}
+
+/* Everything visible in the slot is generated content: the H1's DOM text never changes. */
+.word::before,
+.brace::before,
+.noise::before,
+.measure::before {
+  content: attr(data-t);
+}
+
+.word {
+  color: var(--hero-accent);
+}
+
+.brace {
+  color: var(--hero-muted);
+}
+
+.noise {
+  color: var(--hero-accent);
+  opacity: 0.5;
+}
+
+.caret {
+  display: inline-block;
+  width: 0.07em;
+  height: 0.9em;
+  /* 0.12em in all: LangTitle's CARET_ROOM widens the slot by as much. */
+  margin: 0 0 0 0.05em;
+  vertical-align: -0.08em;
+  background: var(--hero-accent);
+  animation: caretBlink 1.05s steps(1) infinite;
+}
+
+@keyframes caretBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.measure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  white-space: pre;
+  pointer-events: none;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.subtitle {
+  max-width: 680px;
+  margin: 0 auto 28px;
+  font-size: 19px;
+  line-height: 1.55;
+  color: #a3b8cc;
+}
+
+[data-theme='light'] .subtitle {
+  color: #3c5a72;
+}
+
+/* ── Chips ────────────────────────────────────────────────────────── */
+.picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 0 auto 16px;
+}
+
+.chipRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.chipRowLabel {
+  min-width: 58px;
+  text-align: right;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--hero-muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 7px 4px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--hero-border);
+  background: var(--hero-surface);
+  color: #c8d6e8;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, color 0.2s;
+}
+
+.chip:hover {
+  border-color: rgba(0, 200, 150, 0.55);
+  color: #ffffff;
+}
+
+.chipActive,
+.chipActive:hover {
+  border-color: var(--hero-accent);
+  background: rgba(0, 200, 150, 0.16);
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 200, 150, 0.14);
+}
+
+[data-theme='light'] .chip {
+  color: #1f2f44;
+}
+
+[data-theme='light'] .chip:hover {
+  border-color: rgba(0, 120, 90, 0.6);
+  color: #0b2a22;
+}
+
+[data-theme='light'] .chipActive,
+[data-theme='light'] .chipActive:hover {
+  background: rgba(0, 168, 122, 0.12);
+  color: #0b2a22;
+  box-shadow: 0 0 0 3px rgba(0, 168, 122, 0.14);
+}
+
+.chip:focus-visible,
+.pauseButton:focus-visible,
+.cardLink:focus-visible {
+  outline: 2px solid var(--hero-accent);
+  outline-offset: 2px;
+}
+
+.chipIcon {
+  font-size: 16px;
+}
+
+.chipName {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 13px;
+}
+
+.chip .badge {
+  padding: 2px 5px;
+  font-size: 9px;
+}
+
+/* Maturity badges: the same colors on the chips, the cards and the ecosystem. */
+.badge {
+  display: inline-block;
+  padding: 3px 6px;
+  border-radius: 999px;
+  border: 1px solid;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge[data-maturity='stable'] {
+  color: #34d399;
+  border-color: rgba(52, 211, 153, 0.45);
+  background: rgba(52, 211, 153, 0.1);
+}
+
+.badge[data-maturity='beta'] {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.45);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.badge[data-maturity='preview'] {
+  color: #b4a0ff;
+  border-color: rgba(180, 160, 255, 0.45);
+  background: rgba(180, 160, 255, 0.1);
+}
+
+.badge[data-maturity='early'] {
+  color: #f69acb;
+  border-color: rgba(246, 154, 203, 0.45);
+  background: rgba(246, 154, 203, 0.1);
+}
+
+[data-theme='light'] .badge[data-maturity='stable'] {
+  color: #047857;
+  border-color: rgba(4, 120, 87, 0.4);
+  background: rgba(4, 120, 87, 0.08);
+}
+
+[data-theme='light'] .badge[data-maturity='beta'] {
+  color: #92400e;
+  border-color: rgba(146, 64, 14, 0.4);
+  background: rgba(217, 119, 6, 0.1);
+}
+
+[data-theme='light'] .badge[data-maturity='preview'] {
+  color: #5b21b6;
+  border-color: rgba(91, 33, 182, 0.35);
+  background: rgba(91, 33, 182, 0.07);
+}
+
+[data-theme='light'] .badge[data-maturity='early'] {
+  color: #9d174d;
+  border-color: rgba(157, 23, 77, 0.35);
+  background: rgba(157, 23, 77, 0.07);
+}
+
+.pauseButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 31px;
+  height: 31px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--hero-border);
+  background: var(--hero-surface);
+  color: #c8d6e8;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.pauseButton svg {
+  width: 13px;
+  height: 13px;
+}
+
+.pauseButton:hover {
+  border-color: rgba(0, 200, 150, 0.6);
+  color: #ffffff;
+}
+
+[data-theme='light'] .pauseButton {
+  color: #1f2f44;
+}
+
+[data-theme='light'] .pauseButton:hover {
+  color: #0b2a22;
+}
+
+.pauseButtonIdle {
+  visibility: hidden;
+}
+
+/* ── Runtime card: every card is rendered, stacked in one grid cell ─
+   The stack is as tall as the tallest card, so rotating never moves
+   the buttons below it. Only the active card is visible and focusable. */
+.cardStack {
+  display: grid;
+  max-width: 680px;
+  margin: 0 auto 30px;
+  text-align: left;
+}
+
+.card {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+  padding: 16px 18px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 200, 150, 0.25);
+  background: var(--hero-surface);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.cardActive {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.25s ease, visibility 0s;
+}
+
+[data-theme='light'] .card {
+  border-color: rgba(0, 120, 90, 0.25);
+  box-shadow: 0 8px 24px rgba(15, 40, 70, 0.08);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cardIcon {
+  font-size: 22px;
+}
+
+.cardPkg {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 15px;
+  font-weight: 700;
+  color: #e0eaf5;
+}
+
+[data-theme='light'] .cardPkg {
+  color: #13263d;
+}
+
+.cardVersion {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 12.5px;
+  color: var(--hero-muted);
+}
+
+.cardLabel {
+  margin-left: auto;
+  font-size: 12.5px;
+  color: var(--hero-muted);
+}
+
+.command {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 7px 7px 14px;
+  border-radius: 9px;
+  border: 1px solid rgba(0, 200, 150, 0.2);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+[data-theme='light'] .command {
+  border-color: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.035);
+}
+
+.command code {
+  flex: 1;
+  min-width: 0;
+  padding: 5px 0 0;
+  border: none;
+  background: none;
+  color: var(--hero-accent);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 14px;
+  line-height: 1.5;
+  /* Long commands (dart) wrap instead of hiding behind a scrollbar. */
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.prompt {
+  color: var(--hero-muted);
+  user-select: none;
+}
+
+.feature {
+  margin: 12px 0 10px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #a9bdd2;
+}
+
+[data-theme='light'] .feature {
+  color: #3c5a72;
+}
+
+.note {
+  color: var(--hero-muted);
+}
+
+.cardLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--hero-accent) !important;
+}
+
+/* ── Calls to action ──────────────────────────────────────────────── */
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+
+.ctaPrimary,
+.ctaSecondary,
+.ctaLive {
+  padding: 13px 30px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  text-decoration: none !important;
+}
+
+.ctaPrimary {
+  background: #00a87a !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(0, 168, 122, 0.35) !important;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s !important;
+}
+
+.ctaPrimary:hover {
+  transform: translateY(-2px);
+  background: #008b65 !important;
+  box-shadow: 0 6px 20px rgba(0, 168, 122, 0.5) !important;
+}
+
+.ctaSecondary {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #c8d6e8 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  transition: background 0.2s !important;
+}
+
+.ctaSecondary:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+[data-theme='light'] .ctaSecondary {
+  background: rgba(255, 255, 255, 0.7) !important;
+  color: #1f2937 !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-theme='light'] .ctaSecondary:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #0f172a !important;
+}
+
+.ctaLive {
+  background: rgba(0, 200, 150, 0.08) !important;
+  color: #00c896 !important;
+  border: 1px solid rgba(0, 200, 150, 0.4) !important;
+  transition: background 0.2s, border-color 0.2s !important;
+}
+
+.ctaLive:hover {
+  background: rgba(0, 200, 150, 0.18) !important;
+  border-color: rgba(0, 200, 150, 0.7) !important;
+  color: #00e8b0 !important;
+}
+
+[data-theme='light'] .ctaLive {
+  color: #00785a !important;
+  border-color: rgba(0, 120, 90, 0.45) !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* ── Small screens ────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .hero {
+    padding: 36px 16px 48px;
+  }
+
+  .subtitle {
+    font-size: 17px;
+  }
+
+  .chipRow {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .chipRowLabel {
+    min-width: 0;
+    text-align: center;
+  }
+
+  .cardLabel {
+    display: none;
+  }
+
+  .ctas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* ── Reduced motion: no rotation (see index.tsx), and no transitions ─ */
+@media (prefers-reduced-motion: reduce) {
+  .slot,
+  .view,
+  .card,
+  .chip {
+    transition: none !important;
+  }
+
+  .caret {
+    animation: none;
+  }
+}

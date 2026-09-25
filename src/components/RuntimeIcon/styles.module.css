@@ -1,0 +1,29 @@
+/* One color per runtime, with a darker variant where the light theme needs contrast. */
+.icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  display: inline-block;
+  fill: currentColor;
+  color: var(--rt-color, currentColor);
+}
+
+.icon[data-rt='node'] { --rt-color: #6cc24a; }
+.icon[data-rt='go'] { --rt-color: #00add8; }
+.icon[data-rt='lambda'] { --rt-color: #ff9900; }
+.icon[data-rt='python'] { --rt-color: #5a9fd4; }
+.icon[data-rt='rust'] { --rt-color: #dea584; }
+.icon[data-rt='dart'] { --rt-color: #13b9fd; }
+.icon[data-rt='angular'] { --rt-color: #f0506e; }
+.icon[data-rt='react'] { --rt-color: #61dafb; }
+.icon[data-rt='flutter'] { --rt-color: #47c5fb; }
+
+[data-theme='light'] .icon[data-rt='node'] { --rt-color: #3c873a; }
+[data-theme='light'] .icon[data-rt='go'] { --rt-color: #007d9c; }
+[data-theme='light'] .icon[data-rt='lambda'] { --rt-color: #d97d00; }
+[data-theme='light'] .icon[data-rt='python'] { --rt-color: #3776ab; }
+[data-theme='light'] .icon[data-rt='rust'] { --rt-color: #a0522d; }
+[data-theme='light'] .icon[data-rt='dart'] { --rt-color: #0175c2; }
+[data-theme='light'] .icon[data-rt='angular'] { --rt-color: #dd0031; }
+[data-theme='light'] .icon[data-rt='react'] { --rt-color: #087ea4; }
+[data-theme='light'] .icon[data-rt='flutter'] { --rt-color: #02569b; }
