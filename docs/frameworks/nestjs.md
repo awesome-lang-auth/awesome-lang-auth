@@ -10,8 +10,8 @@ sidebar_label: NestJS
 
 A complete, production-ready NestJS integration with `AuthModule.forRoot()`, `JwtAuthGuard`, `@CurrentUser()` decorator, and an admin panel.
 
-▶ **[Open live demo in StackBlitz](https://stackblitz.com/github/nik2208/awesome-node-auth/tree/main/demo/nestjs-fullstack?title=awesome-node-auth%20NestJS%20Demo&startScript=start)**  
-Source: [`demo/nestjs-fullstack/`](https://github.com/nik2208/awesome-node-auth/tree/main/demo/nestjs-fullstack)
+▶ **[Open live demo in StackBlitz](https://stackblitz.com/github/awesome-lang-auth/awesome-node-auth/tree/main/demo/nestjs-fullstack?title=awesome-node-auth%20NestJS%20Demo&startScript=start)**  
+Source: [`demo/nestjs-fullstack/`](https://github.com/awesome-lang-auth/awesome-node-auth/tree/main/demo/nestjs-fullstack)
 
 ---
 
@@ -56,7 +56,7 @@ sequenceDiagram
 ```typescript
 import 'reflect-metadata';
 import { Module, Global, DynamicModule, Provider } from '@nestjs/common';
-import { AuthConfigurator, AuthConfig, IUserStore } from 'awesome-node-auth';
+import { AuthConfigurator, AuthConfig, IUserStore } from '@awesome-lang-auth/node';
 
 export const AUTH_CONFIGURATOR = 'AUTH_CONFIGURATOR';
 
@@ -83,7 +83,7 @@ export class AuthModule {
 
 ```typescript
 import { Injectable, CanActivate, ExecutionContext, Inject } from '@nestjs/common';
-import { AuthConfigurator } from 'awesome-node-auth';
+import { AuthConfigurator } from '@awesome-lang-auth/node';
 import { Request, Response } from 'express';
 
 @Injectable()
@@ -124,7 +124,7 @@ export const CurrentUser = createParamDecorator(
 
 ```typescript
 import { Controller, All, Req, Res, Next, Inject } from '@nestjs/common';
-import { AuthConfigurator, AuthError, PasswordService } from 'awesome-node-auth';
+import { AuthConfigurator, AuthError, PasswordService } from '@awesome-lang-auth/node';
 import { Request, Response, NextFunction } from 'express';
 
 @Controller('auth')
@@ -181,7 +181,7 @@ export class ProfileController {
 import { Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { createAdminRouter } from 'awesome-node-auth';
+import { createAdminRouter } from '@awesome-lang-auth/node';
 import * as path from 'path';
 
 const userStore = new MyUserStore();   // your IUserStore implementation

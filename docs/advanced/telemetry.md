@@ -34,7 +34,7 @@ sequenceDiagram
 ### 1. Implement `ITelemetryStore`
 
 ```typescript
-import { ITelemetryStore, TelemetryEvent, TelemetryFilter } from 'awesome-node-auth';
+import { ITelemetryStore, TelemetryEvent, TelemetryFilter } from '@awesome-lang-auth/node';
 
 export class MyTelemetryStore implements ITelemetryStore {
   async save(event: TelemetryEvent): Promise<void> {

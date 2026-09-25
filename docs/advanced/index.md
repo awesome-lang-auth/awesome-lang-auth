@@ -20,7 +20,7 @@ sidebar_position: 6
 | [User Metadata](/docs/advanced/user-metadata) | `IUserMetadataStore` | Arbitrary per-user key/value data |
 | [Account Linking](/docs/advanced/account-linking) | `ILinkedAccountsStore` | Link multiple OAuth providers to one account |
 | [Admin Panel](/docs/advanced/admin) | `createAdminRouter()` | Built-in admin dashboard (HTML UI + REST API) |
-| [Dynamic Inbound Webhooks](/docs/advanced/webhooks#dynamic-inbound-execution) | `@webhookAction`, `ActionRegistry`, `vm` sandbox | Govern and execute JS scripts on inbound webhooks via the admin UI |
+| [Dynamic Inbound Webhooks](/docs/advanced/webhooks#dynamic-inbound-execution) | `@webhookAction`, `ActionRegistry`, `node:vm` | Govern and execute JS scripts on inbound webhooks via the admin UI; scripts run with the server's privileges, so only trusted operators may write them |
 | [Bearer Token](/docs/advanced/bearer-token) | — | Mobile/native clients: token storage, interceptors |
 | [Mailer (HTTP)](/docs/advanced/mailer) | `MailerConfig` | Built-in HTTP email transport with bilingual templates |
 | [Email Verification](/docs/advanced/email-verification) | `emailVerificationMode` | `none` / `lazy` / `strict` verification enforcement |

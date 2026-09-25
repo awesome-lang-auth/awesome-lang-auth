@@ -19,7 +19,7 @@ npm install -D @types/pg
 
 ```typescript
 import { Pool } from 'pg';
-import { IUserStore, BaseUser } from 'awesome-node-auth';
+import { IUserStore, BaseUser } from '@awesome-lang-auth/node';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 

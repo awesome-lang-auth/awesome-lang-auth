@@ -10,8 +10,8 @@ sidebar_label: Next.js
 
 A complete working demo is available in the repository — install it and run `npm start` in under a minute.
 
-▶ **[Open live demo in StackBlitz](https://stackblitz.com/github/nik2208/awesome-node-auth/tree/main/demo/nextjs-fullstack?title=awesome-node-auth%20Next.js%20Demo&startScript=start)**  
-Source: [`demo/nextjs-fullstack/`](https://github.com/nik2208/awesome-node-auth/tree/main/demo/nextjs-fullstack)
+▶ **[Open live demo in StackBlitz](https://stackblitz.com/github/awesome-lang-auth/awesome-node-auth/tree/main/demo/nextjs-fullstack?title=awesome-node-auth%20Next.js%20Demo&startScript=start)**  
+Source: [`demo/nextjs-fullstack/`](https://github.com/awesome-lang-auth/awesome-node-auth/tree/main/demo/nextjs-fullstack)
 
 ---
 
@@ -55,7 +55,7 @@ sequenceDiagram
 ## Step 1 — Auth singleton (`lib/auth.ts`)
 
 ```typescript
-import { AuthConfigurator, AuthConfig, IUserStore } from 'awesome-node-auth';
+import { AuthConfigurator, AuthConfig, IUserStore } from '@awesome-lang-auth/node';
 import { MyUserStore } from './user-store';   // your IUserStore implementation
 
 export const authConfig: AuthConfig = {
@@ -109,7 +109,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 ```typescript
 // pages/api/admin/[...admin].ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { createAdminRouter } from 'awesome-node-auth';
+import { createAdminRouter } from '@awesome-lang-auth/node';
 import { userStore } from '@/lib/auth';
 
 const adminRouter = createAdminRouter(userStore, {
@@ -233,7 +233,7 @@ await fetch('/api/auth/logout', {
 
 
 ```typescript
-import { AuthConfigurator, AuthConfig, IUserStore } from 'awesome-node-auth';
+import { AuthConfigurator, AuthConfig, IUserStore } from '@awesome-lang-auth/node';
 import { MyUserStore } from './user-store';   // your IUserStore implementation
 
 export const authConfig: AuthConfig = {
@@ -283,7 +283,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
 The App Router request/response model differs from Node.js `http`. Bridging it to an Express router requires a non-trivial adapter. A complete, production-ready implementation is available in:
 
-[`examples/nextjs-integration.example.ts`](https://github.com/nik2208/awesome-node-auth/blob/main/examples/nextjs-integration.example.ts)
+[`examples/nextjs-integration.example.ts`](https://github.com/awesome-lang-auth/awesome-node-auth/blob/main/examples/nextjs-integration.example.ts)
 
 Copy the `runNodeAuthRouter` function and the `GET`/`POST`/`DELETE` exports from that file into `app/api/auth/[...auth]/route.ts`.
 
@@ -292,7 +292,7 @@ Copy the `runNodeAuthRouter` function and the `GET`/`POST`/`DELETE` exports from
 ```typescript
 // pages/api/admin/[...admin].ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { createAdminRouter } from 'awesome-node-auth';
+import { createAdminRouter } from '@awesome-lang-auth/node';
 import { userStore, linkedAccountsStore, settingsStore } from '@/lib/auth';
 
 const adminRouter = createAdminRouter(userStore, {
@@ -356,7 +356,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 // app/dashboard/page.tsx
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { TokenService } from 'awesome-node-auth';
+import { TokenService } from '@awesome-lang-auth/node';
 import { authConfig } from '@/lib/auth';
 
 export default async function DashboardPage() {

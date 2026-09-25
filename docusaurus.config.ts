@@ -95,7 +95,10 @@ const config: Config = {
   projectName: 'awesome-node-auth',
   trailingSlash: true,
 
-  onBrokenLinks: 'warn',
+  // A broken link, anchor or Markdown link fails the build rather than
+  // shipping: the log alone is too easy to miss.
+  onBrokenLinks: 'throw',
+  onBrokenAnchors: 'throw',
 
   // ── Structured data (JSON-LD) injected into every page ─────────────────────
   headTags: [
@@ -134,7 +137,7 @@ const config: Config = {
   markdown: {
     mermaid: true,
     hooks: {
-      onBrokenMarkdownLinks: 'warn',
+      onBrokenMarkdownLinks: 'throw',
     }
   },
 
@@ -149,6 +152,93 @@ const config: Config = {
           { trackingID: process.env.GOOGLE_ANALYTICS_ID, anonymizeIP: true },
         ]]
       : []),
+    // llms.txt (an index of the doc pages) and llms-full.txt (their Markdown,
+    // concatenated) at the site root, generated from docs/ on every build.
+    [
+      'docusaurus-plugin-llms',
+      {
+        description: SITE_DESCRIPTION,
+        // Link the HTML pages: the site serves no per-page .md files.
+        addMdExtension: false,
+        excludeImports: true,
+        removeDuplicateHeadings: true,
+        // The docs link each other with root-relative paths (/docs/...): name
+        // the origin they resolve against, since this file is read on its own.
+        fullRootContent:
+          `This file contains all documentation content of ${SITE_URL}/ in a ` +
+          'single document following the llmstxt.org standard. Links that start ' +
+          `with / are relative to ${SITE_URL}.`,
+        // Sidebar order (sidebars.ts), as file paths relative to docs/.
+        // Pages that are not in the sidebar follow at the end.
+        includeOrder: [
+          'intro.md',
+          'live-demo.md',
+          'installation.md',
+          'authentication/index.md',
+          'authentication/local.md',
+          'authentication/oauth.md',
+          'authentication/magic-link.md',
+          'authentication/totp.md',
+          'authentication/sms.md',
+          'database/index.md',
+          'database/in-memory.md',
+          'database/sqlite.md',
+          'database/mysql.md',
+          'database/mongodb.md',
+          'database/postgresql.md',
+          'database/postgrest.md',
+          'database/php-crud-api.md',
+          'api-reference/index.md',
+          'api-reference/endpoints.md',
+          'api-reference/template-store.md',
+          'advanced/index.md',
+          'advanced/built-in-ui.md',
+          'advanced/browser-client.md',
+          'advanced/idp-mode.md',
+          'advanced/sessions.md',
+          'advanced/roles-permissions.md',
+          'advanced/multi-tenancy.md',
+          'advanced/cors.md',
+          'advanced/csrf.md',
+          'advanced/user-metadata.md',
+          'advanced/extending-interfaces.md',
+          'advanced/account-linking.md',
+          'advanced/admin.md',
+          'advanced/bearer-token.md',
+          'advanced/mailer.md',
+          'advanced/email-verification.md',
+          'advanced/change-email.md',
+          'advanced/account-deletion.md',
+          'advanced/custom-claims.md',
+          'advanced/auth-event-bus.md',
+          'advanced/api-keys.md',
+          'advanced/auth-tools.md',
+          'advanced/sse.md',
+          'advanced/sse-scaling.md',
+          'advanced/sse-notify-decorator.md',
+          'advanced/webhooks.md',
+          'advanced/telemetry.md',
+          'advanced/swagger.md',
+          'frameworks/index.md',
+          'frameworks/express.md',
+          'frameworks/nestjs.md',
+          'frameworks/nextjs.md',
+          'frameworks/framework-agnostic.md',
+          'frameworks/angular.md',
+          'frameworks/ng-awesome-node-auth.md',
+          'frameworks/react.md',
+          'frameworks/python.md',
+          'frameworks/dart.md',
+          'frameworks/go.md',
+          'frameworks/lambda.md',
+          'frameworks/rust.md',
+          'frameworks/flutter.md',
+          'frameworks/ios.md',
+          'frameworks/android.md',
+        ],
+        includeUnmatchedLast: true,
+      },
+    ],
   ],
 
   presets: [

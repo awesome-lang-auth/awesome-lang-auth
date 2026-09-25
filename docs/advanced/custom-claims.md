@@ -52,7 +52,7 @@ sequenceDiagram
 ## Configuration
 
 ```typescript
-import { AuthConfigurator, BaseUser } from 'awesome-node-auth';
+import { AuthConfigurator, BaseUser } from '@awesome-lang-auth/node';
 
 // Extend BaseUser with your project-specific fields
 interface AppUser extends BaseUser {

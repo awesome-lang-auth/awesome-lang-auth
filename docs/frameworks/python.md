@@ -2,14 +2,14 @@
 id: python
 title: "Python FastAPI Authentication: awesome-python-auth"
 description: >-
-  awesome-python-auth is the FastAPI port of awesome-node-auth: the same endpoints, JWT model and client compatibility, for Python backends.
+  awesome-python-auth brings the same auth model as awesome-node-auth to FastAPI backends; its parity audit tracks what is implemented.
 sidebar_label: Python / FastAPI
 ---
 
 # Python Integration — `awesome-python-auth`
 
 :::tip Official Python library
-**For Python backends, use [`awesome-python-auth`](https://pypi.org/project/awesome-python-auth/)** — the official FastAPI library that mirrors every feature of `awesome-node-auth`.
+**For Python backends, use [`awesome-python-auth`](https://pypi.org/project/awesome-python-auth/)** — the official FastAPI library that brings the same auth model as `awesome-node-auth` to Python. Its [parity audit](https://github.com/awesome-lang-auth/awesome-python-auth/issues/10) tracks the details.
 
 It provides:
 - All the same auth flows: local, OAuth, magic link, SMS OTP, TOTP 2FA

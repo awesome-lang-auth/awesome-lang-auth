@@ -17,7 +17,7 @@ This approach allows you to keep your database tightly secured behind PostgREST'
 Below is a complete example of how to implement the `IUserStore` interface using the native `fetch` API against a PostgREST server.
 
 ```typescript
-import { IUserStore, BaseUser } from 'awesome-node-auth';
+import { IUserStore, BaseUser } from '@awesome-lang-auth/node';
 
 export class PostgRestUserStore implements IUserStore {
   constructor(
@@ -143,7 +143,7 @@ export class PostgRestUserStore implements IUserStore {
 2. Initialize the store in your application:
 
 ```typescript
-import { AuthConfigurator } from 'awesome-node-auth';
+import { AuthConfigurator } from '@awesome-lang-auth/node';
 import { PostgRestUserStore } from './postgrest-user-store';
 
 const userStore = new PostgRestUserStore(

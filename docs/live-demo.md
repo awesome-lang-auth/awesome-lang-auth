@@ -25,7 +25,7 @@ The simplest integration: Express + `awesome-node-auth` with HttpOnly JWT cookie
 | **Database** | In-memory |
 | **Start** | `npm start` |
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/nik2208/awesome-node-auth/tree/main/demo/express-vanilla?title=awesome-node-auth%20Express%20Demo&startScript=start)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/awesome-lang-auth/awesome-node-auth/tree/main/demo/express-vanilla?title=awesome-node-auth%20Express%20Demo&startScript=start)
 
 ---
 
@@ -40,7 +40,7 @@ NestJS application with `AuthModule.forRoot()`, `JwtAuthGuard`, `@CurrentUser()`
 | **Database** | In-memory |
 | **Start** | `npm start` |
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/nik2208/awesome-node-auth/tree/main/demo/nestjs-fullstack?title=awesome-node-auth%20NestJS%20Demo&startScript=start)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/awesome-lang-auth/awesome-node-auth/tree/main/demo/nestjs-fullstack?title=awesome-node-auth%20NestJS%20Demo&startScript=start)
 
 ---
 
@@ -55,7 +55,7 @@ Full-stack Next.js application with a catch-all `/api/auth/[...auth]` route, Edg
 | **Database** | In-memory |
 | **Start** | `npm start` (runs `next dev`) |
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/nik2208/awesome-node-auth/tree/main/demo/nextjs-fullstack?title=awesome-node-auth%20Next.js%20Demo&startScript=start)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/awesome-lang-auth/awesome-node-auth/tree/main/demo/nextjs-fullstack?title=awesome-node-auth%20Next.js%20Demo&startScript=start)
 
 ---
 
@@ -76,7 +76,7 @@ Angular 19 application with Server-Side Rendering, a full auth layer, and all pr
 | **Production** | `npm run build && npm run serve:ssr` |
 | **Database** | In-memory |
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/nik2208/awesome-node-auth/tree/main/demo/angular-ssr?title=awesome-node-auth%20Angular%20SSR%20Demo&startScript=start)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/awesome-lang-auth/awesome-node-auth/tree/main/demo/angular-ssr?title=awesome-node-auth%20Angular%20SSR%20Demo&startScript=start)
 
 ---
 
@@ -93,7 +93,7 @@ Same auth patterns as the Angular SSR demo (guards, interceptors, `APP_INITIALIZ
 | **Production** | `npm run build && npm run serve:prod` |
 | **Database** | In-memory |
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/nik2208/awesome-node-auth/tree/main/demo/express-angular-spa?title=awesome-node-auth%20Express%20%2B%20Angular%20SPA&startScript=start)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/awesome-lang-auth/awesome-node-auth/tree/main/demo/express-angular-spa?title=awesome-node-auth%20Express%20%2B%20Angular%20SPA&startScript=start)
 
 ---
 

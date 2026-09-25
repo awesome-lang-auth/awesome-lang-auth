@@ -49,7 +49,7 @@ import type {
   AuthNextFunction,
   AuthRequestHandler,
   AuthRouter,
-} from 'awesome-node-auth';
+} from '@awesome-lang-auth/node';
 ```
 
 ---
@@ -73,7 +73,7 @@ third-party middleware directly assignable without an explicit cast.
 ```typescript
 import express from 'express';
 import rateLimit from 'express-rate-limit';
-import { AuthConfigurator } from 'awesome-node-auth';
+import { AuthConfigurator } from '@awesome-lang-auth/node';
 
 const auth = new AuthConfigurator(config, userStore);
 
@@ -92,8 +92,8 @@ neutral `AuthRequestHandler` type.  On Express, pass it through
 `expressAdapter()` to get the correct Express typing for `app.use()`:
 
 ```typescript
-import type { AuthRequestHandler } from 'awesome-node-auth';
-import { expressAdapter } from 'awesome-node-auth';
+import type { AuthRequestHandler } from '@awesome-lang-auth/node';
+import { expressAdapter } from '@awesome-lang-auth/node';
 
 // Typed against the neutral interface
 const requestLogger: AuthRequestHandler = (req, res, next) => {
@@ -115,7 +115,7 @@ the `AuthRequest` interface is broad enough to accommodate them:
 
 ```typescript
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import type { AuthRequest } from 'awesome-node-auth';
+import type { AuthRequest } from '@awesome-lang-auth/node';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
@@ -140,8 +140,8 @@ awesome-node-auth's token service directly:
 ```typescript
 // app/api/me/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { TokenService } from 'awesome-node-auth';
-import type { AuthRequest } from 'awesome-node-auth';
+import { TokenService } from '@awesome-lang-auth/node';
+import type { AuthRequest } from '@awesome-lang-auth/node';
 
 const tokenService = new TokenService();
 
@@ -177,8 +177,8 @@ If you are integrating with a framework not listed here, implement the
 and pass the resulting handler to your framework's router:
 
 ```typescript
-import type { AuthRequest, AuthResponse, AuthNextFunction } from 'awesome-node-auth';
-import { createAuthMiddleware } from 'awesome-node-auth';
+import type { AuthRequest, AuthResponse, AuthNextFunction } from '@awesome-lang-auth/node';
+import { createAuthMiddleware } from '@awesome-lang-auth/node';
 
 // 1. Create the framework-neutral middleware
 const authMiddleware = createAuthMiddleware(config, sessionStore);

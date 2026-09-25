@@ -18,7 +18,7 @@ Apply the decorator to a method. After the method executes successfully, an SSE 
 > This decorator uses the **TC39 Stage 3** syntax and requires **TypeScript 5.x+**. For legacy environments or older frameworks, use manual notification via `SseNotifyRegistry.notify()`.
 
 ```typescript
-import { sseNotify } from 'awesome-node-auth';
+import { sseNotify } from '@awesome-lang-auth/node';
 
 class ProductService {
   @sseNotify({
@@ -92,7 +92,7 @@ The `SseNotifyRegistry` serves as the central dispatcher for SSE notifications. 
 If you cannot use decorators, you can trigger notifications manually:
 
 ```typescript
-import { SseNotifyRegistry } from 'awesome-node-auth';
+import { SseNotifyRegistry } from '@awesome-lang-auth/node';
 
 async function updateSystemSetting(config: any) {
   const result = await db.settings.save(config);

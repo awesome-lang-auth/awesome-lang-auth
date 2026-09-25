@@ -19,7 +19,7 @@ Below is a complete example of how to implement the `IUserStore` interface using
 > **Note:** PHP-CRUD-API uses a query parameter format like `?filter=field,eq,value` for filtering and returns the actual record in the body. Ensure your table structure matches `BaseUser`.
 
 ```typescript
-import { IUserStore, BaseUser } from 'awesome-node-auth';
+import { IUserStore, BaseUser } from '@awesome-lang-auth/node';
 
 export class PhpCrudApiUserStore implements IUserStore {
   constructor(
@@ -151,7 +151,7 @@ export class PhpCrudApiUserStore implements IUserStore {
 2. Initialize the store in your Node.js application:
 
 ```typescript
-import { AuthConfigurator } from 'awesome-node-auth';
+import { AuthConfigurator } from '@awesome-lang-auth/node';
 import { PhpCrudApiUserStore } from './php-crud-api-user-store';
 
 const userStore = new PhpCrudApiUserStore(

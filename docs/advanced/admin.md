@@ -73,8 +73,8 @@ sequenceDiagram
 
 ```typescript
 import express from 'express';
-import { AuthConfigurator, createAdminRouter } from 'awesome-node-auth';
-import type { AdminOptions, AdminAccessPolicy } from 'awesome-node-auth';
+import { AuthConfigurator, createAdminRouter } from '@awesome-lang-auth/node';
+import type { AdminOptions, AdminAccessPolicy } from '@awesome-lang-auth/node';
 
 const app = express();
 app.use(express.json());
@@ -218,7 +218,7 @@ Each tab is activated automatically when you pass the corresponding store:
 The Control tab lets admins change runtime auth policy. Implement `ISettingsStore`:
 
 ```typescript
-import { ISettingsStore, AuthSettings } from 'awesome-node-auth';
+import { ISettingsStore, AuthSettings } from '@awesome-lang-auth/node';
 
 // Simple in-memory implementation (replace with DB in production)
 let settings: Partial<AuthSettings> = {};
@@ -289,7 +289,7 @@ All admin endpoints require a valid JWT access token in `Authorization: Bearer <
 The Users tab requires a `listUsers` method on your `IUserStore`. Add it to your implementation:
 
 ```typescript
-import { IUserStore, BaseUser } from 'awesome-node-auth';
+import { IUserStore, BaseUser } from '@awesome-lang-auth/node';
 
 export class MyUserStore implements IUserStore {
   // ... other methods ...
@@ -343,9 +343,13 @@ Outgoing webhooks are delivered with retry and exponential back-off. See the ful
 
 ---
 
-### Inbound webhooks — dynamic vm sandbox (external service → library)
+### Inbound webhooks — dynamic scripts (external service → library)
 
-Inbound webhooks receive HTTP `POST` calls **from** external services (e.g. Stripe, GitHub, Paddle) and execute a **JavaScript script inside a secure Node.js `vm` sandbox**. The available functions inside the script are governed by the admin — each action must be explicitly enabled globally (Control tab) **and** assigned to the specific webhook.
+Inbound webhooks receive HTTP `POST` calls **from** external services (e.g. Stripe, GitHub, Paddle) and execute a **JavaScript script through Node.js `node:vm`**. The functions the script receives in `actions` are governed by the admin — each action must be explicitly enabled globally (Control tab) **and** assigned to the specific webhook.
+
+:::danger Inbound scripts run with the server's privileges
+`node:vm` is not a security mechanism, so the script is **not sandboxed**: it runs with the privileges of the server process and can run arbitrary code on the server. Only fully trusted operators may write a webhook script, whether through the webhook store or this admin console. See [awesome-node-auth#10](https://github.com/awesome-lang-auth/awesome-node-auth/issues/10).
+:::
 
 ```mermaid
 sequenceDiagram
@@ -353,7 +357,7 @@ sequenceDiagram
     participant Router as POST /tools/webhook/:provider
     participant Store as IWebhookStore
     participant Settings as ISettingsStore
-    participant VM as vm sandbox
+    participant VM as Node.js vm module
     participant Bus as AuthEventBus
 
     Ext->>Router: POST /tools/webhook/stripe<br/>{ type: "customer.subscription.deleted", … }
@@ -372,7 +376,7 @@ sequenceDiagram
 #### Step 1 — Expose service methods as injectable actions
 
 ```typescript
-import { webhookAction, ActionRegistry } from 'awesome-node-auth';
+import { webhookAction, ActionRegistry } from '@awesome-lang-auth/node';
 
 class BillingService {
   @webhookAction({
@@ -409,7 +413,7 @@ Click **+ Register webhook** and switch the type to **Inbound (dynamic)**:
 |-------|---------|-------------|
 | Provider name | `stripe` | Matches `:provider` in `POST /tools/webhook/stripe` |
 | Allowed actions | ☑ `billing.cancel` | Subset of globally-enabled actions for this script only |
-| JavaScript | see below | Body executed in the vm sandbox |
+| JavaScript | see below | Body run through `node:vm` with the server's privileges |
 
 **Example script:**
 
@@ -433,13 +437,13 @@ if (body.type === 'customer.subscription.deleted') {
 
 | Rule | Behaviour |
 |------|-----------|
-| Action not in `enabledWebhookActions` | Excluded from sandbox even if in `allowedActions` |
-| Action's `dependsOn` not met | Excluded from sandbox |
-| Script throws / exceeds 5 s timeout | Error logged; HTTP 200 returned (no crash) |
+| Action not in `enabledWebhookActions` | Not passed to the script in `actions`, even if in `allowedActions` |
+| Action's `dependsOn` not met | Not passed to the script in `actions` |
+| Script throws, or its synchronous part exceeds 5 s | Error logged; HTTP 200 returned (no crash). Asynchronous work is not bounded by the timeout |
 | `result` is null | Silently acknowledged; no event emitted |
 
-:::tip Principle of Least Privilege
-Each inbound webhook can only call the **intersection** of globally-enabled actions **and** its own `allowedActions` list. A compromised webhook script cannot call functions that weren't explicitly granted to it.
+:::note Action governance is not isolation
+Each inbound webhook receives in `actions` only the **intersection** of globally-enabled actions **and** its own `allowedActions` list. This decides which registered actions a script is handed; it does not confine the script, which runs with the server's privileges (see the warning above).
 :::
 
 #### Step 4 — Wire stores into the tools router
@@ -462,7 +466,7 @@ When your application registers `@webhookAction`-decorated methods, the **Contro
 Actions are grouped by category. If an action declares `dependsOn`, its toggle is disabled until all its dependencies are enabled.
 
 ```typescript
-import { webhookAction, ActionRegistry } from 'awesome-node-auth';
+import { webhookAction, ActionRegistry } from '@awesome-lang-auth/node';
 
 class BillingService {
   @webhookAction({
@@ -476,7 +480,7 @@ class BillingService {
   }
 }
 
-// Register the bound instance so the vm sandbox can call it
+// Register the bound instance so inbound scripts can call it
 const billing = new BillingService();
 ActionRegistry.register({
   id:          'billing.cancelSubscription',
@@ -487,7 +491,7 @@ ActionRegistry.register({
 });
 ```
 
-Pass both stores to the tools router to enable the vm sandbox:
+Pass both stores to the tools router to enable inbound webhook scripts:
 
 ```typescript
 app.use('/tools', createToolsRouter(tools, {
@@ -509,7 +513,7 @@ The **Email & UI** tab is enabled by passing an `ITemplateStore` to `createAdmin
 - **UI translations** — per-page `data-i18n` key/value grid used to localise the built-in login/register/forgot-password pages
 
 ```typescript
-import { MemoryTemplateStore } from 'awesome-node-auth';
+import { MemoryTemplateStore } from '@awesome-lang-auth/node';
 
 const templateStore = new MemoryTemplateStore(); // swap for a DB implementation in production
 

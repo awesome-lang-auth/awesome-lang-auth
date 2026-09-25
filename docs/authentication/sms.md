@@ -50,6 +50,23 @@ For native/mobile clients add `X-Auth-Strategy: bearer` to `/auth/sms/verify` to
 
 ---
 
+## Login mode and 2FA mode
+
+Both endpoints take an optional `mode` in the request body:
+
+| `mode` | `POST /auth/sms/send` body | `POST /auth/sms/verify` body | What the code does |
+|--------|----------------------------|------------------------------|--------------------|
+| `'login'` (default) | `{ userId }` or `{ email }` | `{ userId, code }` | Login with the SMS code alone |
+| `'2fa'` | `{ mode: '2fa', tempToken }` | `{ mode: '2fa', tempToken, code }` | Second factor after the password |
+
+:::note SMS login and 2FA
+In `mode: 'login'`, `POST /auth/sms/verify` issues a session directly and does not ask for the second factor, even for accounts with TOTP enabled.
+
+The second-factor flow is `mode: '2fa'`, after the password: `POST /auth/login` answers `{ requiresTwoFactor: true, tempToken, available2faMethods }`, `POST /auth/sms/send` with `{ mode: '2fa', tempToken }` texts a code to that user's `phoneNumber`, and `POST /auth/sms/verify` with `{ mode: '2fa', tempToken, code }` issues the session.
+:::
+
+---
+
 ## **Step 1**: Configure AuthConfig
 
 SMS OTP is enabled by configuring the built-in HTTP SMS gateway in your `AuthConfig.sms` block:
@@ -114,7 +131,7 @@ curl -X POST http://localhost:3000/auth/sms/verify \
 The `SmsService` is exported and can be used directly in your own code:
 
 ```typescript
-import { SmsService } from 'awesome-node-auth';
+import { SmsService } from '@awesome-lang-auth/node';
 
 const smsService = new SmsService({
   endpoint:  'https://sms.yourprovider.com/send',
@@ -139,8 +156,8 @@ The service makes a `GET` request to `{endpoint}?username={u}&password={p}&phone
 
 | Method | Path | Description |
 |--------|------|-------------|
-| `POST` | `/auth/sms/send` | Generate OTP + send to user's `phoneNumber` |
-| `POST` | `/auth/sms/verify` | Verify OTP → issue session tokens |
+| `POST` | `/auth/sms/send` | Generate OTP + send to user's `phoneNumber`. Body: `{ userId }` or `{ email }` for login; `{ mode: '2fa', tempToken }` for the second factor |
+| `POST` | `/auth/sms/verify` | Verify OTP → issue session tokens. Body: `{ userId, code }` for login; `{ mode: '2fa', tempToken, code }` for the second factor |
 
 ## Related
 

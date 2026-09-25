@@ -13,7 +13,7 @@ sidebar_label: User Metadata
 ## Interface
 
 ```typescript
-import { IUserMetadataStore } from 'awesome-node-auth';
+import { IUserMetadataStore } from '@awesome-lang-auth/node';
 
 export class MyUserMetadataStore implements IUserMetadataStore {
   async getMetadata(userId: string): Promise<Record<string, unknown>> {

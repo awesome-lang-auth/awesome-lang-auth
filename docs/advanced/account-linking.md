@@ -81,7 +81,7 @@ sequenceDiagram
 ## Step 1 — Implement `ILinkedAccountsStore`
 
 ```typescript
-import { ILinkedAccountsStore, LinkedAccount } from 'awesome-node-auth';
+import { ILinkedAccountsStore, LinkedAccount } from '@awesome-lang-auth/node';
 
 export class MyLinkedAccountsStore implements ILinkedAccountsStore {
   /** Persist a new provider link for the user. */
@@ -125,7 +125,7 @@ export class MyLinkedAccountsStore implements ILinkedAccountsStore {
 When an OAuth login collides with an existing email, the conflict is stashed here until the user verifies ownership of the existing account.
 
 ```typescript
-import { IPendingLinkStore, IPendingLink } from 'awesome-node-auth';
+import { IPendingLinkStore, IPendingLink } from '@awesome-lang-auth/node';
 
 export class MyPendingLinkStore implements IPendingLinkStore {
   async createPendingLink(link: IPendingLink): Promise<void> {
@@ -158,7 +158,7 @@ interface IPendingLink {
 ## Step 3 — Pass stores to the router
 
 ```typescript
-import { createAuthRouter } from 'awesome-node-auth';
+import { createAuthRouter } from '@awesome-lang-auth/node';
 
 app.use('/auth', createAuthRouter(userStore, config, {
   linkedAccountsStore,

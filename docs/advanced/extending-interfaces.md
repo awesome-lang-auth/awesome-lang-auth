@@ -25,9 +25,9 @@ TypeScript allows **Declaration Merging**, which lets you "inject" new propertie
 Create a file named `node-auth.d.ts` (the name doesn't matter, but the `.d.ts` extension does) in your source directory (e.g., `src/types/`).
 
 ```typescript
-import 'awesome-node-auth';
+import '@awesome-lang-auth/node';
 
-declare module 'awesome-node-auth' {
+declare module '@awesome-lang-auth/node' {
   // Augment the BaseUser interface
   interface BaseUser {
     priviledge?: number;
@@ -55,7 +55,7 @@ declare module 'awesome-node-auth' {
 When implementing a custom store (e.g., `SqliteUserStore`), you should define a local `User` interface that extends the augmented `BaseUser`:
 
 ```typescript
-import { BaseUser, IUserStore } from 'awesome-node-auth';
+import { BaseUser, IUserStore } from '@awesome-lang-auth/node';
 
 export interface User extends BaseUser {
   // The fields from .d.ts are automatically inherited here

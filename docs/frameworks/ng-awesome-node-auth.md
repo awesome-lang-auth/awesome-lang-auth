@@ -22,6 +22,10 @@ sidebar_label: Angular (ng-awesome-node-auth)
 npm install ng-awesome-node-auth
 ```
 
+:::note Upcoming package name
+The library moves to `@awesome-lang-auth/angular`. Until that package is published, install `ng-awesome-node-auth` as above. The source lives in [awesome-lang-auth/awesome-angular-auth](https://github.com/awesome-lang-auth/awesome-angular-auth).
+:::
+
 ---
 
 ## Quick start
@@ -402,6 +406,6 @@ Express Server
 ## Links
 
 - **npm**: [`ng-awesome-node-auth`](https://www.npmjs.com/package/ng-awesome-node-auth)
-- **GitHub**: [nik2208/ng-awesome-node-auth](https://github.com/nik2208/ng-awesome-node-auth)
+- **GitHub**: [awesome-lang-auth/awesome-angular-auth](https://github.com/awesome-lang-auth/awesome-angular-auth)
 - **Backend docs**: [Built-in UI guide](/docs/advanced/built-in-ui) · [Browser Client](/docs/advanced/browser-client)
 - **Manual Angular wiring** (without the library): [Angular (manual)](/docs/frameworks/angular)

@@ -34,7 +34,7 @@ app.use('/auth', auth.router());
 ## Tools router — Swagger UI
 
 ```typescript
-import { createToolsRouter } from 'awesome-node-auth';
+import { createToolsRouter } from '@awesome-lang-auth/node';
 
 app.use('/tools', createToolsRouter(tools, {
   swagger: 'auto',         // default — enabled outside production
@@ -54,7 +54,7 @@ GET /tools/openapi.json — raw OpenAPI 3.0 spec
 ## Admin router — Swagger UI
 
 ```typescript
-import { createAdminRouter } from 'awesome-node-auth';
+import { createAdminRouter } from '@awesome-lang-auth/node';
 
 app.use('/admin', createAdminRouter(userStore, {
   accessPolicy: 'first-user',
