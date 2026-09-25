@@ -27,7 +27,7 @@ npm ci && npm run build
 ```
 
 The static output is in `build/`. The build needs no environment variable. The optional ones
-(Google Analytics, and the host port for `docker compose`) are listed in
+(Google Analytics, and the host port and project name for `docker compose`) are listed in
 [`.env.example`](.env.example): copy it to `.env`, which is gitignored, and rebuild.
 
 ## Deploy
@@ -86,10 +86,10 @@ echo "$P"                                   # e.g. wiki
 # 2. What --remove-orphans will delete: this must list only docusaurus_docs
 docker ps -a --filter "label=com.docker.compose.project=$P" --format '{{.Names}}'
 
-# 3. Reuse the values of the old checkout (PORT, GOOGLE_ANALYTICS_ID if set), without the
-#    AI assistant and account API settings and keys: the site reads none of them any more
-cp /path/to/old/checkout/wiki/.env .env
-sed -i '/^AI_/d; /^ACCOUNT_API_URL=/d' .env
+# 3. Reuse only what compose and the site still read (PORT, GOOGLE_ANALYTICS_ID,
+#    COMPOSE_PROJECT_NAME): no AI assistant or account API setting or key is carried over.
+#    If none of them is set, .env ends up empty, which is fine.
+grep -E '^(PORT|GOOGLE_ANALYTICS_ID|COMPOSE_PROJECT_NAME)=' /path/to/old/checkout/wiki/.env > .env
 
 # 4. Build, then swap the container inside that project
 docker compose -p "$P" --profile npm up -d --build --remove-orphans
