@@ -12,16 +12,29 @@ dotenv.config();
 const SITE_URL = 'https://www.awesomenodeauth.com';
 const SOCIAL_CARD_URL = `${SITE_URL}/img/docusaurus-social-card.jpg`;
 
+// ── Brand ──────────────────────────────────────────────────────────────────────
+// The site brand is the family, awesome-lang-auth. The family started as the
+// Node.js library awesome-node-auth, which keeps that name as its project (repo
+// awesome-lang-auth/awesome-node-auth) and is published on npm as
+// @awesome-lang-auth/node. Only the brand changes here: SITE_URL, the domain
+// and every URL of the site stay as they are until the domain switch.
+const BRAND = 'awesome-lang-auth';
+// The old brand, declared as an alternate name in the JSON-LD so search
+// engines and AI assistants resolve the two names to the same entity.
+const FORMER_BRAND = 'awesome-node-auth';
+const GITHUB_ORG_URL = 'https://github.com/awesome-lang-auth';
+const NODE_REPO_URL = `${GITHUB_ORG_URL}/awesome-node-auth`;
+const NODE_NPM_URL = 'https://www.npmjs.com/package/@awesome-lang-auth/node';
+
 /**
- * Single source of truth for the sitewide meta description.
- * Kept at ~155 characters so Google renders it whole, and reused by the
- * JSON-LD blocks below so the snippet, the social card and the structured
- * data never drift apart. The home page sets its own description
- * (HOME_DESCRIPTION in src/pages/index.tsx).
+ * Single source of truth for the sitewide description: the JSON-LD blocks
+ * below and the llms.txt summary read it, so they never drift apart.
+ * Kept under ~160 characters, with Node.js named first. The home page sets
+ * its own meta description (HOME_DESCRIPTION in src/pages/index.tsx).
  */
 const SITE_DESCRIPTION =
-  'awesome-node-auth is a self-hosted, database-agnostic authentication library ' +
-  'for Node.js: JWT, OAuth2, magic link, TOTP 2FA, RBAC and multi-tenancy.';
+  `${BRAND} is self-hosted authentication for Node.js, Go, AWS Lambda, Python, Rust ` +
+  'and Dart, with Angular, React and Flutter clients: JWT, OAuth2, 2FA.';
 
 // Read version from root package.json so there is a single source of truth.
 // __dirname is the wiki/ directory in the jiti-transpiled CJS context.
@@ -33,23 +46,24 @@ const LIB_VERSION: string = (() => {
     return '';
   }
 })();
-const CHANGELOG_URL = 'https://github.com/nik2208/awesome-node-auth/releases';
+// The Node.js library's releases (the navbar version badge and the footer link them).
+const CHANGELOG_URL = `${NODE_REPO_URL}/releases`;
 
 // JSON-LD structured data — injected into every page <head>
 const JSON_LD_SOFTWARE: object = {
   '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'awesome-node-auth',
-  // Most people type the brand with spaces; declaring both spellings helps
-  // search engines and AI assistants resolve them to the same entity.
-  alternateName: ['Awesome Node Auth', 'awesome node auth'],
+  // SoftwareSourceCode as well, so that codeRepository is a known property.
+  '@type': ['SoftwareApplication', 'SoftwareSourceCode'],
+  name: BRAND,
+  alternateName: [FORMER_BRAND],
   applicationCategory: 'DeveloperApplication',
   operatingSystem: 'Cross-platform',
   description:
     `${SITE_DESCRIPTION} ` +
-    'Works with Express, NestJS, Next.js and Fastify, and with any database through ' +
-    'a store interface. Also ships real-time SSE, webhooks, API keys, telemetry ' +
-    'and SMS OTP, with Python, Dart and Rust backend ports.',
+    'The Node.js library, the reference, works with Express, NestJS, Next.js and Fastify, ' +
+    'and with any database through a store interface. It also ships real-time SSE, ' +
+    'webhooks, API keys, telemetry and SMS OTP. The Go, Python, Rust and Dart libraries ' +
+    'and the serverless AWS Lambda stack share its auth model and wire protocol.',
   url: SITE_URL,
   // Free and open source — stated explicitly so it is machine-readable.
   offers: {
@@ -57,16 +71,24 @@ const JSON_LD_SOFTWARE: object = {
     price: '0',
     priceCurrency: 'USD',
   },
-  downloadUrl: 'https://www.npmjs.com/package/awesome-node-auth',
+  // The Node.js library: its npm package and the repository that publishes it.
+  downloadUrl: NODE_NPM_URL,
+  codeRepository: NODE_REPO_URL,
   author: {
     '@type': 'Person',
     name: 'nik2208',
     url: 'https://github.com/nik2208',
   },
   license: 'https://opensource.org/licenses/MIT',
-  keywords: 'authentication, JWT, Node.js, TypeScript, OAuth2, multi-tenancy, RBAC, 2FA, webhooks',
+  keywords:
+    'authentication, self-hosted, JWT, Node.js, TypeScript, Go, AWS Lambda, Python, Rust, ' +
+    'Dart, Angular, React, Flutter, OAuth2, multi-tenancy, RBAC, 2FA, webhooks',
+  // The org, the Node.js library's repository and npm package, and the old
+  // npm package name, which links the former brand to this entity.
   sameAs: [
-    'https://github.com/nik2208/awesome-node-auth',
+    GITHUB_ORG_URL,
+    NODE_REPO_URL,
+    NODE_NPM_URL,
     'https://www.npmjs.com/package/awesome-node-auth',
   ],
 };
@@ -77,23 +99,24 @@ const JSON_LD_SOFTWARE: object = {
 const JSON_LD_WEBSITE: object = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'awesome-node-auth',
-  alternateName: 'Awesome Node Auth',
+  name: BRAND,
+  alternateName: [FORMER_BRAND],
   url: SITE_URL,
   description: SITE_DESCRIPTION,
   inLanguage: 'en',
 };
 
 const config: Config = {
-  title: 'awesome-node-auth',
-  tagline: 'Self-hosted auth ecosystem for Node.js, Python, Dart and Rust',
+  title: BRAND,
+  tagline: 'Self-hosted authentication for Node.js, Go, AWS Lambda, Python, Rust and Dart',
   favicon: 'img/favicon.ico',
 
   url: SITE_URL,
   baseUrl: '/',
 
-  organizationName: 'awesomenodeauth',
-  projectName: 'awesome-node-auth',
+  // Used only by `docusaurus deploy` (GitHub Pages): the org and this repo.
+  organizationName: 'awesome-lang-auth',
+  projectName: 'awesome-lang-auth',
   trailingSlash: true,
 
   // A broken link, anchor or Markdown link fails the build rather than
@@ -297,24 +320,30 @@ const config: Config = {
       // Open Graph
       { name: 'og:type',       content: 'website' },
       { name: 'og:image',      content: SOCIAL_CARD_URL },
-      { name: 'og:site_name',  content: 'awesome-node-auth' },
+      { name: 'og:site_name',  content: BRAND },
       // Twitter / X Card
       { name: 'twitter:card',  content: 'summary_large_image' },
       { name: 'twitter:image', content: SOCIAL_CARD_URL },
-      // SEO keywords (supplementary signal — not a primary ranking factor)
+      // SEO keywords (supplementary signal — not a primary ranking factor):
+      // the family, then the Node.js terms the site has always ranked for.
       {
         name: 'keywords',
         content:
-          'node.js authentication, JWT auth, typescript auth library, express authentication, ' +
-          'nestjs authentication, oauth2, multi-tenancy, rbac, role-based access control, ' +
-          '2fa totp, magic link login, api key authentication, awesome-node-auth',
+          'self-hosted authentication, node.js authentication, JWT auth, typescript auth library, ' +
+          'express authentication, nestjs authentication, go authentication, ' +
+          'aws lambda authentication, python authentication, fastapi authentication, ' +
+          'rust authentication, dart authentication, angular auth, react auth, flutter auth, ' +
+          'oauth2, multi-tenancy, rbac, role-based access control, 2fa totp, magic link login, ' +
+          `api key authentication, ${BRAND}, ${FORMER_BRAND}`,
       },
       // Google Search Console — backup verification alongside the static HTML file
       { name: 'google-site-verification', content: '635c063a344579f7' },
     ],
 
     announcementBar: {
-      content: '⭐ If you like awesome-node-auth, give it a star on <a href="https://github.com/nik2208/awesome-node-auth">GitHub</a>!',
+      // A new id shows the renamed bar again to visitors who closed the old one.
+      id: 'brand-awesome-lang-auth',
+      content: `⭐ If you like ${BRAND}, give it a star on <a href="${GITHUB_ORG_URL}">GitHub</a>!`,
       backgroundColor: '#00a87a',
       textColor: '#fff',
       isCloseable: true,
@@ -325,7 +354,7 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'awesome-node-auth',
+      title: BRAND,
       items: [
         {
           type: 'docSidebar',
@@ -351,11 +380,11 @@ const config: Config = {
               value: `<a href="${CHANGELOG_URL}" target="_blank" rel="noopener noreferrer" class="navbar-version-badge" aria-label="Changelog v${LIB_VERSION}">v${LIB_VERSION}</a>`,
             }] as object[])
           : []),
-        // GitHub icon link (no text label)
+        // GitHub icon link (no text label): the org, home of every repo
         {
           type: 'html',
           position: 'right',
-          value: `<a href="https://github.com/nik2208/awesome-node-auth" target="_blank" rel="noopener noreferrer" class="navbar-github-link" aria-label="GitHub repository"></a>`,
+          value: `<a href="${GITHUB_ORG_URL}" target="_blank" rel="noopener noreferrer" class="navbar-github-link" aria-label="${BRAND} on GitHub"></a>`,
         },
       ],
     },
@@ -386,10 +415,11 @@ const config: Config = {
         {
           title: 'Open Source',
           items: [
-            { label: 'GitHub', href: 'https://github.com/nik2208/awesome-node-auth' },
-            { label: 'npm Package', href: 'https://www.npmjs.com/package/awesome-node-auth' },
-            { label: 'GitHub Discussions', href: 'https://github.com/nik2208/awesome-node-auth/discussions' },
-            { label: 'Changelog', href: 'https://github.com/nik2208/awesome-node-auth/releases' },
+            { label: 'GitHub', href: GITHUB_ORG_URL },
+            // The Node.js library's package, discussions and releases.
+            { label: 'npm Package (Node.js)', href: NODE_NPM_URL },
+            { label: 'GitHub Discussions', href: `${NODE_REPO_URL}/discussions` },
+            { label: 'Node.js Changelog', href: CHANGELOG_URL },
           ],
         },
         {
@@ -400,7 +430,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `© ${new Date().getFullYear()} nik2208 — awesome-node-auth is released under the MIT License.`,
+      copyright: `© ${new Date().getFullYear()} nik2208 — ${BRAND} is released under the MIT License.`,
     },
     prism: {
       theme: prismThemes.github,
