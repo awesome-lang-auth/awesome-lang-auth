@@ -15,8 +15,9 @@ const SOCIAL_CARD_URL = `${SITE_URL}/img/docusaurus-social-card.jpg`;
 /**
  * Single source of truth for the sitewide meta description.
  * Kept at ~155 characters so Google renders it whole, and reused by the
- * homepage (src/pages/index.tsx) and by the JSON-LD blocks below so the
- * snippet, the social card and the structured data never drift apart.
+ * JSON-LD blocks below so the snippet, the social card and the structured
+ * data never drift apart. The home page sets its own description
+ * (HOME_DESCRIPTION in src/pages/index.tsx).
  */
 const SITE_DESCRIPTION =
   'awesome-node-auth is a self-hosted, database-agnostic authentication library ' +
@@ -121,8 +122,8 @@ const config: Config = {
   ],
 
   customFields: {
-    // Read by src/pages/index.tsx so the homepage meta description and the
-    // JSON-LD description stay the same string.
+    // The sitewide default description, for pages that want it. Nothing reads
+    // it today: the home page sets its own (HOME_DESCRIPTION).
     siteDescription: SITE_DESCRIPTION,
   },
 

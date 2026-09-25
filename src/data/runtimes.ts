@@ -203,9 +203,11 @@ export const RUNTIMES: readonly Runtime[] = [
     available: true,
     docs: '/docs/frameworks/dart/',
     repo: 'https://github.com/awesome-lang-auth/awesome-dart-auth',
-    feature: 'Server-side package for Shelf and Dart Frog backends.',
+    // The command adds the core package, whose AuthRouter serves Shelf directly;
+    // Dart Frog needs packages/awesome_dart_auth_dart_frog on top of it.
+    feature: 'The core package serves Shelf directly; Dart Frog adds an adapter package from the same repo.',
     description:
-      'Server-side package for Shelf and Dart Frog, with the same auth model as the reference: cookies and CSRF for the web, bearer for native apps.',
+      'Server-side core that serves Shelf directly, with a Dart Frog adapter package in the same repository, and the same auth model as the reference: cookies and CSRF for the web, bearer for native apps.',
   },
   // ── Clients ────────────────────────────────────────────────────────────
   {

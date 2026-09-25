@@ -20,6 +20,10 @@ const HOME_DESCRIPTION =
   'and Dart servers, with Angular, React and Flutter clients. MIT.';
 
 const LAMBDA_EXAMPLES = 'https://github.com/awesome-lang-auth/awesome-lambda-auth/tree/main/examples';
+// Open in awesome_node_auth_flutter 1.10.0 (2026-09-25): #21 getActiveSessions()
+// reads `handle`, the servers send `sessionHandle`; #22 setup2fa() requires a
+// `qrCode` that Go, Lambda and Rust do not send. Drop the sentence once both ship.
+const FLUTTER_ISSUES = 'https://github.com/awesome-lang-auth/awesome-flutter-auth/issues';
 
 // ── Recipes ──────────────────────────────────────────────────────────────────
 
@@ -233,7 +237,7 @@ function AuthJsCard(): ReactNode {
 function RecipeCard({ icon, runtime, title, description, href }: RecipeItem): ReactNode {
   return (
     <Link to={href} className={styles.recipeCard}>
-      <div className={styles.recipeIcon}>{runtime ? <RuntimeIcon id={runtime} /> : <span>{icon}</span>}</div>
+      <div className={styles.recipeIcon}>{runtime ? <RuntimeIcon id={runtime} /> : <span aria-hidden="true">{icon}</span>}</div>
       <h3 className={styles.recipeTitle}>{title}</h3>
       <p className={styles.recipeDescription}>{description}</p>
       <span className={styles.recipeLink}>View docs →</span>
@@ -299,9 +303,18 @@ function MixAndMatch(): ReactNode {
           and a CSRF header, so serve the API from your app&apos;s origin (a reverse-proxy rule is enough); native apps use bearer
           tokens. Checked end to end: the{' '}
           <a href={LAMBDA_EXAMPLES} target="_blank" rel="noopener noreferrer">
-            awesome-lambda-auth examples
+            awesome-lambda-auth examples <ExternalIcon />
           </a>{' '}
-          run the unmodified Angular and Flutter clients against a deployed Lambda stack.
+          run the unmodified Angular and Flutter clients against a deployed Lambda stack. The two Flutter client gaps they
+          surfaced, the sessions list and 2FA setup on servers that send no QR image, are tracked in{' '}
+          <a href={`${FLUTTER_ISSUES}/21`} target="_blank" rel="noopener noreferrer">
+            #21 <ExternalIcon />
+          </a>{' '}
+          and{' '}
+          <a href={`${FLUTTER_ISSUES}/22`} target="_blank" rel="noopener noreferrer">
+            #22 <ExternalIcon />
+          </a>
+          .
         </p>
       </div>
     </section>
@@ -317,15 +330,15 @@ export default function Home(): ReactNode {
         <title>{HOME_TITLE}</title>
         <meta property="og:title" content={HOME_TITLE} />
       </Head>
-      <HomeHero
-        subtitle={
-          <>
-            One self-hosted auth model for your servers and your clients: JWT sessions with refresh-token rotation, OAuth2, magic
-            links and two-factor authentication, on your own infrastructure, with no per-user pricing.
-          </>
-        }
-      />
       <main>
+        <HomeHero
+          subtitle={
+            <>
+              One self-hosted auth model for your servers and your clients: JWT sessions with refresh-token rotation, OAuth2,
+              magic links and two-factor authentication, on your own infrastructure, with no per-user pricing.
+            </>
+          }
+        />
         <MixAndMatch />
 
         {/* ── Ecosystem ─────────────────────────────────────────────────── */}
