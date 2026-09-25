@@ -37,7 +37,9 @@ Two sources, layered:
 
 Secrets are never values in the document: a secret knob is a reference to Secrets Manager or SSM, resolved at cold start, and a plaintext secret in the document refuses to start.
 
-Configuration domains that the schema accepts but the binary does not act on yet are **refused at start**, never silently ignored. At the time of writing these are `ui`, `admin` and `tools`, so the built-in UI, the admin console and the tools router are not available on this stack yet. Every knob is documented in [docs/config-reference.md](https://github.com/awesome-lang-auth/awesome-lambda-auth/blob/main/docs/config-reference.md).
+Configuration domains that the schema accepts but the binary does not act on yet are **refused at start**, never silently ignored. At the time of writing these are `admin` and `tools`, so the admin console and the tools router are not available on this stack yet. The hosted UI is wired behind `ui.enabled`, which is off by default. Its admin dashboard calls routes this build does not mount, so the project's configuration reference says to leave it off on a deployed stack until the admin surface lands.
+
+What the binary reads is documented in [docs/config-reference.md](https://github.com/awesome-lang-auth/awesome-lambda-auth/blob/main/docs/config-reference.md), and the full schema with every default in [docs/spec/config-schema.md](https://github.com/awesome-lang-auth/awesome-lambda-auth/blob/main/docs/spec/config-schema.md).
 
 ## Deploy outline
 
@@ -50,7 +52,7 @@ cd awesome-lambda-auth
 ./scripts/deploy.sh --profile <profile> --region <region>   # package + deploy with the AWS CLI, no SAM CLI
 ```
 
-`--profile` and `--region` are required and have no defaults. The stack is one HTTP API, one Lambda function (`provided.al2023`, arm64) for the whole auth router, one DynamoDB table, and the JWT signing secrets, which AWS generates in Secrets Manager so you never handle their values. A CloudFront distribution and a KMS signing key for the identity provider are optional. `scripts/teardown.sh` removes the stack and names what outlives it. The template, its parameters and the IAM policy are documented in [infra/sam/README.md](https://github.com/awesome-lang-auth/awesome-lambda-auth/blob/main/infra/sam/README.md).
+`--profile` and `--region` are required and have no defaults. The stack is one HTTP API, one Lambda function (`provided.al2023`, arm64) for the whole auth router, one DynamoDB table, a log group with 14-day retention by default, the JWT signing secrets, which AWS generates in Secrets Manager so you never handle their values, and, by default, nine CloudWatch alarms. A CloudFront distribution and a KMS signing key for the identity provider are optional. `scripts/teardown.sh` removes the stack and names what outlives it. The template, its parameters and the IAM policy are documented in [infra/sam/README.md](https://github.com/awesome-lang-auth/awesome-lambda-auth/blob/main/infra/sam/README.md).
 
 To check a deployment, run the contract suite against it:
 
@@ -68,7 +70,7 @@ AWESOME_AUTH_CONTRACT_REQUIRE=register,csrf,secure-cookies,sessions,totp \
 - **One test suite for both.** The contract suite in `test/contract` is black-box and parametrised on a base URL: it runs against this stack or against the reference Express app.
 - **The official clients, unmodified.** `examples/angular-client` uses `ng-awesome-node-auth` from npm and `examples/flutter-client` uses `awesome_node_auth_flutter` from pub.dev. The API prefix defaults to `/auth`, as in awesome-node-auth, so the clients keep their usual `apiPrefix`.
 - **Browser clients need one origin.** The session cookies are `SameSite=Lax` and the CSRF double-submit needs the page to read the CSRF cookie, so the examples serve the app and rewrite `/auth/*` to the API from the same origin.
-- **One addition.** Rate limiting is on by default, which the reference does not ship: 10 requests per 60-second window, keyed by account, over the five credential flows, refused with `429 RATE_LIMITED` and a `Retry-After`.
+- **Rate limiting, on by default.** The reference ships no limiter. This stack allows 10 requests per 60-second window, keyed by account, over the five credential flows, and refuses the rest with `429 RATE_LIMITED` and a `Retry-After`.
 
 Every place where the stack differs from the reference is indexed in [docs/deviations.md](https://github.com/awesome-lang-auth/awesome-lambda-auth/blob/main/docs/deviations.md).
 

@@ -111,7 +111,7 @@ auth.on('sessionExpired', () => router.navigate('/login'));
 <AwesomeAuthProvider client={auth}>...</AwesomeAuthProvider>
 ```
 
-Every action method resolves to `{ success, error?, code? }` (plus its payload) and never rejects on an HTTP error. The client covers sessions, login and registration, passwords, magic link, SMS, TOTP 2FA, email verification and change, account linking and account deletion.
+Every action method resolves to `{ success, error?, code? }` (plus its payload) and never rejects on an HTTP error. The exceptions are `checkSession()`, which resolves to the user or `null`, `fetch()`, which resolves to a `Response`, and `oauthUrl()`, which returns a string. The client covers sessions, login and registration, passwords, magic link, SMS, TOTP 2FA, email verification and change, account linking and account deletion.
 
 ---
 
