@@ -9,11 +9,6 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'doc',
-      id: 'mcp-server',
-      label: '🤖 AI Setup (MCP)',
-    },
-    {
-      type: 'doc',
       id: 'live-demo',
       label: '▶ Live Demo',
     },

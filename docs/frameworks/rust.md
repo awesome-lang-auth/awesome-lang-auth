@@ -15,7 +15,6 @@ For Rust backends, use [`awesome-rust-auth`](https://github.com/nik2208/awesome-
 ## Resources
 
 - GitHub repository: [nik2208/awesome-rust-auth](https://github.com/nik2208/awesome-rust-auth)
-- MCP resource: `awesome-rust-auth://docs/readme`
 
 ## Related
 

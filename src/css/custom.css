@@ -191,16 +191,6 @@
 }
 
 
-@media (min-width: 1280px) {
-  body {
-    transition: padding-right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  body.ai-panel-open {
-    padding-right: var(--ai-panel-width) !important;
-  }
-}
-
 /* ── Canvas background — light & dark mode support ────────────────────────── */
 .auth-canvas {
   position: fixed;

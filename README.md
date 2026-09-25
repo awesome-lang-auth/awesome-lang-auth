@@ -26,47 +26,9 @@ The site runs at http://localhost:3000/.
 npm ci && npm run build
 ```
 
-The static output is in `build/`. The build needs no environment variable: without them the
-AI assistant stays disabled and the account API script (`auth.js`) is not injected.
-
-## AI Assistant Configuration
-
-The documentation site includes a built-in AI assistant (floating button, bottom-right). All parameters are injected at **build time** via environment variables — nothing is stored in the browser.
-
-**Step 1** — Copy the example env file:
-
-```bash
-cp .env.example .env
-```
-
-**Step 2** — Edit `.env`:
-
-```bash
-# Required — OpenAI Responses API endpoint (supports MCP servers)
-AI_LLM_ENDPOINT=https://api.openai.com/v1/responses
-
-# Model selection (leave empty for endpoint default)
-AI_MODEL=gpt-4o-mini
-
-# Sampling — 0.0 deterministic → 1.0 random (default: model default)
-AI_TEMPERATURE=0.3
-
-# Max tokens per reply (default: model default, typically 4096)
-AI_MAX_TOKENS=2048
-```
-
-> Security note: MCP tool config, MCP bearer auth, and system prompt are injected server-side by `mcp-server` (`POST /tools/ai-proxy`). Do not put secrets in `.env`.
-
-See [`.env.example`](.env.example) for the full reference with all comments.
-
-**Step 3** — Rebuild:
-
-```bash
-npm run build
-```
-
-> **Note:** `.env` is gitignored. Never commit your API key.
-> The variables are passed to the image as build args by `docker-compose.yml` (Docusaurus inlines them into the static bundle at build time, so they must be present when the image is built, not when the container starts).
+The static output is in `build/`. The build needs no environment variable. The optional ones
+(Google Analytics, and the host port and project name for `docker compose`) are listed in
+[`.env.example`](.env.example): copy it to `.env`, which is gitignored, and rebuild.
 
 ## Deploy
 
@@ -93,16 +55,16 @@ curl -sSI https://www.awesomenodeauth.com/ | grep -i last-modified
 
 Both services use the container name `docusaurus_docs`, so never enable both profiles at once.
 
-On the host, from a checkout of this repository, with the build values in `.env` next to
-`docker-compose.yml` (see above):
+On the host, from a checkout of this repository, with the optional values in `.env` next to
+`docker-compose.yml` (see [Build](#build)):
 
 ```bash
 docker compose --profile npm up -d --build      # Nginx Proxy Manager
 docker compose --profile traefik up -d --build  # Traefik
 ```
 
-`--build` is not optional: the AI-assistant and account API variables are baked into the
-JS bundle at build time, so a plain restart republishes the previous bundle.
+`--build` is not optional: the image contains the built site (and `.env` is read at build
+time), so a plain restart republishes the previous build.
 
 ### Replacing a container started from another checkout
 
@@ -124,10 +86,10 @@ echo "$P"                                   # e.g. wiki
 # 2. What --remove-orphans will delete: this must list only docusaurus_docs
 docker ps -a --filter "label=com.docker.compose.project=$P" --format '{{.Names}}'
 
-# 3. Reuse the build values of the old checkout (PORT included), without any API key:
-#    the site reads neither of these two any more
-cp /path/to/old/checkout/wiki/.env .env
-sed -i '/^AI_API_KEY=/d; /^AI_MCP_AUTH_KEY=/d' .env
+# 3. Reuse only what compose and the site still read (PORT, GOOGLE_ANALYTICS_ID,
+#    COMPOSE_PROJECT_NAME): no AI assistant or account API setting or key is carried over.
+#    If none of them is set, .env ends up empty, which is fine.
+grep -E '^(PORT|GOOGLE_ANALYTICS_ID|COMPOSE_PROJECT_NAME)=' /path/to/old/checkout/wiki/.env > .env
 
 # 4. Build, then swap the container inside that project
 docker compose -p "$P" --profile npm up -d --build --remove-orphans

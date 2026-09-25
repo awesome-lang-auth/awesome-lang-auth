@@ -12,14 +12,6 @@ x-site: &site
   build:
     context: .
     dockerfile: Dockerfile
-    args:
-      # Build args, not runtime env: Docusaurus inlines them into the static
-      # JS bundle at build time (values come from .env next to this file).
-      - AI_LLM_ENDPOINT=${AI_LLM_ENDPOINT}
-      - AI_MODEL=${AI_MODEL}
-      - AI_TEMPERATURE=${AI_TEMPERATURE}
-      - AI_MAX_TOKENS=${AI_MAX_TOKENS}
-      - ACCOUNT_API_URL=${ACCOUNT_API_URL}
   restart: always
 
 services:

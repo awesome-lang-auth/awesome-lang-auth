@@ -2,17 +2,11 @@
 id: advanced
 title: Advanced Authentication Features
 description: >-
-  Multi-tenancy, RBAC, sessions, API keys, webhooks, SSE, telemetry and the admin panel — the advanced half of awesome-node-auth, for sponsors.
+  Multi-tenancy, RBAC, sessions, API keys, webhooks, SSE, telemetry and the admin panel — the advanced half of awesome-node-auth.
 sidebar_position: 6
 ---
 
 # Advanced Features
-
-:::tip Sponsor-only section 🔒
-This section is accessible to **[GitHub sponsors](https://github.com/sponsors/nik2208)** only.
-Sponsoring unlocks these in-depth guides as a thank-you for keeping the project going.
-Already a sponsor? [Sign in to your account](/account) to verify your sponsorship status.
-:::
 
 `awesome-node-auth` provides optional interfaces and hooks for advanced functionality. Every feature is opt-in — only configure what you need.
 

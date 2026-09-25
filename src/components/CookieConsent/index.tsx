@@ -47,7 +47,6 @@ export default function CookieConsent(): React.ReactElement | null {
       }}
     >
       <span>
-        We use strictly-necessary cookies for authentication.{' '}
         <a href="/privacy" style={{ color: '#38bdf8' }}>Privacy Policy</a>
         {' · '}
         <a href="/termsofservice" style={{ color: '#38bdf8' }}>Terms</a>
