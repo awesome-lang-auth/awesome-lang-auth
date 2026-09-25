@@ -176,7 +176,8 @@
 }
 
 [data-theme='light'] .mixWire {
-  color: #00936b;
+  /* The label is 13px text: ≥ 4.5:1 on white (WCAG 1.4.3 AA). */
+  color: #00785a;
 }
 
 .mixWireLine {

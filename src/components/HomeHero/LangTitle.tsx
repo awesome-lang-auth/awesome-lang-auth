@@ -13,6 +13,11 @@ interface Props {
   target: string | null;
   /** Transition to use; null swaps words without animation (reduced motion). */
   effect: EffectName | null;
+  /**
+   * Whether the rotation is running. When it is not (paused, pinned by a chip,
+   * held, off screen) the typewriter caret stops blinking and rests visible.
+   */
+  live: boolean;
   /** Called once the slot shows `target`. */
   onSettled: (target: string | null) => void;
 }
@@ -23,7 +28,7 @@ interface Props {
  * the slot is CSS generated content (`content: attr(data-t)`), so the
  * rotation never changes the heading's text, and SSR renders `${lang}`.
  */
-export default function LangTitle({ target, effect, onSettled }: Props): ReactNode {
+export default function LangTitle({ target, effect, live, onSettled }: Props): ReactNode {
   const slotRef = useRef<HTMLSpanElement>(null);
   const measureRef = useRef<HTMLSpanElement>(null);
   const widths = useRef(new Map<string, number>());
@@ -151,7 +156,7 @@ export default function LangTitle({ target, effect, onSettled }: Props): ReactNo
             <span key={i} className={seg.brace ? styles.brace : styles.word} data-t={seg.t} />
           ))}
           {view.noise ? <span className={styles.noise} data-t={view.noise} /> : null}
-          {view.caret ? <span className={styles.caret} /> : null}
+          {view.caret ? <span className={styles.caret} data-still={live ? undefined : ''} /> : null}
         </span>
         <span ref={measureRef} className={styles.measure} data-t={PLACEHOLDER} aria-hidden="true" />
       </span>

@@ -78,7 +78,12 @@ export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNo
   // What stops the rotation.
   const [pinned, setPinned] = useState(false); // first chip click: for good
   const [userPaused, setUserPaused] = useState(false); // the pause button
-  const [cardHeld, setCardHeld] = useState(false); // hover or focus on the card
+  // Hover and focus hold the card separately: a pointer leaving the card must
+  // not release a keyboard focus that is still inside it (the card would go
+  // inert under the focused button and focus would drop to <body>).
+  const [cardHovered, setCardHovered] = useState(false);
+  const [cardFocused, setCardFocused] = useState(false);
+  const cardHeld = cardHovered || cardFocused;
   const [offscreen, setOffscreen] = useState(false); // hero out of view or tab hidden
 
   // The card follows the title; it keeps the last runtime while ${lang} shows.
@@ -113,6 +118,9 @@ export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNo
       });
       observer.observe(hero);
     }
+    // A tab opened in the background starts hidden, gets no rendering steps
+    // (so no observer callback) and no visibilitychange until it is shown.
+    update();
     return () => {
       document.removeEventListener('visibilitychange', onVisibility);
       observer?.disconnect();
@@ -144,34 +152,38 @@ export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNo
   };
 
   const holdCard = {
-    onMouseEnter: () => setCardHeld(true),
-    onMouseLeave: () => setCardHeld(false),
-    onFocus: () => setCardHeld(true),
+    onMouseEnter: () => setCardHovered(true),
+    onMouseLeave: () => setCardHovered(false),
+    onFocus: () => setCardFocused(true),
     onBlur: (e: FocusEvent<HTMLDivElement>) => {
-      if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setCardHeld(false);
+      if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setCardFocused(false);
     },
   };
 
+  // The group holds the chips only: `extra` (the pause button, which controls
+  // the H1) sits next to it, so it is not announced as one of the chips.
   const chipRow = (group: 'server' | 'client', runtimes: readonly Runtime[], extra?: ReactNode) => (
-    <div className={styles.chipRow} role="group" aria-labelledby={`chips-${group}`}>
+    <div className={styles.chipRow}>
       <span className={styles.chipRowLabel} id={`chips-${group}`}>
         {GROUP_INFO[group].label}
       </span>
-      <div className={styles.chips}>
-        {runtimes.map((r) => (
-          <button
-            key={r.id}
-            type="button"
-            className={clsx(styles.chip, r.id === cardId && styles.chipActive)}
-            aria-pressed={r.id === cardId}
-            aria-controls={`runtime-card-${r.id}`}
-            onClick={() => choose(r.id)}
-          >
-            <RuntimeIcon id={r.id} className={styles.chipIcon} />
-            <span className={styles.chipName}>{r.id}</span>
-            <MaturityBadge runtime={r} />
-          </button>
-        ))}
+      <div className={styles.chipLine}>
+        <div className={styles.chips} role="group" aria-labelledby={`chips-${group}`}>
+          {runtimes.map((r) => (
+            <button
+              key={r.id}
+              type="button"
+              className={clsx(styles.chip, r.id === cardId && styles.chipActive)}
+              aria-pressed={r.id === cardId}
+              aria-controls={`runtime-card-${r.id}`}
+              onClick={() => choose(r.id)}
+            >
+              <RuntimeIcon id={r.id} className={styles.chipIcon} />
+              <span className={styles.chipName}>{r.id}</span>
+              <MaturityBadge runtime={r} />
+            </button>
+          ))}
+        </div>
         {extra}
       </div>
     </div>
@@ -202,8 +214,10 @@ export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNo
     </button>
   );
 
+  // A <section>, not a <header>: the page renders it inside <main>, so the H1
+  // is in the main landmark and "Skip to main content" does not jump past it.
   return (
-    <header className={styles.hero} ref={heroRef}>
+    <section className={styles.hero} ref={heroRef}>
       <div className={styles.heroInner}>
         <div className={styles.heroBadge}>
           <span>Open source</span>
@@ -213,7 +227,7 @@ export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNo
           <span>Self-hosted</span>
         </div>
 
-        <LangTitle target={target} effect={reducedMotion ? null : effect} onSettled={onSettled} />
+        <LangTitle target={target} effect={reducedMotion ? null : effect} live={running} onSettled={onSettled} />
 
         <p className={styles.subtitle}>{subtitle}</p>
 
@@ -240,6 +254,6 @@ export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNo
           </Link>
         </div>
       </div>
-    </header>
+    </section>
   );
 }
