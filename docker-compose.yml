@@ -1,28 +1,53 @@
+# Two deployments of the same image. Pick exactly one with --profile:
+#
+#   docker compose --profile npm up -d --build      # host behind Nginx Proxy Manager
+#   docker compose --profile traefik up -d --build  # host behind Traefik
+#
+# Both services use container_name docusaurus_docs and host port ${PORT:-3000},
+# so never enable both profiles at once. Without --profile nothing starts.
+# See README.md → "Deploy" before replacing a container started from another
+# checkout (compose project name).
+
+x-site: &site
+  build:
+    context: .
+    dockerfile: Dockerfile
+    args:
+      # Build args, not runtime env: Docusaurus inlines them into the static
+      # JS bundle at build time (values come from .env next to this file).
+      - AI_LLM_ENDPOINT=${AI_LLM_ENDPOINT}
+      - AI_MODEL=${AI_MODEL}
+      - AI_TEMPERATURE=${AI_TEMPERATURE}
+      - AI_MAX_TOKENS=${AI_MAX_TOKENS}
+      - ACCOUNT_API_URL=${ACCOUNT_API_URL}
+  restart: always
+
 services:
-  docusaurus-wiki:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        # Passiamo i segreti durante la build perché Docusaurus 
-        # li inietta nel bundle JS statico
-        - AI_LLM_ENDPOINT=${AI_LLM_ENDPOINT}
-        - AI_MODEL=${AI_MODEL}
-        - AI_TEMPERATURE=${AI_TEMPERATURE}
-        - AI_MAX_TOKENS=${AI_MAX_TOKENS}
-        - ACCOUNT_API_URL=${ACCOUNT_API_URL}
+  # Nginx Proxy Manager: the proxy host forwards to the published host port.
+  site-npm:
+    <<: *site
+    profiles: ["npm"]
     container_name: docusaurus_docs
-    restart: always
     networks:
-      - awesome-node-auth # Assicurati che sia la stessa rete di Traefik
+      - awesome-node-auth
     ports:
-      - "${PORT:-3000}:80" # Mappa la porta 80 del container alla porta 3000 del host
+      - "${PORT:-3000}:80" # container port 80 → host port 3000 by default
+
+  # Traefik: same container, plus the router labels (Traefik must be attached
+  # to the same network).
+  site-traefik:
+    <<: *site
+    profiles: ["traefik"]
+    container_name: docusaurus_docs
+    networks:
+      - awesome-node-auth
+    ports:
+      - "${PORT:-3000}:80" # container port 80 → host port 3000 by default
     labels:
       - "traefik.enable=true"
-      # Sostituisci con il tuo dominio reale per la Wiki
       - "traefik.http.routers.docusaurus.rule=Host(`www.awesomenodeauth.com`)"
       - "traefik.http.routers.docusaurus.entrypoints=websecure"
-      - "traefik.http.routers.docusaurus.tls.certresolver=myresolver" # Il nome del tuo resolver in traefik.yml
+      - "traefik.http.routers.docusaurus.tls.certresolver=myresolver" # resolver name in traefik.yml
       - "traefik.http.services.docusaurus.loadbalancer.server.port=80"
 
 networks:
