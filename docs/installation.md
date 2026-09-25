@@ -2,7 +2,7 @@
 id: installation
 title: Install awesome-node-auth in a Node.js App
 description: >-
-  Install awesome-node-auth from npm and configure JWT secrets, cookies, CORS, mailer and the user store before mounting the auth router in your app.
+  Install @awesome-lang-auth/node from npm and configure JWT secrets, cookies, CORS, mailer and the user store before mounting the auth router in your app.
 sidebar_position: 2
 ---
 

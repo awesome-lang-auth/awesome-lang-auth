@@ -2,7 +2,7 @@
 id: python
 title: "Python FastAPI Authentication: awesome-python-auth"
 description: >-
-  awesome-python-auth is the FastAPI port of awesome-node-auth: the same endpoints, JWT model and client compatibility, for Python backends.
+  awesome-python-auth brings the same auth model as awesome-node-auth to FastAPI backends; its parity audit tracks what is implemented.
 sidebar_label: Python / FastAPI
 ---
 

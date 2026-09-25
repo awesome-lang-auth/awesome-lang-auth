@@ -14,7 +14,7 @@ sidebar_label: AuthTools
 - **SSE** — stream events to connected browser/server clients in real time
 - **Webhooks** — forward events to external HTTP endpoints with HMAC signing, or execute dynamic inbound scripts when external providers call you
 
-> See the dedicated [Webhooks](./webhooks.md) page for full details on both outgoing and inbound webhook configurations, including the `@webhookAction` decorator.
+> See the dedicated [Webhooks](/docs/advanced/webhooks) page for full details on both outgoing and inbound webhook configurations, including the `@webhookAction` decorator.
 
 All capabilities are opt-in. Unused features have zero runtime overhead.
 
