@@ -117,10 +117,6 @@ In **development** with a local proxy (API and front-end on the same origin via
 `/api` proxy) `sameSite: 'lax'` is fine. In **production** with separate
 domains use `sameSite: 'none'` + `secure: true`.
 
-:::tip Automatic detection in the MCP server
-The MCP server detects cross-domain deployments automatically: when `CORS_ORIGINS` is set (even in development, e.g. `localhost:3000` talking to a remote server) it switches to `sameSite: 'none'` + `secure: true`. No manual `cookieOptions` override is needed in that scenario.
-:::
-
 ---
 
 ### 3. Front-end fetch calls
@@ -200,10 +196,9 @@ origin once if you set both.
 
 ---
 
-## MCP server example
+## Example: configuration from environment variables
 
-The awesome-node-auth MCP server uses environment variables to configure both CORS and
-dynamic siteUrl:
+A server can drive both CORS and the dynamic siteUrl from environment variables:
 
 ```env
 # .env
@@ -212,7 +207,12 @@ SITE_URL=https://wiki.example.com   # optional: explicit default (used for email
 ```
 
 ```typescript
-// In http-server.ts (already configured in the MCP server)
+// server.ts
+const CORS_ORIGINS = (process.env.CORS_ORIGINS ?? '')
+  .split(',').map((o) => o.trim()).filter(Boolean);
+const SITE_URL = process.env.SITE_URL ?? '';
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+
 const allowedSiteUrls = [SITE_URL, ...CORS_ORIGINS].filter(Boolean);
 
 const authConfig: AuthConfig = {
@@ -233,9 +233,9 @@ app.use('/auth', auth.router({
 }));
 ```
 
-After OAuth login the browser is automatically redirected back to the wiki
+After OAuth login the browser is automatically redirected back to the front-end
 origin that initiated the flow, and subsequent cross-origin `fetch` calls from
-the wiki to the API include the auth cookies correctly.
+that front-end to the API include the auth cookies correctly.
 
 ---
 

@@ -365,10 +365,6 @@ The server-side complement is `buildUiRouter({ authConfig: { ui: { headless: tru
 - Continues serving `auth.js` and CSS static assets
 - Includes `{ headless: true }` in the `/config` JSON response
 
-:::tip MCP server
-The awesome-node-auth MCP server automatically enables headless mode when `CORS_ORIGINS` is set. See [MCP server docs](/docs/mcp-server#cross-domain-wiki-integration) for the complete setup guide.
-:::
-
 ### Custom lifecycle callbacks
 
 Override individual handlers without losing headless redirect protection:

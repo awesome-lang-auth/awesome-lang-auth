@@ -15,7 +15,6 @@ For Go backends, use [`awesome-go-auth`](https://github.com/nik2208/awesome-go-a
 ## Resources
 
 - GitHub repository: [nik2208/awesome-go-auth](https://github.com/nik2208/awesome-go-auth)
-- MCP resource: `awesome-go-auth://docs/readme`
 
 ## Related
 

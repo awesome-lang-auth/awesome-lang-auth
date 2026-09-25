@@ -15,7 +15,6 @@ For Dart backends, use [`awesome-dart-auth`](https://github.com/nik2208/awesome-
 ## Resources
 
 - GitHub repository: [nik2208/awesome-dart-auth](https://github.com/nik2208/awesome-dart-auth)
-- MCP resource: `awesome-dart-auth://docs/readme`
 
 ## Related
 
