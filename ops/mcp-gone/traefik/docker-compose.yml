@@ -1,0 +1,41 @@
+# mcp.awesomenodeauth.com → 410 Gone on a host behind Traefik (see ../README.md).
+#
+#   TRAEFIK_NETWORK=<network Traefik is attached to> docker compose up -d
+#
+# Start it only after the MCP stack is down: two routers with the same Host()
+# rule would compete for the same requests.
+
+# Fixed project name: the default would be this folder's name, "traefik",
+# which is likely the project name of Traefik's own stack.
+name: mcp-gone
+
+services:
+  mcp-gone:
+    image: nginx:alpine
+    container_name: mcp-gone
+    restart: unless-stopped
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=${TRAEFIK_NETWORK}"
+      # HTTPS: every request gets the 410 page.
+      - "traefik.http.routers.mcp-gone.rule=Host(`mcp.awesomenodeauth.com`)"
+      - "traefik.http.routers.mcp-gone.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
+      - "traefik.http.routers.mcp-gone.tls=true"
+      # Must match a certificate resolver defined in Traefik's static config (traefik.yml).
+      - "traefik.http.routers.mcp-gone.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-myresolver}"
+      - "traefik.http.services.mcp-gone.loadbalancer.server.port=80"
+      # HTTP: permanent redirect to HTTPS, as the MCP stack did.
+      - "traefik.http.routers.mcp-gone-http.rule=Host(`mcp.awesomenodeauth.com`)"
+      - "traefik.http.routers.mcp-gone-http.entrypoints=${TRAEFIK_HTTP_ENTRYPOINT:-web}"
+      - "traefik.http.routers.mcp-gone-http.middlewares=mcp-gone-https"
+      - "traefik.http.middlewares.mcp-gone-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.mcp-gone-https.redirectscheme.permanent=true"
+
+networks:
+  traefik:
+    external: true
+    name: ${TRAEFIK_NETWORK:?set TRAEFIK_NETWORK to the Docker network Traefik is attached to}
