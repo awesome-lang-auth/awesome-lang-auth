@@ -34,18 +34,23 @@ The static output is in `build/`. The build needs no environment variable. The o
 
 **GitHub Pages.** Every push to `main` builds the site and publishes it at
 <https://awesomelangauth.com/> ([`.github/workflows/pages.yml`](.github/workflows/pages.yml));
-the workflow can also be started by hand from the Actions tab. The repository's Pages
-settings use the source **GitHub Actions** and the custom domain `awesomelangauth.com`.
-`static/CNAME` names the same domain, but with a deployment from Actions GitHub reads the
-setting, not the file. Check what is live with
+the workflow can also be started by hand from the Actions tab, and it publishes only when
+started on `main`. Every pull request to `main` runs the same build as its check, without
+publishing anything. The repository's Pages settings use the source **GitHub Actions** and
+the custom domain `awesomelangauth.com`. `static/CNAME` names the same domain, but with a
+deployment from Actions GitHub reads the setting, not the file. Check what is live with
 
 ```bash
 curl -sSI https://awesomelangauth.com/ | grep -i last-modified
 ```
 
-GitHub Pages serves the build as plain files, so `nginx.conf` does not apply there. The one
-visible difference: `/docs/` has no page of its own and answers 404 on GitHub Pages, while the
-Docker image below redirects it to `/docs/intro/`.
+GitHub Pages serves the build as plain files, so `nginx.conf` does not apply there. Two
+visible differences from the Docker image below:
+
+- `/docs/` has no page of its own and answers 404 on GitHub Pages, while the Docker image
+  redirects it to `/docs/intro/`;
+- the Pages build runs on a full git checkout, so doc pages show "Last updated" and the
+  sitemap has `<lastmod>`; the Docker image builds without git and has neither.
 
 ### Docker (self-hosting or rollback)
 
@@ -134,8 +139,9 @@ running profile first: `docker compose -p "$P" --profile npm down`, then
 2. Spot-check a page added since the last deploy (it must return `200`, not `404`).
 3. `curl -s https://awesomelangauth.com/sitemap.xml | grep -o '<loc>' | wc -l` matches the number
    of routes you expect, and contains no URL that `robots.txt` disallows.
-4. The old domain redirects that page too: `curl -sI https://www.awesomenodeauth.com/<path>/`
-   answers `301` with `Location: https://awesomelangauth.com/<path>/`.
+4. The old domain redirects that page too:
+   `curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://www.awesomenodeauth.com/<path>/`
+   prints `301 https://awesomelangauth.com/<path>/`.
 5. In [Google Search Console](https://search.google.com/search-console): resubmit the sitemap,
    then run **URL Inspection → Request indexing** on the pages that changed.
 

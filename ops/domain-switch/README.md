@@ -47,15 +47,12 @@ site answers on `https://awesomelangauth.com` (checklist step 5).
    `TRAEFIK_ENTRYPOINT=websecure`, `TRAEFIK_HTTP_ENTRYPOINT=web`. The compose project is
    always `old-domain-redirect`. Its routers have priority 1000, so they take both old names
    over at once, even while the old site container is still running.
-4. Run the checks in [`nginx-proxy-manager.md` → Verify](nginx-proxy-manager.md#verify), with
-   two differences:
-   - Traefik v3 answers **301 to GET** but **308 to HEAD** and every other method. `curl -I`
-     sends a HEAD, so it shows 308: check with a GET instead,
-     `curl -s -o /dev/null -D - 'https://www.awesomenodeauth.com/docs/intro/?q=1'`.
-     Browsers and crawlers use GET and get the 301.
-   - `http://` URLs also take a single hop, straight to `https://awesomelangauth.com`, unless
-     Traefik's static configuration redirects the `web` entry point to `websecure` for every
-     host; then they take two.
+4. Run the checks in [`nginx-proxy-manager.md` → Verify](nginx-proxy-manager.md#verify). They
+   all send a GET, and that matters here: Traefik v3 answers **301 to GET** but **308 to
+   HEAD** and every other method, so `curl -I` (a HEAD) would show 308. Browsers and crawlers
+   use GET and get the 301. Check 6 (`http://`) also shows a single hop, unless Traefik's
+   static configuration redirects the `web` entry point to `websecure` for every host; then
+   it shows two.
 5. Only when the checks pass, stop the old site container (`docker stop docusaurus_docs`).
 
 Rollback: start the old site container again, then `TRAEFIK_NETWORK=<that network> docker

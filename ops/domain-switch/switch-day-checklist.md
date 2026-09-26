@@ -5,8 +5,10 @@ old domain keeps serving the old site from the VPS, so nobody who follows an old
 an outage, and every step before it can be undone by putting DNS back.
 
 Every step ends with a check. The checks are bash commands (`curl`, `grep`, `nslookup`): on
-Windows, run them in Git Bash. A check that still shows the old answer right after a DNS
-change may come from the local DNS cache: `ipconfig /flushdns` on Windows, then retry.
+Windows, run them in Git Bash. Most `curl` checks print the status code and, for a redirect,
+where it points (`-w '%{http_code} %{redirect_url}\n'`), so the expected line is the same
+whatever HTTP version your `curl` speaks. A check that still shows the old answer right after
+a DNS change may come from the local DNS cache: `ipconfig /flushdns` on Windows, then retry.
 
 ## Before the day
 
@@ -38,9 +40,9 @@ These must all be true before step 1. Each has its check.
    302, the fewer browsers keep an old 301.
 
    ```bash
-   curl -sI https://awesomelangauth.com/ | head -1
-   curl -sI https://www.awesomelangauth.com/ | head -1
-   #   both: HTTP/1.1 302 Moved Temporarily (not 301, not 200)
+   curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://awesomelangauth.com/
+   curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://www.awesomelangauth.com/
+   #   both: 302 and the URL it points to (not 301, not 200)
    ```
 
 4. **DNS TTL lowered, at least a day before.** At IONOS, set the TTL of the A/AAAA records of
@@ -98,48 +100,47 @@ nslookup -type=A awesomelangauth.com 1.1.1.1        # the same four
 
 ### 3. Merge the pull request
 
-Merge the domain switch pull request into `main` right after step 2. The **Deploy to GitHub
-Pages** workflow runs on the push and publishes the site (Actions tab: both jobs green,
+The pull request is a draft, and its own build check (**Deploy to GitHub Pages / build**, run
+on every push to the pull request) must be green. On the pull request page: **Ready for
+review**, then **Squash and merge**, right after step 2. The **Deploy to GitHub Pages**
+workflow runs on the push to `main` and publishes the site (Actions tab: both jobs green,
 about 5 minutes).
 
 ```bash
-curl -sI http://awesomelangauth.com/ | grep -iE '^(HTTP|server)'
-#   HTTP/1.1 200 OK
-#   Server: GitHub.com
+curl -s -o /dev/null -D - http://awesomelangauth.com/ | grep -iE '^(HTTP|server)'
+#   the status line ends in 200, and "Server: GitHub.com" (the name may be lowercase)
 curl -s http://awesomelangauth.com/ | grep -o 'rel="canonical" href="[^"]*"'
 #   rel="canonical" href="https://awesomelangauth.com/"
 ```
 
 ### 4. Wait for the certificate, then Enforce HTTPS
 
-In **Settings → Pages**, the DNS check turns green, then GitHub requests the certificate (from
-a few minutes up to an hour). When **Enforce HTTPS** can be ticked, tick it. If it is still
-greyed out after an hour, remove the custom domain, save, add it again and save.
+In **Settings → Pages**, the DNS check turns green, then GitHub requests the certificate
+(usually minutes; GitHub says it can take up to 24 hours). When **Enforce HTTPS** can be
+ticked, tick it. If it is still greyed out after a few hours, remove the custom domain, save,
+add it again and save.
 
 ```bash
-curl -sI https://awesomelangauth.com/ | head -1
-#   HTTP/2 200
-curl -sI 'http://awesomelangauth.com/docs/intro/?q=1' | grep -iE '^(HTTP|location)'
-#   HTTP/1.1 301 Moved Permanently
-#   Location: https://awesomelangauth.com/docs/intro/?q=1
+curl -s -o /dev/null -w '%{http_code}\n' https://awesomelangauth.com/
+#   200
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' 'http://awesomelangauth.com/docs/intro/?q=1'
+#   301 https://awesomelangauth.com/docs/intro/?q=1
 ```
 
 ### 5. Verify the new site
 
 ```bash
 # The www host redirects to the apex in one hop, path and query preserved
-curl -sI 'https://www.awesomelangauth.com/docs/intro/?q=1' | grep -iE '^(HTTP|location)'
-#   HTTP/2 301
-#   location: https://awesomelangauth.com/docs/intro/?q=1
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' 'https://www.awesomelangauth.com/docs/intro/?q=1'
+#   301 https://awesomelangauth.com/docs/intro/?q=1
 
 # Canonical URLs on the apex
 curl -s https://awesomelangauth.com/docs/intro/ | grep -o 'rel="canonical" href="[^"]*"'
 #   rel="canonical" href="https://awesomelangauth.com/docs/intro/"
 
 # A path without the trailing slash gets it; a missing page is a real 404
-curl -sI https://awesomelangauth.com/docs/intro | grep -iE '^(HTTP|location)'
-#   HTTP/2 301
-#   location: https://awesomelangauth.com/docs/intro/
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://awesomelangauth.com/docs/intro
+#   301 https://awesomelangauth.com/docs/intro/
 curl -s -o /dev/null -w '%{http_code}\n' https://awesomelangauth.com/no-such-page/
 #   404
 
@@ -173,10 +174,12 @@ Only when step 5 is all green. On the VPS with Nginx Proxy Manager follow
 that procedure, after its checks.
 
 ```bash
-curl -sI 'https://awesomenodeauth.com/docs/intro/?q=1' | grep -iE '^(HTTP|location)'
-curl -sI 'https://www.awesomenodeauth.com/docs/intro/?q=1' | grep -iE '^(HTTP|location)'
-#   both: 301, Location: https://awesomelangauth.com/docs/intro/?q=1
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' 'https://awesomenodeauth.com/docs/intro/?q=1'
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' 'https://www.awesomenodeauth.com/docs/intro/?q=1'
+#   both: 301 https://awesomelangauth.com/docs/intro/?q=1
 curl -sL -o /dev/null -w '%{num_redirects} %{http_code} %{url_effective}\n' 'https://www.awesomenodeauth.com/'
+#   1 200 https://awesomelangauth.com/
+curl -sL -o /dev/null -w '%{num_redirects} %{http_code} %{url_effective}\n' 'http://awesomenodeauth.com/'
 #   1 200 https://awesomelangauth.com/
 ```
 
@@ -185,20 +188,29 @@ curl -sL -o /dev/null -w '%{num_redirects} %{http_code} %{url_effective}\n' 'htt
 Only after step 6. In Search Console, open the **old** property (`awesomenodeauth.com`) →
 **Settings → Change of address** → choose `awesomelangauth.com` → **Validate and update**.
 If the tool is not offered for the Domain property, use the URL-prefix property
-`https://www.awesomenodeauth.com/`. Then, in the new property:
+`https://www.awesomenodeauth.com/`, then repeat for `https://awesomenodeauth.com/` (verify
+it first if needed): Google asks for every variant of the old domain, with and without
+`www`. Then, in the new property:
 
 - **Sitemaps**: submit `https://awesomelangauth.com/sitemap.xml`;
 - **URL Inspection** → **Request indexing** for `https://awesomelangauth.com/`,
   `https://awesomelangauth.com/docs/intro/` and `https://awesomelangauth.com/llms.txt`.
 
+Leave the old property as it is: do not delete it, nor the sitemap it has.
+
 The Change of Address validation fetches the old home page and expects exactly this:
 
 ```bash
-curl -sI https://www.awesomenodeauth.com/ | grep -iE '^(HTTP|location)'
-#   301, Location: https://awesomelangauth.com/
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://www.awesomenodeauth.com/
+#   301 https://awesomelangauth.com/
 ```
 
 ## After the day
 
+- **Keep the old domain redirecting for at least a year**, ideally for good: keep
+  `awesomenodeauth.com` registered (auto-renew on) and the Redirection Host (or the Traefik
+  router) running. Google asks to keep the redirects for at least 180 days after the Change
+  of Address, and for as long as possible, generally at least a year; if the old domain
+  lapses or stops redirecting, the move is undone.
 - **Umami**: in the Umami dashboard, change the website's domain to `awesomelangauth.com`.
   The tracking script and its website id in `docusaurus.config.ts` do not change.
