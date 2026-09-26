@@ -1,0 +1,52 @@
+# awesomenodeauth.com and www.awesomenodeauth.com → one 301 to the same path
+# and query on https://awesomelangauth.com, on a host behind Traefik v3 (see
+# ../README.md).
+#
+#   TRAEFIK_NETWORK=<network Traefik is attached to> docker compose up -d
+#
+# Traefik itself answers the redirect (redirectRegex middleware, router service
+# noop@internal): the small whoami container only carries the labels and never
+# receives a request.
+
+# Fixed project name: the default would be this folder's name, "traefik",
+# which is likely the project name of Traefik's own stack.
+name: old-domain-redirect
+
+services:
+  old-domain-redirect:
+    image: traefik/whoami:latest
+    container_name: old-domain-redirect
+    restart: unless-stopped
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=${TRAEFIK_NETWORK}"
+      # The middleware: any URL on either old host → https://awesomelangauth.com
+      # plus the same path and query. (?i) because host names are
+      # case-insensitive; $$ is how compose writes a literal $.
+      - 'traefik.http.middlewares.old-domain-redirect.redirectregex.regex=(?i)^https?://(?:www\.)?awesomenodeauth\.com(?::[0-9]+)?/(.*)'
+      - 'traefik.http.middlewares.old-domain-redirect.redirectregex.replacement=https://awesomelangauth.com/$${1}'
+      - "traefik.http.middlewares.old-domain-redirect.redirectregex.permanent=true"
+      # HTTPS on both old names, with a certificate for both.
+      - "traefik.http.routers.old-domain-redirect.rule=Host(`awesomenodeauth.com`) || Host(`www.awesomenodeauth.com`)"
+      - "traefik.http.routers.old-domain-redirect.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
+      - "traefik.http.routers.old-domain-redirect.tls=true"
+      # Must match a certificate resolver defined in Traefik's static config (traefik.yml).
+      - "traefik.http.routers.old-domain-redirect.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-myresolver}"
+      - "traefik.http.routers.old-domain-redirect.middlewares=old-domain-redirect"
+      - "traefik.http.routers.old-domain-redirect.service=noop@internal"
+      # Wins over the old site's router (Host(`www.awesomenodeauth.com`)) while
+      # that container is still running.
+      - "traefik.http.routers.old-domain-redirect.priority=1000"
+      # HTTP: straight to the new host in one hop, not via https:// on the old one.
+      - "traefik.http.routers.old-domain-redirect-http.rule=Host(`awesomenodeauth.com`) || Host(`www.awesomenodeauth.com`)"
+      - "traefik.http.routers.old-domain-redirect-http.entrypoints=${TRAEFIK_HTTP_ENTRYPOINT:-web}"
+      - "traefik.http.routers.old-domain-redirect-http.middlewares=old-domain-redirect"
+      - "traefik.http.routers.old-domain-redirect-http.service=noop@internal"
+      - "traefik.http.routers.old-domain-redirect-http.priority=1000"
+
+networks:
+  traefik:
+    external: true
+    name: ${TRAEFIK_NETWORK:?set TRAEFIK_NETWORK to the Docker network Traefik is attached to}

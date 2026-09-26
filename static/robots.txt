@@ -7,4 +7,4 @@ Disallow: /demo-live
 # Search result page (Docusaurus client-side search)
 Disallow: /search
 
-Sitemap: https://www.awesomenodeauth.com/sitemap.xml
+Sitemap: https://awesomelangauth.com/sitemap.xml

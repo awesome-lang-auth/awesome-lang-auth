@@ -9,15 +9,19 @@ import { resolve } from 'path';
 dotenv.config();
 
 // ── Constants ──────────────────────────────────────────────────────────────────
-const SITE_URL = 'https://www.awesomenodeauth.com';
+// The canonical host is the apex. GitHub Pages serves it (static/CNAME) and
+// redirects www.awesomelangauth.com to it; the old domain (awesomenodeauth.com
+// and www.awesomenodeauth.com) answers with a single 301 to the same path here
+// (ops/domain-switch/).
+const SITE_URL = 'https://awesomelangauth.com';
 const SOCIAL_CARD_URL = `${SITE_URL}/img/docusaurus-social-card.jpg`;
 
 // ── Brand ──────────────────────────────────────────────────────────────────────
 // The site brand is the family, awesome-lang-auth. The family started as the
 // Node.js library awesome-node-auth, which keeps that name as its project (repo
 // awesome-lang-auth/awesome-node-auth) and is published on npm as
-// @awesome-lang-auth/node. Only the brand changes here: SITE_URL, the domain
-// and every URL of the site stay as they are until the domain switch.
+// @awesome-lang-auth/node. The paths of every page did not change with the
+// domain switch: only the host did (SITE_URL above).
 const BRAND = 'awesome-lang-auth';
 // The old brand, declared as an alternate name in the JSON-LD so search
 // engines and AI assistants resolve the two names to the same entity.
@@ -176,6 +180,18 @@ const config: Config = {
           { trackingID: process.env.GOOGLE_ANALYTICS_ID, anonymizeIP: true },
         ]]
       : []),
+    // /docs/ has no page of its own. nginx.conf (the Docker image) answers it
+    // with a 301 to /docs/intro/; GitHub Pages has no server-side redirects, so
+    // the build writes a redirect page at build/docs/index.html instead: a meta
+    // refresh plus a script that keeps the query and the hash. The plugin uses
+    // one URL for the refresh and for rel="canonical", so it is absolute, on
+    // SITE_URL like every other canonical. It is not a route, so it stays out
+    // of the sitemap. The footer links /docs/intro and broken links fail the
+    // build, which guarantees the target exists.
+    [
+      '@docusaurus/plugin-client-redirects',
+      { redirects: [{ from: '/docs', to: `${SITE_URL}/docs/intro/` }] },
+    ],
     // llms.txt (an index of the doc pages) and llms-full.txt (their Markdown,
     // concatenated) at the site root, generated from docs/ on every build.
     [
