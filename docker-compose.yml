@@ -1,3 +1,6 @@
+# The live site is published by GitHub Pages (.github/workflows/pages.yml).
+# This file self-hosts the same build instead, for example as a rollback.
+#
 # Two deployments of the same image. Pick exactly one with --profile:
 #
 #   docker compose --profile npm up -d --build      # host behind Nginx Proxy Manager
@@ -43,7 +46,7 @@ services:
       - "${PORT:-3000}:80" # container port 80 → host port 3000 by default
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.docusaurus.rule=Host(`www.awesomenodeauth.com`)"
+      - "traefik.http.routers.docusaurus.rule=Host(`awesomelangauth.com`)"
       - "traefik.http.routers.docusaurus.entrypoints=websecure"
       - "traefik.http.routers.docusaurus.tls.certresolver=myresolver" # resolver name in traefik.yml
       - "traefik.http.services.docusaurus.loadbalancer.server.port=80"

@@ -1,0 +1,57 @@
+# Builds the site and publishes it on GitHub Pages at https://awesomelangauth.com/.
+# Needs Settings → Pages → Source "GitHub Actions" and the custom domain
+# awesomelangauth.com set there: with an Actions deployment, the custom domain
+# comes from that setting, not from static/CNAME.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time. A run that is already deploying is never cancelled
+# (that could leave Pages half-published); a newer push waits for it instead.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history: showLastUpdateTime feeds <lastmod> in sitemap.xml from
+          # each file's last commit. A shallow clone would date every page
+          # with the latest commit.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          # The same major version as the Dockerfile (node:24-alpine).
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5

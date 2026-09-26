@@ -5,9 +5,9 @@ Website and documentation of the **awesome-lang-auth** family: the Node.js refer
 other languages. Built with [Docusaurus](https://docusaurus.io/).
 
 The site used to live in the `wiki/` folder of the owner's private development repository and
-has moved here. It is still served at <https://www.awesomenodeauth.com/>: the old domain stays
-until the switch to `awesomelangauth.com`, so canonical URLs, `robots.txt`, the sitemap and the
-Traefik label below keep the old host for now.
+has moved here. It is served at <https://awesomelangauth.com/> by GitHub Pages. The old
+domain, `awesomenodeauth.com` and `www.awesomenodeauth.com`, answers every URL with one 301 to
+the same path on the new host (see [The old domain](#the-old-domain)).
 
 ## Development
 
@@ -32,26 +32,37 @@ The static output is in `build/`. The build needs no environment variable. The o
 
 ## Deploy
 
-**The site is not published by GitHub Actions.** The live site is a Docker container built
-from this repository: `Dockerfile` builds the static site and serves it with nginx
-(`nginx.conf`), behind the reverse proxy that terminates TLS.
-
-Deployment is therefore **manual**, and nothing reaches the site until someone runs it.
-A stale deploy is invisible from the repository: check what is actually live with
+**GitHub Pages.** Every push to `main` builds the site and publishes it at
+<https://awesomelangauth.com/> ([`.github/workflows/pages.yml`](.github/workflows/pages.yml));
+the workflow can also be started by hand from the Actions tab. The repository's Pages
+settings use the source **GitHub Actions** and the custom domain `awesomelangauth.com`.
+`static/CNAME` names the same domain, but with a deployment from Actions GitHub reads the
+setting, not the file. Check what is live with
 
 ```bash
-curl -sSI https://www.awesomenodeauth.com/ | grep -i last-modified
+curl -sSI https://awesomelangauth.com/ | grep -i last-modified
 ```
 
-### Profiles
+GitHub Pages serves the build as plain files, so `nginx.conf` does not apply there. The one
+visible difference: `/docs/` has no page of its own and answers 404 on GitHub Pages, while the
+Docker image below redirects it to `/docs/intro/`.
+
+### Docker (self-hosting or rollback)
+
+The `Dockerfile` builds the same site and serves it with nginx (`nginx.conf`), behind a
+reverse proxy that terminates TLS. It is not how the live site is published; it is how to
+host the site on a server of your own, or to bring it back to the VPS. Deployment with Docker
+is **manual**: nothing reaches that server until someone runs it.
+
+#### Profiles
 
 `docker-compose.yml` has one service per reverse proxy. Pick exactly one profile; without
 `--profile` nothing starts.
 
 | Profile | Service | For | What it sets |
 |---|---|---|---|
-| `npm` | `site-npm` | host behind Nginx Proxy Manager (the current VPS) | container `docusaurus_docs`, port `${PORT:-3000}:80`, network `awesome-node-auth` (alias `docusaurus-wiki`, the old service name), no Traefik labels |
-| `traefik` | `site-traefik` | host behind Traefik | the same, plus the router labels for `www.awesomenodeauth.com` (entrypoint `websecure`, resolver `myresolver`) |
+| `npm` | `site-npm` | host behind Nginx Proxy Manager (like the VPS) | container `docusaurus_docs`, port `${PORT:-3000}:80`, network `awesome-node-auth` (alias `docusaurus-wiki`, the old service name), no Traefik labels |
+| `traefik` | `site-traefik` | host behind Traefik | the same, plus the router labels for `awesomelangauth.com` (entrypoint `websecure`, resolver `myresolver`) |
 
 Both services use the container name `docusaurus_docs`, so never enable both profiles at once.
 
@@ -66,7 +77,7 @@ docker compose --profile traefik up -d --build  # Traefik
 `--build` is not optional: the image contains the built site (and `.env` is read at build
 time), so a plain restart republishes the previous build.
 
-### Replacing a container started from another checkout
+#### Replacing a container started from another checkout
 
 Compose names the project, and therefore the network, after the checkout directory. The
 container that runs today was probably started from the old `wiki/` folder (the old README
@@ -118,27 +129,20 @@ running profile first: `docker compose -p "$P" --profile npm down`, then
 
 ### After every deploy — SEO checklist
 
-1. `curl -sSI https://www.awesomenodeauth.com/ | grep -i last-modified` shows today's date.
+1. The **Deploy to GitHub Pages** run of the push is green, and
+   `curl -sSI https://awesomelangauth.com/ | grep -i last-modified` shows its date.
 2. Spot-check a page added since the last deploy (it must return `200`, not `404`).
-3. `curl -s https://www.awesomenodeauth.com/sitemap.xml | grep -c '<loc>'` matches the number
+3. `curl -s https://awesomelangauth.com/sitemap.xml | grep -o '<loc>' | wc -l` matches the number
    of routes you expect, and contains no URL that `robots.txt` disallows.
-4. `/docs/` returns `301` to `/docs/intro/` (handled by `nginx.conf`).
+4. The old domain redirects that page too: `curl -sI https://www.awesomenodeauth.com/<path>/`
+   answers `301` with `Location: https://awesomelangauth.com/<path>/`.
 5. In [Google Search Console](https://search.google.com/search-console): resubmit the sitemap,
    then run **URL Inspection → Request indexing** on the pages that changed.
 
-### Known issue, outside this repository
+## The old domain
 
-`https://awesomenodeauth.com` (apex) and `https://www.awesomenodeauth.com` both answer `200`
-with identical content — the canonical tag points at `www`, but the duplicate host still
-wastes crawl budget and splits signals. The fix belongs to the reverse proxy in front of the
-container, which must answer the apex with a permanent redirect. On the current VPS that is
-Nginx Proxy Manager: add a *Redirection Host* for `awesomenodeauth.com` →
-`https://www.awesomenodeauth.com` (301, *Preserve Path*). On a plain nginx/openresty front
-end, use this block:
-
-```nginx
-server {
-    server_name awesomenodeauth.com;
-    return 301 https://www.awesomenodeauth.com$request_uri;
-}
-```
+`awesomenodeauth.com` and `www.awesomenodeauth.com` are no longer served from this
+repository. The VPS answers every URL on them with one 301 to the same path and query on
+`https://awesomelangauth.com`, and GitHub Pages redirects `www.awesomelangauth.com` to the
+apex. The reverse proxy configuration (Nginx Proxy Manager or Traefik) and the order of the
+switch are in [`ops/domain-switch/`](ops/domain-switch/).
