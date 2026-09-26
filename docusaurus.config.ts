@@ -180,6 +180,18 @@ const config: Config = {
           { trackingID: process.env.GOOGLE_ANALYTICS_ID, anonymizeIP: true },
         ]]
       : []),
+    // /docs/ has no page of its own. nginx.conf (the Docker image) answers it
+    // with a 301 to /docs/intro/; GitHub Pages has no server-side redirects, so
+    // the build writes a redirect page at build/docs/index.html instead: a meta
+    // refresh plus a script that keeps the query and the hash. The plugin uses
+    // one URL for the refresh and for rel="canonical", so it is absolute, on
+    // SITE_URL like every other canonical. It is not a route, so it stays out
+    // of the sitemap. The footer links /docs/intro and broken links fail the
+    // build, which guarantees the target exists.
+    [
+      '@docusaurus/plugin-client-redirects',
+      { redirects: [{ from: '/docs', to: `${SITE_URL}/docs/intro/` }] },
+    ],
     // llms.txt (an index of the doc pages) and llms-full.txt (their Markdown,
     // concatenated) at the site root, generated from docs/ on every build.
     [

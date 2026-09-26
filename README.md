@@ -44,13 +44,17 @@ deployment from Actions GitHub reads the setting, not the file. Check what is li
 curl -sSI https://awesomelangauth.com/ | grep -i last-modified
 ```
 
-GitHub Pages serves the build as plain files, so `nginx.conf` does not apply there. Two
-visible differences from the Docker image below:
+GitHub Pages serves the build as plain files, so `nginx.conf` does not apply there. `/docs/`
+has no page of its own: the Docker image answers it with a 301 to `/docs/intro/`, and on
+GitHub Pages it is a redirect page that the build writes
+([`@docusaurus/plugin-client-redirects`](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-client-redirects),
+in `docusaurus.config.ts`). That page answers 200 and sends the browser to `/docs/intro/`
+at once, with a meta refresh and a script that keeps the query and the hash; its canonical
+URL is `https://awesomelangauth.com/docs/intro/`.
 
-- `/docs/` has no page of its own and answers 404 on GitHub Pages, while the Docker image
-  redirects it to `/docs/intro/`;
-- the Pages build runs on a full git checkout, so doc pages show "Last updated" and the
-  sitemap has `<lastmod>`; the Docker image builds without git and has neither.
+One visible difference from the Docker image below: the Pages build runs on a full git
+checkout, so doc pages show "Last updated" and the sitemap has `<lastmod>`; the Docker image
+builds without git and has neither.
 
 ### Docker (self-hosting or rollback)
 
