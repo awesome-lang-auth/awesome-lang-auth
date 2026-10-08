@@ -8,7 +8,7 @@
  * - erasable TypeScript only: no enums, no namespaces, no parameter properties.
  *
  * Every command and version below was checked against its registry or repo
- * on 2026-09-25. When one changes, change it here and nowhere else.
+ * on 2026-10-08. When one changes, change it here and nowhere else.
  */
 
 export type RuntimeId =
@@ -94,9 +94,9 @@ export const RUNTIMES: readonly Runtime[] = [
     group: 'server',
     maturity: 'stable',
     pkg: '@awesome-lang-auth/node',
-    version: '1.10.1',
+    version: '1.10.8',
     command: 'npm i @awesome-lang-auth/node',
-    registry: { kind: 'npm', name: '@awesome-lang-auth/node', version: '1.10.1' },
+    registry: { kind: 'npm', name: '@awesome-lang-auth/node', version: '1.10.8' },
     registryLabel: 'npm',
     registryUrl: 'https://www.npmjs.com/package/@awesome-lang-auth/node',
     available: true,
@@ -113,9 +113,9 @@ export const RUNTIMES: readonly Runtime[] = [
     group: 'server',
     maturity: 'beta',
     pkg: 'awesome-go-auth',
-    version: '0.11.0',
-    command: 'go get github.com/nik2208/awesome-go-auth@v0.11.0',
-    registry: { kind: 'go', module: 'github.com/nik2208/awesome-go-auth', version: 'v0.11.0' },
+    version: '0.12.0',
+    command: 'go get github.com/nik2208/awesome-go-auth@v0.12.0',
+    registry: { kind: 'go', module: 'github.com/nik2208/awesome-go-auth', version: 'v0.12.0' },
     registryLabel: 'Go packages',
     registryUrl: 'https://pkg.go.dev/github.com/nik2208/awesome-go-auth',
     available: true,
@@ -212,12 +212,12 @@ export const RUNTIMES: readonly Runtime[] = [
     label: 'Angular',
     group: 'client',
     maturity: 'stable',
-    pkg: 'ng-awesome-node-auth',
-    version: '1.9.0',
-    command: 'npm i ng-awesome-node-auth',
-    registry: { kind: 'npm', name: 'ng-awesome-node-auth', version: '1.9.0' },
+    pkg: '@awesome-lang-auth/angular',
+    version: '1.10.0',
+    command: 'npm i @awesome-lang-auth/angular',
+    registry: { kind: 'npm', name: '@awesome-lang-auth/angular', version: '1.10.0' },
     registryLabel: 'npm',
-    registryUrl: 'https://www.npmjs.com/package/ng-awesome-node-auth',
+    registryUrl: 'https://www.npmjs.com/package/@awesome-lang-auth/angular',
     available: true,
     // The library page; /docs/frameworks/angular/ documents manual wiring.
     docs: '/docs/frameworks/ng-awesome-node-auth/',
@@ -225,7 +225,7 @@ export const RUNTIMES: readonly Runtime[] = [
     feature: 'Guards, interceptors, session signals and SSR-safe setup from one provideAuth() call.',
     description:
       'Angular library with guards, HttpClient interceptors, reactive session signals, CSRF support and SSR-safe setup.',
-    note: 'Moves to @awesome-lang-auth/angular.',
+    note: 'Formerly published as ng-awesome-node-auth.',
   },
   {
     id: 'react',
@@ -250,19 +250,19 @@ export const RUNTIMES: readonly Runtime[] = [
     label: 'Flutter',
     group: 'client',
     maturity: 'stable',
-    pkg: 'awesome_node_auth_flutter',
-    version: '1.10.0',
-    command: 'flutter pub add awesome_node_auth_flutter',
-    registry: { kind: 'pub', name: 'awesome_node_auth_flutter', version: '1.10.0' },
+    pkg: 'awesome_flutter_auth',
+    version: '1.10.5',
+    command: 'flutter pub add awesome_flutter_auth',
+    registry: { kind: 'pub', name: 'awesome_flutter_auth', version: '1.10.5' },
     registryLabel: 'pub.dev',
-    registryUrl: 'https://pub.dev/packages/awesome_node_auth_flutter',
+    registryUrl: 'https://pub.dev/packages/awesome_flutter_auth',
     available: true,
     docs: '/docs/frameworks/flutter/',
     repo: 'https://github.com/awesome-lang-auth/awesome-flutter-auth',
     feature: 'Cookies and CSRF on web and WASM, bearer tokens on iOS, Android and desktop.',
     description:
       'Flutter client with no token boilerplate: cookies and CSRF on web and WASM, bearer tokens on iOS, Android and desktop.',
-    note: 'Moves to awesome_flutter_auth.',
+    note: 'Formerly published as awesome_node_auth_flutter.',
   },
 ];
 

@@ -29,10 +29,10 @@ awesome-node-auth works with any Node.js framework and any client platform. See 
 
 | Platform | Guide |
 |----------|-------|
-| [Angular — ng-awesome-node-auth](/docs/frameworks/ng-awesome-node-auth) | **Official Angular library** — Guards, Interceptors, session signals, CSRF, SSR-safe; moves to `@awesome-lang-auth/angular` |
+| [Angular — @awesome-lang-auth/angular](/docs/frameworks/ng-awesome-node-auth) | **Official Angular library** — Guards, Interceptors, session signals, CSRF, SSR-safe |
 | [React](/docs/frameworks/react) | **Official React library (early, 0.1.0)** — `@awesome-lang-auth/react`; provider, hooks, route gates, cookie or bearer transport |
 | [Vanilla JS / Browser Client](/docs/advanced/browser-client) | Zero-config `window.AwesomeNodeAuth` via `auth.js` — works with any JS framework |
-| [Flutter](/docs/frameworks/flutter) | **Official Flutter package** — `awesome_node_auth_flutter`, moving to `awesome_flutter_auth`; web (cookie+CSRF), native (Bearer), WASM |
+| [Flutter](/docs/frameworks/flutter) | **Official Flutter package** — `awesome_flutter_auth`; web (cookie+CSRF), native (Bearer), WASM |
 | [iOS (Swift)](/docs/frameworks/ios) | URLSession, Keychain, SwiftUI |
 | [Android (Kotlin)](/docs/frameworks/android) | Retrofit, EncryptedSharedPreferences, Compose |
 
