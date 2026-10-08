@@ -1,0 +1,72 @@
+# Builds the site and publishes it on GitHub Pages at https://awesomelangauth.com/.
+# Needs Settings → Pages → Source "GitHub Actions" and the custom domain
+# awesomelangauth.com set there: with an Actions deployment, the custom domain
+# comes from that setting, not from static/CNAME.
+#
+# A pull request to main runs the build only: that is its check. Only main
+# deploys (see the deploy job's condition).
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# The build job runs npm ci with read-only access; only the deploy job gets the
+# Pages permissions.
+permissions:
+  contents: read
+
+# One deployment at a time. A run that is already deploying is never cancelled
+# (that could leave Pages half-published); a newer push waits for it instead.
+# A whole run waits, not only its deploy job, so deployments keep the order of
+# the pushes. A pull request gets a group of its own, so its build never waits
+# for a deployment of main, nor takes the place of one that is pending.
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('pages-{0}', github.ref) || 'pages' }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history: showLastUpdateTime feeds <lastmod> in sitemap.xml from
+          # each file's last commit. A shallow clone would date every page
+          # with the latest commit.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          # The same major version as the Dockerfile (node:24-alpine).
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: build
+
+  deploy:
+    # Only main is published: not a pull request (its ref is
+    # refs/pull/<number>/merge), not a manual run started on another branch.
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5

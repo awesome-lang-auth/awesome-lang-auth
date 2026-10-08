@@ -95,6 +95,68 @@
   display: block;
 }
 
+/* Click-to-load placeholder: same box as the iframe, so nothing moves on load. */
+.sbPlaceholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+}
+
+.sbLoadBtn {
+  /* darker than .btnGreen: white text keeps a 4.5:1 contrast */
+  background: linear-gradient(135deg, #00865f, #006d4f);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+/* a darker gradient, not opacity: over the white light-mode frame opacity would
+   lighten the button below 4.5:1 */
+.sbLoadBtn:hover {
+  background: linear-gradient(135deg, #007553, #005c43);
+  transform: translateY(-1px);
+}
+
+.sbLoadBtn:focus-visible {
+  outline: 3px solid #7ff0cf;
+  outline-offset: 3px;
+}
+
+.sbNotice {
+  margin: 0;
+  max-width: 520px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #9ab8c8;
+}
+
+.sbNotice a,
+.sbOpenLink {
+  color: #00c896;
+}
+
+/* told apart from the notice text by more than its colour */
+.sbNotice a { text-decoration: underline; }
+
+.sbOpenLink {
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.sbOpenLink:hover { text-decoration: underline; }
+
 .sbFallback {
   margin-top: 10px;
   text-align: center;
@@ -108,6 +170,27 @@
 }
 
 .sbFallback a:hover { text-decoration: underline; }
+
+/* text for screen readers only (Infima has no such class) */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* on a phone, the button at the top of the box instead of below an empty half */
+@media (max-width: 800px) {
+  .sbPlaceholder {
+    justify-content: flex-start;
+    padding-top: 64px;
+  }
+}
 
 /* ── Page header ─────────────────────────────────────────────────────────── */
 
@@ -806,6 +889,10 @@
   border-color: #e2e8f0;
 }
 [data-theme='light'] .sbFallback { color: #475569; }
+[data-theme='light'] .sbNotice { color: #475569; }
+[data-theme='light'] .sbNotice a,
+[data-theme='light'] .sbOpenLink { color: #006b50; }
+[data-theme='light'] .sbLoadBtn:focus-visible { outline-color: #006b50; }
 
 [data-theme='light'] .note {
   background: rgba(245, 158, 11, 0.05);

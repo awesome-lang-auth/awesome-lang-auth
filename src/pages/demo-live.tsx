@@ -40,12 +40,15 @@ function readToken(tok: string): { sub: string } | null {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-// StackBlitz GitHub-import URL for the demo/ project in this repo.
-// When the PR is merged to main, StackBlitz will boot a real Node.js server
-// from demo/server.js using WebContainers and show the running app preview.
-const STACKBLITZ_URL =
-  'https://stackblitz.com/github/nik2208/awesome-node-auth/tree/main/demo/express-vanilla' +
-  '?embed=1&view=preview&startScript=start&hideNavigation=1&ctl=1';
+// StackBlitz GitHub import of demo/express-vanilla in the awesome-node-auth
+// repository (branch main): StackBlitz boots its server.js with WebContainers
+// and shows the running app. The embed is click-to-load: nothing is requested
+// from StackBlitz before the visitor clicks (see the privacy page).
+const STACKBLITZ_PROJECT =
+  'https://stackblitz.com/github/awesome-lang-auth/awesome-node-auth/tree/main/demo/express-vanilla';
+const STACKBLITZ_EMBED_URL =
+  `${STACKBLITZ_PROJECT}?embed=1&view=preview&startScript=start&hideNavigation=1&ctl=1`;
+const STACKBLITZ_OPEN_URL = `${STACKBLITZ_PROJECT}?startScript=start`;
 
 export default function DemoLive(): JSX.Element {
   // SSR guard — btoa / atob don't exist in Node.js
@@ -54,6 +57,13 @@ export default function DemoLive(): JSX.Element {
 
   // Page mode: live server embed or browser simulator
   const [mode, setMode] = useState<'live' | 'simulator'>('live');
+
+  // The StackBlitz iframe exists only after the visitor clicks to load it.
+  const [sbLoaded, setSbLoaded] = useState(false);
+  const sbIframe = useRef<HTMLIFrameElement>(null);
+  useEffect(() => {
+    if (sbLoaded) sbIframe.current?.focus();
+  }, [sbLoaded]);
 
   // In-memory user store
   const [users, setUsers] = useState<DemoUser[]>([]);
@@ -249,12 +259,8 @@ export default function DemoLive(): JSX.Element {
         </button>
       </div>
 
-      {!mounted ? (
-        <div className={styles.wrapper}>
-          <div className={styles.loading}>Loading demo…</div>
-        </div>
-      ) : mode === 'live' ? (
-        /* ── Live Server mode: StackBlitz WebContainers embed ── */
+      {mode === 'live' ? (
+        /* ── Live Server mode: StackBlitz WebContainers embed, click-to-load ── */
         <div className={styles.sbWrapper}>
           <div className={styles.sbInfo}>
             <strong>⚡ WebContainers</strong> — StackBlitz boots a real Node.js server
@@ -265,24 +271,51 @@ export default function DemoLive(): JSX.Element {
             The Admin Panel (password: <code>1234</code>) is available inside the preview.
           </div>
           <div className={styles.sbFrame}>
-            <iframe
-              src={STACKBLITZ_URL}
-              title="node-auth live demo (StackBlitz WebContainers)"
-              className={styles.sbIframe}
-              allow="cross-origin-isolated"
-              loading="lazy"
-            />
+            {sbLoaded ? (
+              <iframe
+                ref={sbIframe}
+                src={STACKBLITZ_EMBED_URL}
+                title="node-auth live demo (StackBlitz WebContainers)"
+                className={styles.sbIframe}
+                allow="cross-origin-isolated"
+              />
+            ) : (
+              <div className={styles.sbPlaceholder}>
+                <button
+                  type="button"
+                  className={styles.sbLoadBtn}
+                  onClick={() => setSbLoaded(true)}
+                  aria-describedby="sb-load-notice"
+                >
+                  Load the interactive demo
+                </button>
+                <p id="sb-load-notice" className={styles.sbNotice}>
+                  This loads StackBlitz, which uses its own cookies and analytics (see the{' '}
+                  <Link to="/privacy/">privacy policy</Link>).
+                </p>
+                <a
+                  href={STACKBLITZ_OPEN_URL}
+                  className={styles.sbOpenLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open in StackBlitz<span aria-hidden="true"> ↗</span><span className={styles.srOnly}> (opens in a new tab)</span>
+                </a>
+              </div>
+            )}
           </div>
-          <div className={styles.sbFallback}>
-            Can't see the embed?{' '}
-            <a
-              href="https://stackblitz.com/github/nik2208/awesome-node-auth/tree/main/demo/express-vanilla?startScript=start"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Open directly on StackBlitz ↗
-            </a>
-          </div>
+          {sbLoaded && (
+            <div className={styles.sbFallback}>
+              Can't see the embed?{' '}
+              <a href={STACKBLITZ_OPEN_URL} target="_blank" rel="noopener noreferrer">
+                Open in StackBlitz<span aria-hidden="true"> ↗</span><span className={styles.srOnly}> (opens in a new tab)</span>
+              </a>
+            </div>
+          )}
+        </div>
+      ) : !mounted ? (
+        <div className={styles.wrapper}>
+          <div className={styles.loading}>Loading demo…</div>
         </div>
       ) : (
         <div className={styles.wrapper}>
