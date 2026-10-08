@@ -344,13 +344,15 @@ const config: Config = {
     // These provide sitewide Open Graph, Twitter Card, and verification defaults.
     // Per-page title/description still override og:title / og:description.
     metadata: [
-      // Open Graph
-      { name: 'og:type',       content: 'website' },
-      { name: 'og:image',      content: SOCIAL_CARD_URL },
-      { name: 'og:image:width',  content: '1200' },
-      { name: 'og:image:height', content: '630' },
-      { name: 'og:image:alt',    content: SOCIAL_CARD_ALT },
-      { name: 'og:site_name',  content: BRAND },
+      // Open Graph: the protocol (and Facebook, LinkedIn) reads property="og:...",
+      // not name=. Docusaurus emits og:url, og:locale, og:title and og:description
+      // itself, also with property, so none of them is repeated here.
+      { property: 'og:type',       content: 'website' },
+      { property: 'og:image',      content: SOCIAL_CARD_URL },
+      { property: 'og:image:width',  content: '1200' },
+      { property: 'og:image:height', content: '630' },
+      { property: 'og:image:alt',    content: SOCIAL_CARD_ALT },
+      { property: 'og:site_name',  content: BRAND },
       // Twitter / X Card
       { name: 'twitter:card',  content: 'summary_large_image' },
       { name: 'twitter:image', content: SOCIAL_CARD_URL },
