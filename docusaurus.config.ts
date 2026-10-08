@@ -1,12 +1,8 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-// Load .env so the optional GOOGLE_ANALYTICS_ID is available at dev/build time
-// (the Docker build gets it the same way: .env is part of the build context)
-import * as dotenv from 'dotenv';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-dotenv.config();
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 // The canonical host is the apex. GitHub Pages serves it (static/CNAME) and
@@ -172,14 +168,7 @@ const config: Config = {
   themes: ['@docusaurus/theme-mermaid'],
 
   // ── Plugins ────────────────────────────────────────────────────────────────
-  // Google Analytics — only loaded when GOOGLE_ANALYTICS_ID is set at build time
   plugins: [
-    ...(process.env.GOOGLE_ANALYTICS_ID
-      ? [[
-          '@docusaurus/plugin-google-gtag',
-          { trackingID: process.env.GOOGLE_ANALYTICS_ID, anonymizeIP: true },
-        ]]
-      : []),
     // /docs/ has no page of its own. nginx.conf (the Docker image) answers it
     // with a 301 to /docs/intro/; GitHub Pages has no server-side redirects, so
     // the build writes a redirect page at build/docs/index.html instead: a meta

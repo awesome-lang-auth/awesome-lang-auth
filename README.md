@@ -26,9 +26,9 @@ The site runs at http://localhost:3000/.
 npm ci && npm run build
 ```
 
-The static output is in `build/`. The build needs no environment variable. The optional ones
-(Google Analytics, and the host port and project name for `docker compose`) are listed in
-[`.env.example`](.env.example): copy it to `.env`, which is gitignored, and rebuild.
+The static output is in `build/`. The build needs no environment variable and reads no `.env`.
+The optional settings for `docker compose` (the host port and the project name) are listed in
+[`.env.example`](.env.example): copy it to `.env`, which is gitignored.
 
 ## Deploy
 
@@ -83,8 +83,8 @@ docker compose --profile npm up -d --build      # Nginx Proxy Manager
 docker compose --profile traefik up -d --build  # Traefik
 ```
 
-`--build` is not optional: the image contains the built site (and `.env` is read at build
-time), so a plain restart republishes the previous build.
+`--build` is not optional: the image contains the built site, so a plain restart republishes
+the previous build.
 
 #### Replacing a container started from another checkout
 
@@ -106,10 +106,10 @@ echo "$P"                                   # e.g. wiki
 # 2. What --remove-orphans will delete: this must list only docusaurus_docs
 docker ps -a --filter "label=com.docker.compose.project=$P" --format '{{.Names}}'
 
-# 3. Reuse only what compose and the site still read (PORT, GOOGLE_ANALYTICS_ID,
-#    COMPOSE_PROJECT_NAME): no AI assistant or account API setting or key is carried over.
-#    If none of them is set, .env ends up empty, which is fine.
-grep -E '^(PORT|GOOGLE_ANALYTICS_ID|COMPOSE_PROJECT_NAME)=' /path/to/old/checkout/wiki/.env > .env
+# 3. Reuse only what compose still reads (PORT, COMPOSE_PROJECT_NAME): no AI assistant,
+#    account API or Google Analytics setting or key is carried over.
+#    If neither is set, .env ends up empty, which is fine.
+grep -E '^(PORT|COMPOSE_PROJECT_NAME)=' /path/to/old/checkout/wiki/.env > .env
 
 # 4. Build, then swap the container inside that project
 docker compose -p "$P" --profile npm up -d --build --remove-orphans

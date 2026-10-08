@@ -19,7 +19,7 @@ src/**/*.d.ts
 # Misc
 .DS_Store
 
-# Environment files hold build-time values; only the template is tracked
+# Environment files hold docker compose settings (PORT, COMPOSE_PROJECT_NAME); only the template is tracked
 .env*
 !.env.example
 

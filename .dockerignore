@@ -6,6 +6,6 @@ node_modules
 build
 .docusaurus
 
-# .env stays in the context on purpose: docusaurus.config.ts loads it with
-# dotenv, and it is the only way GOOGLE_ANALYTICS_ID reaches the build (there
-# are no compose build args). Exclude it once that is gone.
+# The build reads no .env (docker compose reads it on the host, for PORT and
+# COMPOSE_PROJECT_NAME), so keep it out of the image.
+.env

@@ -99,10 +99,7 @@ export const RUNTIMES: readonly Runtime[] = [
     registry: { kind: 'npm', name: '@awesome-lang-auth/node', version: '1.10.1' },
     registryLabel: 'npm',
     registryUrl: 'https://www.npmjs.com/package/@awesome-lang-auth/node',
-    // Not on npm yet (2026-09-25): the owner publishes 1.10.1 (migration step
-    // M7.1b) before this home goes live. Flip to true right after; until then
-    // check-runtimes.mjs reports whether it resolves without failing on it.
-    available: false,
+    available: true,
     docs: '/docs/intro/',
     repo: 'https://github.com/awesome-lang-auth/awesome-node-auth',
     feature: 'The reference implementation: a drop-in auth router for Express, NestJS and Next.js.',
