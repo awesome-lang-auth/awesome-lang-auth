@@ -216,4 +216,4 @@ import { getAuth } from '@/lib/auth';
 - [Authentication Strategies](/docs/authentication) – All available recipes
 - [Database Integration](/docs/database) – IUserStore implementations
 - [API Reference](/docs/api-reference) – All endpoints
-- [Use the docs with AI assistants](/docs/ai-assistants) – The whole documentation as llms.txt and llms-full.txt
+- [Use the docs with AI assistants](/docs/ai-assistants) – An index of the docs (llms.txt) and every page in one file (llms-full.txt)
