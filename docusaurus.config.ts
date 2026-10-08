@@ -10,7 +10,6 @@ import { resolve } from 'path';
 // and www.awesomenodeauth.com) answers with a single 301 to the same path here
 // (ops/domain-switch/).
 const SITE_URL = 'https://awesomelangauth.com';
-const SOCIAL_CARD_URL = `${SITE_URL}/img/docusaurus-social-card.jpg`;
 
 // ── Brand ──────────────────────────────────────────────────────────────────────
 // The site brand is the family, awesome-lang-auth. The family started as the
@@ -35,6 +34,19 @@ const NODE_NPM_URL = 'https://www.npmjs.com/package/@awesome-lang-auth/node';
 const SITE_DESCRIPTION =
   `${BRAND} is self-hosted authentication for Node.js, Go, AWS Lambda, Python, Rust ` +
   'and Dart, with Angular, React and Flutter clients: JWT, OAuth2, 2FA.';
+
+// The site tagline. The social card (static/img/social-card.png) prints it
+// under the name, so a change here means a new card.
+const SITE_TAGLINE = 'Self-hosted authentication for Node.js, Go, AWS Lambda, Python, Rust and Dart';
+
+// ── Brand assets (static/img/) ─────────────────────────────────────────────────
+// The mark is the template slot `${}` of awesome-${lang}-auth in the primary
+// green on the dark tile: favicon.svg (and logo.svg, the same mark), rasterised
+// into favicon.ico (16, 32 and 48 px) and apple-touch-icon.png (180 px, opaque).
+// The social card is 1200x630 and is linked with an absolute URL, as Open Graph
+// requires.
+const SOCIAL_CARD_URL = `${SITE_URL}/img/social-card.png`;
+const SOCIAL_CARD_ALT = `${BRAND}: ${SITE_TAGLINE}. awesomelangauth.com`;
 
 // Read version from root package.json so there is a single source of truth.
 // __dirname is the wiki/ directory in the jiti-transpiled CJS context.
@@ -108,7 +120,7 @@ const JSON_LD_WEBSITE: object = {
 
 const config: Config = {
   title: BRAND,
-  tagline: 'Self-hosted authentication for Node.js, Go, AWS Lambda, Python, Rust and Dart',
+  tagline: SITE_TAGLINE,
   favicon: 'img/favicon.ico',
 
   url: SITE_URL,
@@ -124,8 +136,18 @@ const config: Config = {
   onBrokenLinks: 'throw',
   onBrokenAnchors: 'throw',
 
-  // ── Structured data (JSON-LD) injected into every page ─────────────────────
+  // ── Icons, analytics and structured data (JSON-LD) on every page ──────────
   headTags: [
+    // The SVG favicon for browsers that take one; `favicon` above (the ICO)
+    // stays for the others. iOS and iPadOS read the apple-touch-icon.
+    {
+      tagName: 'link',
+      attributes: { rel: 'icon', type: 'image/svg+xml', href: '/img/favicon.svg' },
+    },
+    {
+      tagName: 'link',
+      attributes: { rel: 'apple-touch-icon', sizes: '180x180', href: '/img/apple-touch-icon.png' },
+    },
     {
       tagName: 'script',
       attributes: {
@@ -325,10 +347,14 @@ const config: Config = {
       // Open Graph
       { name: 'og:type',       content: 'website' },
       { name: 'og:image',      content: SOCIAL_CARD_URL },
+      { name: 'og:image:width',  content: '1200' },
+      { name: 'og:image:height', content: '630' },
+      { name: 'og:image:alt',    content: SOCIAL_CARD_ALT },
       { name: 'og:site_name',  content: BRAND },
       // Twitter / X Card
       { name: 'twitter:card',  content: 'summary_large_image' },
       { name: 'twitter:image', content: SOCIAL_CARD_URL },
+      { name: 'twitter:image:alt', content: SOCIAL_CARD_ALT },
       // SEO keywords (supplementary signal — not a primary ranking factor):
       // the family, then the Node.js terms the site has always ranked for.
       {
