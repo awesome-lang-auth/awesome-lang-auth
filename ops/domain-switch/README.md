@@ -15,6 +15,11 @@ The order of the day, with a check for every step, is in
 [`switch-day-checklist.md`](switch-day-checklist.md). Nothing in this folder is deployed
 automatically: merging it changes nothing on the VPS.
 
+The new site is never deployed to the VPS: it goes live directly on GitHub Pages when the
+pull request is merged (checklist step 3). Until checklist step 6 the VPS keeps serving the
+old site on the old domain, unchanged; from step 6 it only answers the old domain with the
+301 above.
+
 For the old domain, use the variant that matches the reverse proxy on the VPS:
 
 | Reverse proxy on the host | Use |

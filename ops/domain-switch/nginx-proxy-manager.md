@@ -7,25 +7,26 @@ certificate that covers both.
 
 **Apply this only after the new site answers on `https://awesomelangauth.com`**
 ([`switch-day-checklist.md`](switch-day-checklist.md), steps 1 to 5). Before that, it
-would send every visitor to a site that is not there yet.
+would send every visitor to a site that is not there yet. Until then this server keeps
+serving the old site, unchanged; the new site is never deployed here (GitHub Pages serves
+it).
 
 | Before | After |
 |---|---|
 | Proxy Host `www.awesomenodeauth.com` → the site container | gone |
 | Redirection Host `awesomenodeauth.com` → `www.awesomenodeauth.com` | Redirection Host `awesomenodeauth.com` + `www.awesomenodeauth.com` → `https://awesomelangauth.com`, 301, Preserve Path |
-| temporary redirection hosts `awesomelangauth.com` and `www.awesomelangauth.com` → the old site | gone: those names point at GitHub now |
+| the hosts of the new domain: today `awesomelangauth.com` redirects to `www.awesomelangauth.com`, which serves a copy of the old site | gone: those names point at GitHub now |
 
 NPM refuses a domain name that another host already uses, even a disabled one. That is why
 the steps below delete before they edit.
 
 ## Steps
 
-### A. Delete the temporary hosts of the new domain
+### A. Delete the hosts of the new domain
 
 Do this first, and only when the checklist's step 2 shows the GitHub addresses for
-`awesomelangauth.com`. If the old domain started redirecting while these hosts still exist,
-a visitor whose DNS still points the new domain at this server would bounce between the two
-domains.
+`awesomelangauth.com`. From then on GitHub serves those names: the hosts here only kept a
+copy of the old site on them, and their certificates could no longer renew.
 
 1. Open the NPM admin UI, **Hosts → Redirection Hosts**.
 2. For every row whose domain is `awesomelangauth.com` or `www.awesomelangauth.com`: **⋮ →
@@ -139,7 +140,7 @@ If check 6 shows `2`, Force SSL is on: turn it off (step 7).
 - **Force SSL off.** This host never serves a page, over `http://` or `https://`: it only
   redirects, and always to `https://awesomelangauth.com`. Off, `http://` URLs take the same
   single hop as `https://` ones.
-- **Delete the new-domain hosts first.** See step A: it removes any chance of a loop between
-  the two domains while DNS caches expire.
+- **Delete the new-domain hosts first.** See step A: from step 2 of the checklist GitHub
+  serves those names, so nothing on this server should answer for them any more.
 - **The certificate before the delete.** Requesting it while both names are still served
   keeps `www.awesomenodeauth.com` without a host for about a minute only.

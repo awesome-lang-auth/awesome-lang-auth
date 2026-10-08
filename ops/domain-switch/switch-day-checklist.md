@@ -4,6 +4,10 @@ The order matters: the new site first, the old domain's redirects last. Until st
 old domain keeps serving the old site from the VPS, so nobody who follows an old link sees
 an outage, and every step before it can be undone by putting DNS back.
 
+The new site is never deployed to the VPS. It goes live directly on GitHub Pages, when the
+pull request is merged (step 3). The VPS keeps serving the old site, unchanged, until
+step 6, and from then on only answers the old domain with its 301.
+
 Every step ends with a check. The checks are bash commands (`curl`, `grep`, `nslookup`): on
 Windows, run them in Git Bash. Most `curl` checks print the status code and, for a redirect,
 where it points (`-w '%{http_code} %{redirect_url}\n'`), so the expected line is the same
@@ -12,7 +16,7 @@ a DNS change may come from the local DNS cache: `ipconfig /flushdns` on Windows,
 
 ## Before the day
 
-These must all be true before step 1. Each has its check.
+Items 1 to 3 must be true before step 1; item 4 is optional. Each has its check.
 
 1. **The domain is verified for the organization in GitHub Pages** (organization settings →
    Pages → Verified domains). It stops anyone else from claiming `awesomelangauth.com` on
@@ -34,32 +38,28 @@ These must all be true before step 1. Each has its check.
    #   each lists a google-site-verification=… record
    ```
 
-3. **The new domain redirects with 302, never 301, until the day.** Browsers keep a 301 for
-   as long as they like. A cached `awesomelangauth.com` → `www.awesomelangauth.com` 301 would
-   loop forever with GitHub's `www` → apex redirect after the switch. The earlier they are
-   302, the fewer browsers keep an old 301.
+3. **No CAA record blocks Let's Encrypt**, which issues the GitHub Pages certificate.
 
    ```bash
-   curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://awesomelangauth.com/
-   curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://www.awesomelangauth.com/
-   #   both: 302 and the URL it points to (not 301, not 200)
+   nslookup -type=CAA awesomelangauth.com 8.8.8.8
+   #   no CAA record, or one that lists letsencrypt.org
    ```
 
-4. **DNS TTL lowered, at least a day before.** At IONOS, set the TTL of the A/AAAA records of
-   `awesomelangauth.com` and of `www.awesomelangauth.com` to 5 minutes, so the DNS change on
-   the day reaches everyone quickly.
+4. **Optional: DNS TTL lowered, at least a day before.** At IONOS, set the TTL of the A/AAAA
+   records of `awesomelangauth.com` and of `www.awesomelangauth.com` to 5 minutes, so the DNS
+   change on the day reaches everyone quickly. Without it, the change takes up to the current
+   TTL (one hour when this was written) to reach every resolver; until then some visitors of
+   `awesomelangauth.com` still reach the VPS and see what they see today.
 
    ```bash
    nslookup -debug awesomelangauth.com 8.8.8.8 | grep -i ttl
    #   ttl = 300 or less (once the old, longer TTL has expired)
    ```
 
-5. **No CAA record blocks Let's Encrypt**, which issues the GitHub Pages certificate.
-
-   ```bash
-   nslookup -type=CAA awesomelangauth.com 8.8.8.8
-   #   no CAA record, or one that lists letsencrypt.org
-   ```
+Residual risk, accepted: `awesomelangauth.com` answers today with a 301 to
+`www.awesomelangauth.com`, so a browser that cached that 301 could loop with GitHub's `www` →
+apex redirect until its cache clears; the new domain has little traffic, so few browsers if
+any hold it.
 
 ## On the day
 
