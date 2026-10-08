@@ -1,7 +1,16 @@
 import { useCallback, useEffect, useRef, useState, type FocusEvent, type ReactNode } from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
-import { CLIENTS, GROUP_INFO, MATURITY_INFO, RUNTIMES, SERVERS, type Runtime, type RuntimeId } from '@site/src/data/runtimes';
+import {
+  CLIENTS,
+  GROUP_INFO,
+  MATURITY_INFO,
+  RUNTIMES,
+  SERVERS,
+  TITLE_RUNTIMES,
+  type Runtime,
+  type RuntimeId,
+} from '@site/src/data/runtimes';
 import RuntimeIcon from '@site/src/components/RuntimeIcon';
 import CopyButton from '@site/src/components/CopyButton';
 import ExternalIcon from '@site/src/components/ExternalIcon';
@@ -13,12 +22,18 @@ import styles from './styles.module.css';
 const DWELL_PLACEHOLDER = 2400;
 const DWELL_WORD = 2000;
 
-/** The rotation: ${lang}, then every runtime in order, then ${lang} again. */
+/**
+ * The rotation: ${lang}, then every runtime in order, then ${lang} again.
+ * Only the entries the title can spell (awesome-<id>-auth is a repository):
+ * auth.js has a chip and a card, but no word in the H1.
+ */
 function nextTarget(current: RuntimeId | null): RuntimeId | null {
-  if (current === null) return RUNTIMES[0].id;
-  const i = RUNTIMES.findIndex((r) => r.id === current);
-  return i + 1 < RUNTIMES.length ? RUNTIMES[i + 1].id : null;
+  if (current === null) return TITLE_RUNTIMES[0].id;
+  const i = TITLE_RUNTIMES.findIndex((r) => r.id === current);
+  return i + 1 < TITLE_RUNTIMES.length ? TITLE_RUNTIMES[i + 1].id : null;
 }
+
+const inTitle = (id: RuntimeId): boolean => TITLE_RUNTIMES.some((r) => r.id === id);
 
 function MaturityBadge({ runtime }: { runtime: Runtime }): ReactNode {
   const info = MATURITY_INFO[runtime.maturity];
@@ -30,6 +45,8 @@ function MaturityBadge({ runtime }: { runtime: Runtime }): ReactNode {
 }
 
 function RuntimeCard({ runtime, active }: { runtime: Runtime; active: boolean }): ReactNode {
+  // A served file's command is a script tag for the page, not a shell command.
+  const served = runtime.registry.kind === 'served';
   return (
     <div
       className={clsx(styles.card, active && styles.cardActive)}
@@ -40,16 +57,19 @@ function RuntimeCard({ runtime, active }: { runtime: Runtime; active: boolean })
       <div className={styles.cardHeader}>
         <RuntimeIcon id={runtime.id} className={styles.cardIcon} />
         <span className={styles.cardPkg}>{runtime.pkg}</span>
-        {runtime.version ? <span className={styles.cardVersion}>v{runtime.version}</span> : <span className={styles.cardVersion}>git</span>}
+        <span className={styles.cardVersion}>{runtime.version ? `v${runtime.version}` : served ? 'served' : 'git'}</span>
         <MaturityBadge runtime={runtime} />
         <span className={styles.cardLabel}>{runtime.label}</span>
       </div>
       <div className={styles.command}>
         <code>
-          <span className={styles.prompt} aria-hidden="true">$ </span>
+          {served ? null : <span className={styles.prompt} aria-hidden="true">$ </span>}
           {runtime.command}
         </code>
-        <CopyButton text={runtime.command} label={`Copy the ${runtime.label} install command`} />
+        <CopyButton
+          text={runtime.command}
+          label={served ? `Copy the ${runtime.pkg} script tag` : `Copy the ${runtime.label} install command`}
+        />
       </div>
       <p className={styles.feature}>
         {runtime.feature}
@@ -67,7 +87,18 @@ function RuntimeCard({ runtime, active }: { runtime: Runtime; active: boolean })
   );
 }
 
-export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNode {
+/**
+ * One line under the calls to action that points further down the same page
+ * (the home uses it for its auth.js block, so the feature shows on the first
+ * screen). A plain <a href="#…">: the target is a section of this page.
+ */
+interface HeroFootnote {
+  href: `#${string}`;
+  icon: RuntimeId;
+  text: ReactNode;
+}
+
+export default function HomeHero({ subtitle, footnote }: { subtitle: ReactNode; footnote?: HeroFootnote }): ReactNode {
   // Title state. SSR and the first client render show ${lang} with no effect.
   const [target, setTarget] = useState<RuntimeId | null>(null);
   const [settled, setSettled] = useState<RuntimeId | null | undefined>(undefined);
@@ -147,7 +178,8 @@ export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNo
 
   const choose = (id: RuntimeId) => {
     setPinned(true);
-    setTarget(id);
+    // A chip the title cannot spell (auth.js) leaves the slot at ${lang}.
+    setTarget(inTitle(id) ? id : null);
     setCardId(id);
   };
 
@@ -168,7 +200,11 @@ export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNo
         {GROUP_INFO[group].label}
       </span>
       <div className={styles.chipLine}>
-        <div className={styles.chips} role="group" aria-labelledby={`chips-${group}`}>
+        <div
+          className={clsx(styles.chips, group === 'client' && styles.chipsClient)}
+          role="group"
+          aria-labelledby={`chips-${group}`}
+        >
           {runtimes.map((r) => (
             <button
               key={r.id}
@@ -179,7 +215,10 @@ export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNo
               onClick={() => choose(r.id)}
             >
               <RuntimeIcon id={r.id} className={styles.chipIcon} />
-              <span className={styles.chipName}>{r.id}</span>
+              <span className={styles.chipName}>
+                {r.id}
+                {r.chipSuffix ? <span className={styles.srOnly}> {r.chipSuffix}</span> : null}
+              </span>
               <MaturityBadge runtime={r} />
             </button>
           ))}
@@ -253,6 +292,16 @@ export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNo
             Live demo
           </Link>
         </div>
+
+        {footnote ? (
+          <p className={styles.footnote}>
+            <a href={footnote.href}>
+              <RuntimeIcon id={footnote.icon} className={styles.footnoteIcon} />
+              {footnote.text}
+              <span aria-hidden="true"> ↓</span>
+            </a>
+          </p>
+        ) : null}
       </div>
     </section>
   );

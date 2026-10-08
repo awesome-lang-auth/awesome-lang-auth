@@ -11,6 +11,7 @@ import DartSvg from '@site/static/img/icons/dart.svg';
 import AngularSvg from '@site/static/img/icons/angular.svg';
 import ReactSvg from '@site/static/img/icons/react.svg';
 import FlutterSvg from '@site/static/img/icons/flutter.svg';
+import JsIcon from './JsIcon';
 import styles from './styles.module.css';
 
 // The SVGR type Docusaurus declares for *.svg, `title` included (see below).
@@ -24,6 +25,7 @@ const ICONS: Record<RuntimeId, ComponentType<SVGProps<SVGSVGElement> & { title?:
   angular: AngularSvg,
   react: ReactSvg,
   flutter: FlutterSvg,
+  vanilla: JsIcon,
 };
 
 /**
