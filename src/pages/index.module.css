@@ -601,6 +601,14 @@
   }
 }
 
+/* Under 360px "AWS Lambda" no longer fits its half of the panel: let it wrap. */
+@media (max-width: 359.98px) {
+  .authjsServers li {
+    line-height: 1.25;
+    white-space: normal;
+  }
+}
+
 /* ── Any database ─────────────────────────────────────────────────── */
 
 .dbSection {
