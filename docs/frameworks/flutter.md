@@ -2,14 +2,14 @@
 id: flutter
 title: Flutter Authentication Client (and WASM)
 description: >-
-  Authenticate a Flutter app against awesome-node-auth with the official awesome_node_auth_flutter package, including secure token storage and WASM.
+  Authenticate a Flutter app against awesome-node-auth with the official awesome_flutter_auth package, including secure token storage and WASM.
 sidebar_label: Flutter / WASM
 ---
 
 # Flutter & WASM Integration
 
 :::tip Use the official Flutter package
-**For new projects, use [`awesome_node_auth_flutter`](https://pub.dev/packages/awesome_node_auth_flutter)** — the official Flutter/Dart client for awesome-node-auth.
+**For new projects, use [`awesome_flutter_auth`](https://pub.dev/packages/awesome_flutter_auth)** — the official Flutter/Dart client for awesome-node-auth.
 
 It handles:
 - **Cookie + CSRF** automatically on web/WASM
@@ -33,7 +33,7 @@ This page documents the official package. For the raw manual approach (no packag
 The package detects the platform at runtime — you do not choose the mode.
 
 :::info Python backend
-`awesome_node_auth_flutter` works with both the **Node.js** (`awesome-node-auth`) and the **Python** (`awesome-python-auth`) backends. Set `apiPrefix` to match your server's `api_prefix` (default `/api/auth` in Python vs `/auth` in Node.js). See the [Python / FastAPI guide](/docs/frameworks/python) for server-side setup.
+`awesome_flutter_auth` works with both the **Node.js** (`awesome-node-auth`) and the **Python** (`awesome-python-auth`) backends. Set `apiPrefix` to match your server's `api_prefix` (default `/api/auth` in Python vs `/auth` in Node.js). See the [Python / FastAPI guide](/docs/frameworks/python) for server-side setup.
 :::
 
 ---
@@ -43,15 +43,15 @@ The package detects the platform at runtime — you do not choose the mode.
 ```yaml
 # pubspec.yaml
 dependencies:
-  awesome_node_auth_flutter: ^1.9.4
+  awesome_flutter_auth: ^1.10.5
 ```
 
 ```bash
 flutter pub get
 ```
 
-:::note Upcoming package name
-The package moves to `awesome_flutter_auth`. Until that package is published, depend on `awesome_node_auth_flutter` as above. The source lives in [awesome-lang-auth/awesome-flutter-auth](https://github.com/awesome-lang-auth/awesome-flutter-auth).
+:::note Formerly awesome_node_auth_flutter
+The package was formerly published as `awesome_node_auth_flutter`, now discontinued on pub.dev and replaced by `awesome_flutter_auth`. To migrate, change the dependency and the import to `package:awesome_flutter_auth/awesome_flutter_auth.dart`. The source lives in [awesome-lang-auth/awesome-flutter-auth](https://github.com/awesome-lang-auth/awesome-flutter-auth).
 :::
 
 ---
@@ -61,7 +61,7 @@ The package moves to `awesome_flutter_auth`. Until that package is published, de
 Create an `AuthClient` with `AuthOptions`:
 
 ```dart
-import 'package:awesome_node_auth_flutter/awesome_node_auth_flutter.dart';
+import 'package:awesome_flutter_auth/awesome_flutter_auth.dart';
 
 final auth = AuthClient(
   AuthOptions(
@@ -320,19 +320,19 @@ final response = await auth.httpClient.post(
 On native platforms the package stores tokens in memory by default. For persistence across restarts, provide a `TokenStorage` implementation backed by `flutter_secure_storage`:
 
 :::note
-`flutter_secure_storage` is **not** a dependency of `awesome_node_auth_flutter`. Add it yourself if you need persistent token storage on native.
+`flutter_secure_storage` is **not** a dependency of `awesome_flutter_auth`. Add it yourself if you need persistent token storage on native.
 :::
 
 ```yaml
 # pubspec.yaml — add only for native persistence
 dependencies:
-  awesome_node_auth_flutter: ^1.9.4
+  awesome_flutter_auth: ^1.10.5
   flutter_secure_storage: ^9.0.0
 ```
 
 ```dart
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:awesome_node_auth_flutter/awesome_node_auth_flutter.dart';
+import 'package:awesome_flutter_auth/awesome_flutter_auth.dart';
 
 class SecureTokenStorage implements TokenStorage {
   final _storage = const FlutterSecureStorage(
@@ -424,7 +424,7 @@ For larger apps, wrap `AuthClient` in a singleton service to decouple it from th
 
 ```dart
 // lib/services/auth_service.dart
-import 'package:awesome_node_auth_flutter/awesome_node_auth_flutter.dart';
+import 'package:awesome_flutter_auth/awesome_flutter_auth.dart';
 
 class AuthService {
   AuthService._();
@@ -458,7 +458,7 @@ void main() async {
 
 The previous version of this page documented a manual integration using `flutter_secure_storage`, the `http` package, and the `X-Auth-Strategy: bearer` header. Below is a quick before/after comparison.
 
-| Before (manual) | After (`awesome_node_auth_flutter`) |
+| Before (manual) | After (`awesome_flutter_auth`) |
 |----------------|-------------------------------------|
 | `http` + manual `X-Auth-Strategy: bearer` header | Handled automatically by the package |
 | `flutter_secure_storage` for token persistence | Built-in `TokenStorage` interface; bring your own storage |
@@ -468,7 +468,7 @@ The previous version of this page documented a manual integration using `flutter
 | No event bus | `auth.events` — `AuthEventType` enum |
 
 To migrate:
-1. Add `awesome_node_auth_flutter: ^1.9.4` to `pubspec.yaml`.
+1. Add `awesome_flutter_auth: ^1.10.5` to `pubspec.yaml`.
 2. Remove `http` and the manual `AuthService` if they were only used for auth.
 3. Replace all `_bearerHeaders` / `_authedRequest` calls with `AuthClient` methods.
 4. If you need persistent tokens on native, implement `TokenStorage` with `flutter_secure_storage` (see [Custom TokenStorage](#custom-tokenstorage) above).

@@ -68,7 +68,7 @@ AWESOME_AUTH_CONTRACT_REQUIRE=register,csrf,secure-cookies,sessions,totp \
 
 - **One contract.** The HTTP contract is extracted from the reference source into [docs/spec/wire-contract.md](https://github.com/awesome-lang-auth/awesome-lambda-auth/blob/main/docs/spec/wire-contract.md), which the stack is forbidden to break.
 - **One test suite for both.** The contract suite in `test/contract` is black-box and parametrised on a base URL: it runs against this stack or against the reference Express app.
-- **The official clients, unmodified.** `examples/angular-client` uses `ng-awesome-node-auth` from npm and `examples/flutter-client` uses `awesome_node_auth_flutter` from pub.dev. The API prefix defaults to `/auth`, as in awesome-node-auth, so the clients keep their usual `apiPrefix`.
+- **The official clients, unmodified.** `examples/angular-client` and `examples/flutter-client` use the official Angular and Flutter clients as published on npm and pub.dev. The API prefix defaults to `/auth`, as in awesome-node-auth, so the clients keep their usual `apiPrefix`.
 - **Browser clients need one origin.** The session cookies are `SameSite=Lax` and the CSRF double-submit needs the page to read the CSRF cookie, so the examples serve the app and rewrite `/auth/*` to the API from the same origin.
 - **Rate limiting, on by default.** The reference ships no limiter. This stack allows 10 requests per 60-second window, keyed by account, over the five credential flows, and refuses the rest with `429 RATE_LIMITED` and a `Retry-After`.
 

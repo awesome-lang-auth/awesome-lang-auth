@@ -120,7 +120,7 @@ When `cookieOptions.secure` is enabled, the library automatically applies prefix
 
 > **`__Host-` and `Path=/`**: The browser specification ([RFC 6265bis](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis)) requires that a `__Host-` cookie **must** have `Path=/`, no `Domain`, and `Secure=true`. The library enforces this automatically: even though the `refreshToken` cookie is normally scoped to `{apiPrefix}/refresh`, when the `__Host-` prefix is applied the path is silently overridden to `/`. This ensures the browser actually stores the cookie rather than silently discarding it. The server-side middleware still validates the token only on the `/refresh` endpoint, so there is no functional security regression.
 
-The built-in client utilities (`auth.js` and `ng-awesome-node-auth`) automatically detect these prefixes. If you are using a custom client, ensure you check for all possible names in order of specificity:
+The built-in client utilities (`auth.js` and `@awesome-lang-auth/angular`) automatically detect these prefixes. If you are using a custom client, ensure you check for all possible names in order of specificity:
 
 ```javascript
 const csrfToken = 

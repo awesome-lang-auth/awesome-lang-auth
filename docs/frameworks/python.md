@@ -741,10 +741,10 @@ config = AuthConfig(
 
 ## Connecting Flutter clients
 
-The Flutter package (`awesome_node_auth_flutter`) works with `awesome-python-auth` as a drop-in replacement for the Node.js backend. Set the Flutter client's `apiPrefix` option to match your Python server's `api_prefix`:
+The Flutter package (`awesome_flutter_auth`) works with `awesome-python-auth` as a drop-in replacement for the Node.js backend. Set the Flutter client's `apiPrefix` option to match your Python server's `api_prefix`:
 
 ```dart
-import 'package:awesome_node_auth_flutter/awesome_node_auth_flutter.dart';
+import 'package:awesome_flutter_auth/awesome_flutter_auth.dart';
 
 final auth = AuthClient(
   AuthOptions(
