@@ -21,40 +21,48 @@ export default function PrivacyPage(): React.ReactElement {
 
         <h2>2. Data We Collect</h2>
         <p>
-          This site has no accounts and no forms, and it never asks you for
-          personal information.
+          This site has no accounts and never asks you for personal
+          information. The sign-up and login forms of the interactive demo are
+          part of the demo: nothing you type there is sent to this site.
         </p>
         <p>
-          The only personal data it handles is the standard technical log of
-          its web server: for each request, the IP address, the time, the page
-          requested and the browser's user agent. The log is kept for security
-          and operations and is deleted after a limited period.
+          The only personal data it keeps is the standard technical log of its
+          web server: for each request, the IP address, the time, the page
+          requested, the referring page and the browser's user agent. The log
+          is kept for security and operations and is deleted after a limited
+          period.
         </p>
         <p>
-          Nothing else is collected, and nothing is sold or shared.
+          No other personal data is collected, and nothing is sold or shared.
         </p>
 
         <h2>3. External Services</h2>
-        <p>Your browser also contacts two external services:</p>
+        <p>
+          Every page loads one external service, Umami. Two pages also load
+          content from StackBlitz.
+        </p>
         <ul>
           <li>
             <strong>Umami</strong> web analytics, self-hosted at{' '}
-            <code>umami.applikat.it</code>, which every page loads. It counts
-            visits anonymously: it sets no cookies and does not store IP
-            addresses. It records the page viewed, the referring page, and
-            general details such as browser, operating system, device type,
-            screen size, language and an approximate location (country, region,
-            city) derived from the IP address.
+            <code>umami.applikat.it</code>. It counts visits anonymously: it
+            sets no cookies, and Umami itself does not store IP addresses. It
+            records the page viewed, the referring page, and general details
+            such as browser, operating system, device type, screen size,
+            language and an approximate location (country, region, city)
+            derived from the IP address.
           </li>
           <li>
             <strong>StackBlitz</strong>. When you open the{' '}
-            <Link to="/demo-live/">interactive demo</Link>, the StackBlitz
-            project embedded in that page loads its code from StackBlitz, and
-            StackBlitz may set its own cookies and browser storage. The{' '}
+            <Link to="/demo-live/">interactive demo</Link>, it loads a page
+            from StackBlitz that runs the demo. That page belongs to
+            StackBlitz: it loads StackBlitz's code and the analytics services
+            StackBlitz uses (at the time of writing, Google Tag Manager and
+            Segment), and StackBlitz and those services may set their own
+            cookies and browser storage. The{' '}
             <Link to="/docs/live-demo/">live demos</Link> page loads its
             "Open in StackBlitz" button images from StackBlitz. No other page
-            loads anything from StackBlitz. What StackBlitz does with this data
-            is governed by its{' '}
+            loads anything from StackBlitz. What StackBlitz and these services
+            do with this data is governed by StackBlitz's{' '}
             <a href="https://stackblitz.com/privacy-policy" target="_blank" rel="noreferrer">
               privacy policy
             </a>.
@@ -64,9 +72,11 @@ export default function PrivacyPage(): React.ReactElement {
         <h2>4. Cookies</h2>
         <p>
           This site sets no cookies of its own. Your browser's local storage
-          keeps a few display preferences, such as the colour theme or a closed
-          announcement bar, and they never leave your browser. Only the
-          StackBlitz demo described above may set cookies.
+          keeps a few display settings, such as the colour theme, whether you
+          closed the announcement bar and which title animation the home page
+          showed last; they never leave your browser. Only the StackBlitz page
+          in the interactive demo may set cookies: StackBlitz's own and those
+          of the services it loads.
         </p>
 
         <h2>5. Security</h2>
