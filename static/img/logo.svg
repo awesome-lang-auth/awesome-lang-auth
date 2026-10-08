@@ -3,5 +3,5 @@
   <!-- The mark: the template slot ${} of awesome-${lang}-auth on the dark tile, drawn as paths on a 32-unit grid. -->
   <rect width="32" height="32" rx="7" fill="#0e1623"/>
   <rect x=".5" y=".5" width="31" height="31" rx="6.5" fill="none" stroke="#00c896" stroke-opacity=".35"/>
-  <path d="M11.6 11.68C10.64 9.66 9.36 8.8 7.6 8.8C5.04 8.8 3.6 10.24 3.6 12.54C3.6 15.71 11.6 16.29 11.6 19.46C11.6 21.76 10.16 23.2 7.6 23.2C5.84 23.2 4.56 22.34 3.6 20.32M7.6 6.4V8.8M7.6 23.2V25.6M18.8 6.5Q15.8 6.5 15.8 9.5V12.7Q15.8 16 12.8 16Q15.8 16 15.8 19.3V22.5Q15.8 25.5 18.8 25.5M23.2 6.5Q26.2 6.5 26.2 9.5V12.7Q26.2 16 29.2 16Q26.2 16 26.2 19.3V22.5Q26.2 25.5 23.2 25.5" fill="none" stroke="#00c896" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M9.6 11.68C8.86 9.66 7.86 8.8 6.5 8.8C4.52 8.8 3.4 10.24 3.4 12.54C3.4 15.71 9.6 16.29 9.6 19.46C9.6 21.76 8.48 23.2 6.5 23.2C5.14 23.2 4.14 22.34 3.4 20.32M6.5 6.4V8.8M6.5 23.2V25.6M18.8 6.5Q16.2 6.5 16.2 9.1V13.8Q16.2 16 14.2 16Q16.2 16 16.2 18.2V22.9Q16.2 25.5 18.8 25.5M23.6 6.5Q26.4 6.5 26.4 9.3V12.92Q26.4 16 29.2 16Q26.4 16 26.4 19.08V22.7Q26.4 25.5 23.6 25.5" fill="none" stroke="#00c896" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
