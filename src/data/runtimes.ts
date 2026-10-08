@@ -20,13 +20,17 @@ export type RuntimeId =
   | 'dart'
   | 'angular'
   | 'react'
-  | 'flutter';
+  | 'flutter'
+  | 'vanilla';
 
 export type RuntimeGroup = 'server' | 'client';
 
 export type Maturity = 'stable' | 'beta' | 'preview' | 'early';
 
-/** What check-runtimes.mjs asks the registry, or the repo for git installs. */
+/**
+ * What check-runtimes.mjs asks the registry, or the repo for git installs and
+ * for files the servers serve.
+ */
 export type RegistryRef =
   | { kind: 'npm'; name: string; version: string }
   | { kind: 'pypi'; name: string; version: string }
@@ -39,6 +43,18 @@ export type RegistryRef =
       url: string;
       /** A manifest the command needs at the default branch, and the package name it must declare. */
       manifest?: { path: string; name: string };
+    }
+  | {
+      /** A file every server serves: nothing to install, so no registry to ask. */
+      kind: 'served';
+      /** The repository of the reference implementation, which ships the file the others copy. */
+      url: string;
+      /** The file in that repository, read from its default branch. */
+      path: string;
+      /** Text the file must contain to still be the client the page describes. */
+      defines: string;
+      /** The URL path the command loads it from, under the default API prefix. */
+      route: string;
     };
 
 export interface Runtime {
@@ -49,9 +65,9 @@ export interface Runtime {
   maturity: Maturity;
   /** Package, module or repository name the command installs. */
   pkg: string;
-  /** Released version the command resolves to today; absent for untagged git installs. */
+  /** Released version the command resolves to today; absent for untagged git installs and served files. */
   version?: string;
-  /** One line that works today. */
+  /** One line that works today: a shell command, or the script tag for a served file. */
   command: string;
   registry: RegistryRef;
   /** Human name and page of the registry (or the repo, for git installs). */
@@ -72,6 +88,12 @@ export interface Runtime {
   description: string;
   /** A rename or move the reader should know about. */
   note?: string;
+  /**
+   * false keeps the entry out of the rotating H1. The title spells
+   * awesome-<id>-auth, the name of a family repository, and a served file
+   * such as auth.js is not one.
+   */
+  inTitle?: false;
 }
 
 export const MATURITY_INFO: Record<Maturity, { label: string; description: string }> = {
@@ -264,7 +286,40 @@ export const RUNTIMES: readonly Runtime[] = [
       'Flutter client with no token boilerplate: cookies and CSRF on web and WASM, bearer tokens on iOS, Android and desktop.',
     note: 'Formerly published as awesome_node_auth_flutter.',
   },
+  {
+    // auth.js: the browser client every server serves at <apiPrefix>/ui/auth.js,
+    // a copy of the reference's src/ui/assets/auth.js. There is nothing to
+    // install and no version of its own; the maturity is the one of the
+    // release that ships it, @awesome-lang-auth/node 1.10.8.
+    id: 'vanilla',
+    label: 'Vanilla JS',
+    group: 'client',
+    maturity: 'stable',
+    pkg: 'auth.js',
+    command: '<script src="/auth/ui/auth.js"></script>',
+    registry: {
+      kind: 'served',
+      url: 'https://github.com/awesome-lang-auth/awesome-node-auth',
+      path: 'src/ui/assets/auth.js',
+      defines: 'window.AwesomeNodeAuth = {',
+      route: '/auth/ui/auth.js',
+    },
+    registryLabel: 'source',
+    registryUrl: 'https://github.com/awesome-lang-auth/awesome-node-auth/blob/main/src/ui/assets/auth.js',
+    available: true,
+    docs: '/docs/advanced/browser-client/',
+    repo: 'https://github.com/awesome-lang-auth/awesome-node-auth',
+    feature: 'No npm install: one script tag gives any page window.AwesomeNodeAuth, with login, token refresh and CSRF built in.',
+    description:
+      'A browser client in one script tag, served next to the built-in UI pages. No build step: login, token refresh and every auth flow from window.AwesomeNodeAuth.',
+    note: 'Served by every server; works with Vue, Svelte, plain HTML.',
+    inTitle: false,
+  },
 ];
 
 export const SERVERS: readonly Runtime[] = RUNTIMES.filter((r) => r.group === 'server');
 export const CLIENTS: readonly Runtime[] = RUNTIMES.filter((r) => r.group === 'client');
+/** The entries the H1 rotates through, in order. */
+export const TITLE_RUNTIMES: readonly Runtime[] = RUNTIMES.filter((r) => r.inTitle !== false);
+/** The browser client every server serves. */
+export const AUTH_JS: Runtime = RUNTIMES.find((r) => r.id === 'vanilla')!;

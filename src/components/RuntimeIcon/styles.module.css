@@ -17,6 +17,7 @@
 .icon[data-rt='angular'] { --rt-color: #f0506e; }
 .icon[data-rt='react'] { --rt-color: #61dafb; }
 .icon[data-rt='flutter'] { --rt-color: #47c5fb; }
+.icon[data-rt='vanilla'] { --rt-color: #f7df1e; }
 
 [data-theme='light'] .icon[data-rt='node'] { --rt-color: #3c873a; }
 [data-theme='light'] .icon[data-rt='go'] { --rt-color: #007d9c; }
@@ -27,3 +28,4 @@
 [data-theme='light'] .icon[data-rt='angular'] { --rt-color: #dd0031; }
 [data-theme='light'] .icon[data-rt='react'] { --rt-color: #087ea4; }
 [data-theme='light'] .icon[data-rt='flutter'] { --rt-color: #02569b; }
+[data-theme='light'] .icon[data-rt='vanilla'] { --rt-color: #f0d000; }
