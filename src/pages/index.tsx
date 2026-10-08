@@ -6,7 +6,15 @@ import HomeHero from '@site/src/components/HomeHero';
 import RuntimeIcon from '@site/src/components/RuntimeIcon';
 import CopyButton from '@site/src/components/CopyButton';
 import ExternalIcon from '@site/src/components/ExternalIcon';
-import { AUTH_JS, CLIENTS, MATURITY_INFO, SERVERS, type Runtime, type RuntimeId } from '@site/src/data/runtimes';
+import {
+  AUTH_JS,
+  AUTH_JS_ROUTE,
+  CLIENTS,
+  MATURITY_INFO,
+  SERVERS,
+  type Runtime,
+  type RuntimeId,
+} from '@site/src/data/runtimes';
 import styles from './index.module.css';
 
 // Homepage <title>, written out instead of Layout's `title` prop (which would
@@ -309,15 +317,19 @@ function MixAndMatch(): ReactNode {
 // anything that runs in a browser page can call it.
 const AUTH_JS_WORKS_WITH = ['Plain HTML', 'Vue', 'Svelte', 'jQuery', 'any framework'];
 
+// The built-in UI's base path under the default prefix: /auth/ui.
+const UI_BASE = AUTH_JS_ROUTE.slice(0, AUTH_JS_ROUTE.lastIndexOf('/'));
+
 /**
  * Every server serves auth.js at <apiPrefix>/ui/auth.js beside its built-in UI
  * (on each default branch, 2026-10-08): Node.js, Go and Lambda once ui.enabled
  * is set, Python once build_ui_router is mounted, Rust and Dart by default.
+ * The default prefix is /auth everywhere except Python (api_prefix "/api/auth").
  */
 function AuthJsSection(): ReactNode {
   const tag = AUTH_JS.command;
   return (
-    <section className={styles.authjsSection} aria-labelledby="authjs-heading">
+    <section id="authjs" className={styles.authjsSection} aria-labelledby="authjs-heading">
       <div className={styles.container}>
         <div className={styles.authjsGrid}>
           <div>
@@ -335,8 +347,11 @@ function AuthJsSection(): ReactNode {
               <CopyButton text={tag} label="Copy the auth.js script tag" />
             </div>
             <p className={styles.authjsHint}>
-              The path is <code>&lt;apiPrefix&gt;/ui/auth.js</code> and <code>/auth</code> is the default prefix; with another one,
-              also call <code>{'AwesomeNodeAuth.init({ apiPrefix })'}</code>.
+              The path is <code>&lt;apiPrefix&gt;/ui/auth.js</code>. <code>/auth</code> is the default prefix on every server
+              except Python (<code>/api/auth</code>); with another prefix, also call{' '}
+              <code>{'AwesomeNodeAuth.init({ apiPrefix })'}</code>. For an API on another origin, use its full URL in{' '}
+              <code>src</code> and in <code>apiPrefix</code> (
+              <Link to="/docs/advanced/browser-client/#headless-mode--loading-authjs-from-a-remote-spa">headless mode</Link>).
             </p>
             <div className={styles.authjsWorks}>
               <span className={styles.authjsWorksLabel} id="authjs-works">
@@ -366,20 +381,22 @@ function AuthJsSection(): ReactNode {
             <dl className={styles.authjsRoutes}>
               <div>
                 <dt>
-                  <code>GET /auth/ui/auth.js</code>
+                  <code>{`GET ${AUTH_JS_ROUTE}`}</code>
                 </dt>
-                <dd>the browser client, window.AwesomeNodeAuth</dd>
+                <dd>
+                  the browser client, <code>window.AwesomeNodeAuth</code>
+                </dd>
               </div>
               <div>
                 <dt>
-                  <code>GET /auth/ui/login</code>
+                  <code>{`GET ${UI_BASE}/login`}</code>
                 </dt>
                 <dd>the built-in UI pages</dd>
               </div>
             </dl>
             <p className={styles.authjsPanelNote}>
-              Switch the built-in UI on: one setting in Node.js, Go and Lambda, one mounted router in Python. Rust and Dart serve
-              it by default.
+              Routes with the default prefix. Switch the built-in UI on: one setting in Node.js, Go and Lambda, one mounted router
+              in Python. Rust and Dart serve it by default.
             </p>
           </div>
         </div>
@@ -400,7 +417,9 @@ const STORE_CONTRACTS: { runtime: RuntimeId; lang: string; name: string; kind: s
   { runtime: 'dart', lang: 'Dart', name: 'UserStore', kind: 'interface' },
 ];
 
-// Only databases with a guide on this site (docs/database/).
+// Only databases with a guide or an example on this site: the user-store
+// guides in docs/database/, and Redis as the session store in the write-through
+// example of docs/advanced/sessions.md.
 const DATABASE_GUIDES: { name: string; href: string }[] = [
   { name: 'PostgreSQL', href: '/docs/database/postgresql/' },
   { name: 'MySQL / MariaDB', href: '/docs/database/mysql/' },
@@ -409,6 +428,7 @@ const DATABASE_GUIDES: { name: string; href: string }[] = [
   { name: 'PostgREST', href: '/docs/database/postgrest/' },
   { name: 'PHP-CRUD-API', href: '/docs/database/php-crud-api/' },
   { name: 'In-memory', href: '/docs/database/in-memory/' },
+  { name: 'Redis (sessions)', href: '/docs/advanced/sessions/#pattern-write-through-redis--database-l2--l3' },
 ];
 
 function DatabaseSection(): ReactNode {
@@ -419,8 +439,8 @@ function DatabaseSection(): ReactNode {
           Any database
         </h2>
         <p className={styles.sectionSubtitle}>
-          The libraries store nothing on their own. Users go through one small contract that your application implements for
-          the database it already has; optional contracts add features such as roles, API keys and telemetry.
+          The libraries persist nothing on their own. Users go through one contract that your application implements for the
+          database it already has; optional contracts add features such as roles, API keys and telemetry.
         </p>
         <div className={styles.dbGrid}>
           <div className={styles.dbCard}>
@@ -430,19 +450,23 @@ function DatabaseSection(): ReactNode {
                 <li key={c.runtime}>
                   <RuntimeIcon id={c.runtime} className={styles.dbIcon} />
                   <span className={styles.dbLang}>{c.lang}</span>
-                  <code>{c.name}</code>
-                  <span className={styles.dbKind}>{c.kind}</span>
+                  <span className={styles.dbImpl}>
+                    <code>{c.name}</code>
+                    <span className={styles.dbKind}>{c.kind}</span>
+                  </span>
                 </li>
               ))}
               <li>
                 <RuntimeIcon id="lambda" className={styles.dbIcon} />
                 <span className={styles.dbLang}>AWS Lambda</span>
-                <Link to="/docs/frameworks/lambda/">ships DynamoDB stores</Link>
+                <span className={styles.dbImpl}>
+                  <Link to="/docs/frameworks/lambda/">ships DynamoDB stores</Link>
+                </span>
               </li>
             </ul>
           </div>
           <div className={styles.dbCard}>
-            <h3 className={styles.dbCardHeading}>Step-by-step guides (Node.js)</h3>
+            <h3 className={styles.dbCardHeading}>Guides and examples (Node.js)</h3>
             <ul className={styles.dbGuides}>
               {DATABASE_GUIDES.map((d) => (
                 <li key={d.href}>
@@ -477,6 +501,11 @@ export default function Home(): ReactNode {
               magic links and two-factor authentication, on your own infrastructure, with no per-user pricing.
             </>
           }
+          footnote={{
+            href: '#authjs',
+            icon: AUTH_JS.id,
+            text: 'Every server also serves auth.js: any frontend, one script tag',
+          }}
         />
         <MixAndMatch />
         <AuthJsSection />

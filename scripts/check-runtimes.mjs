@@ -5,10 +5,11 @@
  * Reads src/data/runtimes.ts (the single source of truth) and, for each
  * runtime marked `available`, asks its registry whether the package and the
  * version the page shows still resolve: npm, PyPI, pub.dev, crates.io, the Go
- * module proxy, or the GitHub repository for git installs. A file the servers
- * serve (auth.js) has no registry: like a git install, it is read from the
- * default branch of the repository that ships it. Exits 1 when one does not. Runtimes marked `available: false` are queried too, but only
- * reported, so the day they start resolving is visible in the log.
+ * module proxy, or the GitHub repository for git installs. Exits 1 when one
+ * does not. A file the servers serve (auth.js) has no registry: like a git
+ * install, it is read from the default branch of the repository that ships
+ * it. Runtimes marked `available: false` are queried too, but only reported,
+ * so the day they start resolving is visible in the log.
  *
  * Runs weekly from .github/workflows/check-runtimes.yml, never on a build:
  * a registry outage must not break a deploy.

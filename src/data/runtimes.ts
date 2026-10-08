@@ -94,6 +94,12 @@ export interface Runtime {
    * such as auth.js is not one.
    */
   inTitle?: false;
+  /**
+   * A word the hero chip's accessible name adds after the id, when the id
+   * alone is not a name: the vanilla chip shows a JS icon (hidden from screen
+   * readers), so it is announced as "vanilla js".
+   */
+  chipSuffix?: string;
 }
 
 export const MATURITY_INFO: Record<Maturity, { label: string; description: string }> = {
@@ -314,6 +320,7 @@ export const RUNTIMES: readonly Runtime[] = [
       'A browser client in one script tag, served next to the built-in UI pages. No build step: login, token refresh and every auth flow from window.AwesomeNodeAuth.',
     note: 'Served by every server; works with Vue, Svelte, plain HTML.',
     inTitle: false,
+    chipSuffix: 'js',
   },
 ];
 
@@ -323,3 +330,11 @@ export const CLIENTS: readonly Runtime[] = RUNTIMES.filter((r) => r.group === 'c
 export const TITLE_RUNTIMES: readonly Runtime[] = RUNTIMES.filter((r) => r.inTitle !== false);
 /** The browser client every server serves. */
 export const AUTH_JS: Runtime = RUNTIMES.find((r) => r.id === 'vanilla')!;
+
+function servedRoute(runtime: Runtime): string {
+  if (runtime.registry.kind !== 'served') throw new Error(`${runtime.id} is not a served file`);
+  return runtime.registry.route;
+}
+
+/** Where the servers serve auth.js under the default API prefix: /auth/ui/auth.js. */
+export const AUTH_JS_ROUTE: string = servedRoute(AUTH_JS);

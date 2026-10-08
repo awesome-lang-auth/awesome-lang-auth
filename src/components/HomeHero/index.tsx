@@ -87,7 +87,18 @@ function RuntimeCard({ runtime, active }: { runtime: Runtime; active: boolean })
   );
 }
 
-export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNode {
+/**
+ * One line under the calls to action that points further down the same page
+ * (the home uses it for its auth.js block, so the feature shows on the first
+ * screen). A plain <a href="#…">: the target is a section of this page.
+ */
+interface HeroFootnote {
+  href: `#${string}`;
+  icon: RuntimeId;
+  text: ReactNode;
+}
+
+export default function HomeHero({ subtitle, footnote }: { subtitle: ReactNode; footnote?: HeroFootnote }): ReactNode {
   // Title state. SSR and the first client render show ${lang} with no effect.
   const [target, setTarget] = useState<RuntimeId | null>(null);
   const [settled, setSettled] = useState<RuntimeId | null | undefined>(undefined);
@@ -189,7 +200,11 @@ export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNo
         {GROUP_INFO[group].label}
       </span>
       <div className={styles.chipLine}>
-        <div className={styles.chips} role="group" aria-labelledby={`chips-${group}`}>
+        <div
+          className={clsx(styles.chips, group === 'client' && styles.chipsClient)}
+          role="group"
+          aria-labelledby={`chips-${group}`}
+        >
           {runtimes.map((r) => (
             <button
               key={r.id}
@@ -200,7 +215,10 @@ export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNo
               onClick={() => choose(r.id)}
             >
               <RuntimeIcon id={r.id} className={styles.chipIcon} />
-              <span className={styles.chipName}>{r.id}</span>
+              <span className={styles.chipName}>
+                {r.id}
+                {r.chipSuffix ? <span className={styles.srOnly}> {r.chipSuffix}</span> : null}
+              </span>
               <MaturityBadge runtime={r} />
             </button>
           ))}
@@ -274,6 +292,16 @@ export default function HomeHero({ subtitle }: { subtitle: ReactNode }): ReactNo
             Live demo
           </Link>
         </div>
+
+        {footnote ? (
+          <p className={styles.footnote}>
+            <a href={footnote.href}>
+              <RuntimeIcon id={footnote.icon} className={styles.footnoteIcon} />
+              {footnote.text}
+              <span aria-hidden="true"> ↓</span>
+            </a>
+          </p>
+        ) : null}
       </div>
     </section>
   );
