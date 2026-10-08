@@ -451,7 +451,7 @@ headTags: [
 |--------|---------------|
 | **Vanilla JS / jQuery / plain HTML** | Use the built-in UI — zero setup |
 | **Next.js / Nuxt / SvelteKit** | Built-in UI works; or build your own pages and call the REST API |
-| **Angular** | Use the dedicated **[ng-awesome-node-auth](/docs/frameworks/ng-awesome-node-auth)** library — it provides Guards, Interceptors, and a typed `AuthService`; `auth.js` is **not needed** in Angular projects |
+| **Angular** | Use the dedicated **[@awesome-lang-auth/angular](/docs/frameworks/ng-awesome-node-auth)** library — it provides Guards, Interceptors, and a typed `AuthService`; `auth.js` is **not needed** in Angular projects |
 
 ---
 

@@ -1,17 +1,17 @@
 ---
 id: ng-awesome-node-auth
-title: "Angular Auth Library: ng-awesome-node-auth"
+title: "Angular Auth Library: @awesome-lang-auth/angular"
 description: >-
   The official Angular library for awesome-node-auth: guards, HttpClient interceptors, reactive session signals, CSRF support and SSR hydration.
-sidebar_label: Angular (ng-awesome-node-auth)
+sidebar_label: Angular (@awesome-lang-auth/angular)
 ---
 
-# Angular Integration — `ng-awesome-node-auth`
+# Angular Integration — `@awesome-lang-auth/angular`
 
-`ng-awesome-node-auth` is the official Angular library for frontends backed by `awesome-node-auth`. It provides Guards, Interceptors, reactive session signals, CSRF support, and optional UI theme synchronization — all tree-shakable and SSR-safe.
+`@awesome-lang-auth/angular` is the official Angular library for frontends backed by `awesome-node-auth`. It provides Guards, Interceptors, reactive session signals, CSRF support, and optional UI theme synchronization — all tree-shakable and SSR-safe.
 
 :::info Why not use auth.js?
-`auth.js` (the built-in browser client) uses plain `fetch()` intercept and global `window` APIs that are not compatible with Angular's `HttpClient` pipeline, zone.js change detection, or SSR hydration. Use `ng-awesome-node-auth` instead.
+`auth.js` (the built-in browser client) uses plain `fetch()` intercept and global `window` APIs that are not compatible with Angular's `HttpClient` pipeline, zone.js change detection, or SSR hydration. Use `@awesome-lang-auth/angular` instead.
 :::
 
 ---
@@ -19,11 +19,11 @@ sidebar_label: Angular (ng-awesome-node-auth)
 ## Installation
 
 ```bash
-npm install ng-awesome-node-auth
+npm install @awesome-lang-auth/angular
 ```
 
-:::note Upcoming package name
-The library moves to `@awesome-lang-auth/angular`. Until that package is published, install `ng-awesome-node-auth` as above. The source lives in [awesome-lang-auth/awesome-angular-auth](https://github.com/awesome-lang-auth/awesome-angular-auth).
+:::note Formerly ng-awesome-node-auth
+The library was formerly published as `ng-awesome-node-auth`, now deprecated on npm: its last release, 1.10.0, only re-exports `@awesome-lang-auth/angular`. To migrate, install the new package and change the import specifier. The source lives in [awesome-lang-auth/awesome-angular-auth](https://github.com/awesome-lang-auth/awesome-angular-auth).
 :::
 
 ---
@@ -36,7 +36,7 @@ The library moves to `@awesome-lang-auth/angular`. Until that package is publish
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
-import { provideAuth, provideAuthUi } from 'ng-awesome-node-auth';
+import { provideAuth, provideAuthUi } from '@awesome-lang-auth/angular';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -57,7 +57,7 @@ export const appConfig: ApplicationConfig = {
 
 ```typescript
 import { Routes } from '@angular/router';
-import { authGuard, guestGuard } from 'ng-awesome-node-auth';
+import { authGuard, guestGuard } from '@awesome-lang-auth/angular';
 
 export const routes: Routes = [
   {
@@ -78,7 +78,7 @@ export const routes: Routes = [
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { AuthService } from 'ng-awesome-node-auth';
+import { AuthService } from '@awesome-lang-auth/angular';
 
 @Component({
   selector: 'app-dashboard',
@@ -147,7 +147,7 @@ interface LoginResult {
 
 ```typescript
 import { APP_INITIALIZER, inject } from '@angular/core';
-import { AuthService } from 'ng-awesome-node-auth';
+import { AuthService } from '@awesome-lang-auth/angular';
 import { firstValueFrom, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -208,7 +208,7 @@ When included, `provideAuthUi()` registers `UiConfigService`, which:
 
 ```typescript
 import { inject } from '@angular/core';
-import { UiConfigService } from 'ng-awesome-node-auth';
+import { UiConfigService } from '@awesome-lang-auth/angular';
 
 @Component({ /* … */ })
 export class NavComponent {
@@ -233,7 +233,7 @@ export class NavComponent {
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from 'ng-awesome-node-auth';
+import { AuthService } from '@awesome-lang-auth/angular';
 
 @Component({
   selector: 'app-login',
@@ -301,7 +301,7 @@ export class LoginComponent {
 
 ## SSR wiring
 
-`ng-awesome-node-auth` is SSR-safe. The `AuthService` and `UiConfigService` use Angular's `isPlatformBrowser` checks internally to avoid calling browser-only APIs during server-side rendering.
+`@awesome-lang-auth/angular` is SSR-safe. The `AuthService` and `UiConfigService` use Angular's `isPlatformBrowser` checks internally to avoid calling browser-only APIs during server-side rendering.
 
 For SSR apps, forward the browser's cookies to the API server in `app.config.server.ts`:
 
@@ -390,7 +390,7 @@ if (isMainModule(import.meta.url)) {
 ```
 Browser / SSR
  └─ Angular App
-     ├─ provideAuth({ apiPrefix: '/api/auth' })  ← ng-awesome-node-auth
+     ├─ provideAuth({ apiPrefix: '/api/auth' })  ← @awesome-lang-auth/angular
      ├─ authGuard / guestGuard
      └─ AuthService.user() / isAuthenticated()
 
@@ -405,7 +405,7 @@ Express Server
 
 ## Links
 
-- **npm**: [`ng-awesome-node-auth`](https://www.npmjs.com/package/ng-awesome-node-auth)
+- **npm**: [`@awesome-lang-auth/angular`](https://www.npmjs.com/package/@awesome-lang-auth/angular)
 - **GitHub**: [awesome-lang-auth/awesome-angular-auth](https://github.com/awesome-lang-auth/awesome-angular-auth)
 - **Backend docs**: [Built-in UI guide](/docs/advanced/built-in-ui) · [Browser Client](/docs/advanced/browser-client)
 - **Manual Angular wiring** (without the library): [Angular (manual)](/docs/frameworks/angular)

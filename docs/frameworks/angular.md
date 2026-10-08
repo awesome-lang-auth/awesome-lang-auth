@@ -7,7 +7,7 @@ sidebar_label: Angular (manual wiring)
 ---
 
 :::tip Prefer the official Angular library
-**For new projects, use [`ng-awesome-node-auth`](/docs/frameworks/ng-awesome-node-auth)** — the official Angular library that provides Guards, Interceptors, reactive session signals, CSRF support, and SSR wiring out of the box with a single `provideAuth()` call.
+**For new projects, use [`@awesome-lang-auth/angular`](/docs/frameworks/ng-awesome-node-auth)** — the official Angular library that provides Guards, Interceptors, reactive session signals, CSRF support, and SSR wiring out of the box with a single `provideAuth()` call.
 
 This page documents the **manual wiring approach** for teams that want full control over the Angular auth layer or need to integrate into an existing codebase.
 :::

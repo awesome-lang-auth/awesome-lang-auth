@@ -291,11 +291,11 @@ function MixAndMatch(): ReactNode {
         </div>
         <pre className={styles.mixCode}>
           <code>
-            <span className={styles.mixComment}>{'// Angular: ng-awesome-node-auth'}</span>
+            <span className={styles.mixComment}>{'// Angular: @awesome-lang-auth/angular'}</span>
             {"\nprovideAuth({ apiPrefix: '/api/auth' })\n\n"}
             <span className={styles.mixComment}>{'// React: @awesome-lang-auth/react'}</span>
             {"\n<AwesomeAuthProvider options={{ apiPrefix: '/api/auth' }}>\n\n"}
-            <span className={styles.mixComment}>{'// Flutter: awesome_node_auth_flutter'}</span>
+            <span className={styles.mixComment}>{'// Flutter: awesome_flutter_auth'}</span>
             {"\nAuthClient(AuthOptions(apiPrefix: '/api/auth'))"}
           </code>
         </pre>
