@@ -108,6 +108,11 @@ const sidebars: SidebarsConfig = {
         'frameworks/android',
       ],
     },
+    {
+      type: 'doc',
+      id: 'ai-assistants',
+      label: 'AI assistants (llms.txt)',
+    },
   ],
 };
 
