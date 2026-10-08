@@ -29,18 +29,19 @@ export default function PrivacyPage(): React.ReactElement {
           The site is hosted on <strong>GitHub Pages</strong>. Every page,
           image and file of the site is requested from GitHub's servers, so
           GitHub receives the technical details of every request, such as your
-          IP address, the page requested and your browser's user agent. GitHub
-          handles them under the{' '}
+          IP address, the page requested and your browser's user agent, and
+          logs and stores your IP address for security purposes. GitHub
+          handles this data under the{' '}
           <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noreferrer">
             GitHub General Privacy Statement
           </a>.
         </p>
         <p>
-          Two servers run by the owner keep the standard technical log of the
-          requests they receive: for each request, the IP address, the time,
-          the address requested, the referring page and the browser's user
-          agent. The logs are kept for security and operations and are deleted
-          after a limited period.
+          The owner's server keeps the standard technical log of the requests
+          it receives for two addresses: for each request, the IP address, the
+          time, the address requested, the referring page and the browser's
+          user agent. The logs are kept for security and operations and are
+          deleted after a limited period.
         </p>
         <ul>
           <li>
@@ -55,7 +56,9 @@ export default function PrivacyPage(): React.ReactElement {
           </li>
         </ul>
         <p>
-          No other personal data is collected, and nothing is sold or shared.
+          Apart from these logs and the Umami statistics described below, no
+          personal data is collected, and the owner sells or shares none of
+          it.
         </p>
 
         <h2>3. External Services</h2>
@@ -105,7 +108,11 @@ export default function PrivacyPage(): React.ReactElement {
 
         <h2>5. Security</h2>
         <p>
-          All data in transit is encrypted with TLS.
+          The pages of this site, and the statistics requests they make, use
+          HTTPS (TLS). A request to a plain <code>http://</code> address, of
+          this site or of its old address, only receives a redirect to the{' '}
+          <code>https://</code> address; that first request, including the
+          address requested, is not encrypted.
         </p>
 
         <h2>6. Changes to This Policy</h2>

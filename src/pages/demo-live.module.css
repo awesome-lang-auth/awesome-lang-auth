@@ -118,10 +118,15 @@
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
-  transition: opacity 0.15s, transform 0.1s;
+  transition: transform 0.1s;
 }
 
-.sbLoadBtn:hover { opacity: 0.9; transform: translateY(-1px); }
+/* a darker gradient, not opacity: over the white light-mode frame opacity would
+   lighten the button below 4.5:1 */
+.sbLoadBtn:hover {
+  background: linear-gradient(135deg, #007553, #005c43);
+  transform: translateY(-1px);
+}
 
 .sbLoadBtn:focus-visible {
   outline: 3px solid #7ff0cf;
@@ -140,6 +145,9 @@
 .sbOpenLink {
   color: #00c896;
 }
+
+/* told apart from the notice text by more than its colour */
+.sbNotice a { text-decoration: underline; }
 
 .sbOpenLink {
   font-size: 14px;
@@ -162,6 +170,27 @@
 }
 
 .sbFallback a:hover { text-decoration: underline; }
+
+/* text for screen readers only (Infima has no such class) */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* on a phone, the button at the top of the box instead of below an empty half */
+@media (max-width: 800px) {
+  .sbPlaceholder {
+    justify-content: flex-start;
+    padding-top: 64px;
+  }
+}
 
 /* ── Page header ─────────────────────────────────────────────────────────── */
 
@@ -860,6 +889,10 @@
   border-color: #e2e8f0;
 }
 [data-theme='light'] .sbFallback { color: #475569; }
+[data-theme='light'] .sbNotice { color: #475569; }
+[data-theme='light'] .sbNotice a,
+[data-theme='light'] .sbOpenLink { color: #006b50; }
+[data-theme='light'] .sbLoadBtn:focus-visible { outline-color: #006b50; }
 
 [data-theme='light'] .note {
   background: rgba(245, 158, 11, 0.05);

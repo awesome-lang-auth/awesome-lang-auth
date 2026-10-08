@@ -299,7 +299,7 @@ export default function DemoLive(): JSX.Element {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Open in StackBlitz ↗
+                  Open in StackBlitz<span aria-hidden="true"> ↗</span><span className={styles.srOnly}> (opens in a new tab)</span>
                 </a>
               </div>
             )}
@@ -308,7 +308,7 @@ export default function DemoLive(): JSX.Element {
             <div className={styles.sbFallback}>
               Can't see the embed?{' '}
               <a href={STACKBLITZ_OPEN_URL} target="_blank" rel="noopener noreferrer">
-                Open directly on StackBlitz ↗
+                Open in StackBlitz<span aria-hidden="true"> ↗</span><span className={styles.srOnly}> (opens in a new tab)</span>
               </a>
             </div>
           )}
