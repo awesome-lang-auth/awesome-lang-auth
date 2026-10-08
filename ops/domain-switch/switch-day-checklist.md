@@ -49,7 +49,10 @@ Items 1 to 3 must be true before step 1; item 4 is optional. Each has its check.
    records of `awesomelangauth.com` and of `www.awesomelangauth.com` to 5 minutes, so the DNS
    change on the day reaches everyone quickly. Without it, the change takes up to the current
    TTL (one hour when this was written) to reach every resolver; until then some visitors of
-   `awesomelangauth.com` still reach the VPS and see what they see today.
+   `awesomelangauth.com` still reach the VPS and see what they see today. Your own checks in
+   steps 3 to 5 go through your resolver too, so for up to that long they can still show
+   today's answer (`ipconfig /flushdns` only clears Windows' own cache): wait, or use the
+   `--resolve` form under step 3, which asks GitHub directly.
 
    ```bash
    nslookup -debug awesomelangauth.com 8.8.8.8 | grep -i ttl
@@ -112,6 +115,19 @@ curl -s -o /dev/null -D - http://awesomelangauth.com/ | grep -iE '^(HTTP|server)
 curl -s http://awesomelangauth.com/ | grep -o 'rel="canonical" href="[^"]*"'
 #   rel="canonical" href="https://awesomelangauth.com/"
 ```
+
+If the TTL was not lowered (item 4), your resolver may still send these checks to the VPS
+for up to an hour: they then show today's `301` and `Server: openresty`. The same check
+without waiting for your resolver sends it to one of GitHub's addresses:
+
+```bash
+curl -s -o /dev/null -D - --resolve awesomelangauth.com:80:185.199.108.153 http://awesomelangauth.com/ | grep -iE '^(HTTP|server)'
+#   the status line ends in 200, and "Server: GitHub.com"
+```
+
+The `https://` checks of steps 4 and 5 take the same option with port 443, for example
+`--resolve awesomelangauth.com:443:185.199.108.153` (and
+`--resolve www.awesomelangauth.com:443:185.199.108.153` for the `www` check).
 
 ### 4. Wait for the certificate, then Enforce HTTPS
 

@@ -25,7 +25,8 @@ the steps below delete before they edit.
 ### A. Delete the hosts of the new domain
 
 Do this first, and only when the checklist's step 2 shows the GitHub addresses for
-`awesomelangauth.com`. From then on GitHub serves those names: the hosts here only kept a
+`awesomelangauth.com` and, if the TTL was not lowered (checklist item 4), at least one hour
+after step 2. From then on GitHub serves those names: the hosts here only kept a
 copy of the old site on them, and their certificates could no longer renew.
 
 1. Open the NPM admin UI, **Hosts → Redirection Hosts**.
