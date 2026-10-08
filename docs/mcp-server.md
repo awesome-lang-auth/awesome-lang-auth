@@ -11,6 +11,9 @@ The hosted awesome-node-auth MCP server, which connected AI editors to this docu
 through an API key, is being retired. The account area of this site, where those keys were
 created, has already been removed.
 
+To give an AI assistant this documentation, use
+[llms.txt and llms-full.txt](/docs/ai-assistants) instead: no account and no key.
+
 The library is not affected: awesome-node-auth, its backend ports and its client libraries
 work exactly as before, and they are fully documented here:
 
