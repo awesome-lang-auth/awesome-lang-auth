@@ -1,12 +1,8 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-// Load .env so the optional GOOGLE_ANALYTICS_ID is available at dev/build time
-// (the Docker build gets it the same way: .env is part of the build context)
-import * as dotenv from 'dotenv';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-dotenv.config();
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 const SITE_URL = 'https://www.awesomenodeauth.com';
@@ -168,14 +164,7 @@ const config: Config = {
   themes: ['@docusaurus/theme-mermaid'],
 
   // ── Plugins ────────────────────────────────────────────────────────────────
-  // Google Analytics — only loaded when GOOGLE_ANALYTICS_ID is set at build time
   plugins: [
-    ...(process.env.GOOGLE_ANALYTICS_ID
-      ? [[
-          '@docusaurus/plugin-google-gtag',
-          { trackingID: process.env.GOOGLE_ANALYTICS_ID, anonymizeIP: true },
-        ]]
-      : []),
     // llms.txt (an index of the doc pages) and llms-full.txt (their Markdown,
     // concatenated) at the site root, generated from docs/ on every build.
     [
