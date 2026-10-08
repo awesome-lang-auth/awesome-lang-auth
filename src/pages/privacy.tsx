@@ -26,20 +26,42 @@ export default function PrivacyPage(): React.ReactElement {
           part of the demo: nothing you type there is sent to this site.
         </p>
         <p>
-          The only personal data it keeps is the standard technical log of its
-          web server: for each request, the IP address, the time, the page
-          requested, the referring page and the browser's user agent. The log
-          is kept for security and operations and is deleted after a limited
-          period.
+          The site is hosted on <strong>GitHub Pages</strong>. Every page,
+          image and file of the site is requested from GitHub's servers, so
+          GitHub receives the technical details of every request, such as your
+          IP address, the page requested and your browser's user agent. GitHub
+          handles them under the{' '}
+          <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noreferrer">
+            GitHub General Privacy Statement
+          </a>.
         </p>
+        <p>
+          Two servers run by the owner keep the standard technical log of the
+          requests they receive: for each request, the IP address, the time,
+          the address requested, the referring page and the browser's user
+          agent. The logs are kept for security and operations and are deleted
+          after a limited period.
+        </p>
+        <ul>
+          <li>
+            The redirect server of the site's old address,{' '}
+            <code>awesomenodeauth.com</code>. A request there only gets a
+            redirect to the same page on <code>awesomelangauth.com</code>.
+          </li>
+          <li>
+            The proxy in front of the Umami statistics server,{' '}
+            <code>umami.applikat.it</code> (see below). Umami itself does not
+            store IP addresses.
+          </li>
+        </ul>
         <p>
           No other personal data is collected, and nothing is sold or shared.
         </p>
 
         <h2>3. External Services</h2>
         <p>
-          Every page loads one external service, Umami. Two pages also load
-          content from StackBlitz.
+          Every page loads one external service, Umami. StackBlitz loads only
+          when you click.
         </p>
         <ul>
           <li>
@@ -52,17 +74,19 @@ export default function PrivacyPage(): React.ReactElement {
             derived from the IP address.
           </li>
           <li>
-            <strong>StackBlitz</strong>. When you open the{' '}
-            <Link to="/demo-live/">interactive demo</Link>, it loads a page
-            from StackBlitz that runs the demo. That page belongs to
-            StackBlitz: it loads StackBlitz's code and the analytics services
-            StackBlitz uses (at the time of writing, Google Tag Manager and
-            Segment), and StackBlitz and those services may set their own
-            cookies and browser storage. The{' '}
-            <Link to="/docs/live-demo/">live demos</Link> page loads its
-            "Open in StackBlitz" button images from StackBlitz. No other page
-            loads anything from StackBlitz. What StackBlitz and these services
-            do with this data is governed by StackBlitz's{' '}
+            <strong>StackBlitz</strong>, only when you click. The{' '}
+            <Link to="/demo-live/">interactive demo</Link> loads nothing from
+            StackBlitz until you click "Load the interactive demo". Then it
+            loads a page from StackBlitz that runs the demo. That page belongs
+            to StackBlitz: it loads StackBlitz's code and the analytics
+            services StackBlitz uses (at the time of writing, Google Tag
+            Manager and Segment), and StackBlitz and those services may set
+            their own cookies and browser storage. The "Open in StackBlitz"
+            links, on that page and on the{' '}
+            <Link to="/docs/live-demo/">live demos</Link> page, open StackBlitz
+            itself. No page of this site loads anything from StackBlitz before
+            you click. What StackBlitz and these services do with this data is
+            governed by StackBlitz's{' '}
             <a href="https://stackblitz.com/privacy-policy" target="_blank" rel="noreferrer">
               privacy policy
             </a>.
@@ -74,9 +98,9 @@ export default function PrivacyPage(): React.ReactElement {
           This site sets no cookies of its own. Your browser's local storage
           keeps a few display settings, such as the colour theme, whether you
           closed the announcement bar and which title animation the home page
-          showed last; they never leave your browser. Only the StackBlitz page
-          in the interactive demo may set cookies: StackBlitz's own and those
-          of the services it loads.
+          showed last; they never leave your browser. Only StackBlitz may set
+          cookies, and only once you click to load or open a demo:
+          StackBlitz's own and those of the services it loads.
         </p>
 
         <h2>5. Security</h2>
@@ -92,7 +116,7 @@ export default function PrivacyPage(): React.ReactElement {
 
         <h2>7. Contact</h2>
         <p>
-          For privacy-related questions, including about the server log, please
+          For privacy-related questions, including about the server logs, please
           open an issue on{' '}
           <a href="https://github.com/awesome-lang-auth/awesome-node-auth/issues" target="_blank" rel="noreferrer">
             GitHub
