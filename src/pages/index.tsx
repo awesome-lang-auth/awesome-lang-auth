@@ -6,7 +6,15 @@ import HomeHero from '@site/src/components/HomeHero';
 import RuntimeIcon from '@site/src/components/RuntimeIcon';
 import CopyButton from '@site/src/components/CopyButton';
 import ExternalIcon from '@site/src/components/ExternalIcon';
-import { CLIENTS, MATURITY_INFO, SERVERS, type Runtime, type RuntimeId } from '@site/src/data/runtimes';
+import {
+  AUTH_JS,
+  AUTH_JS_ROUTE,
+  CLIENTS,
+  MATURITY_INFO,
+  SERVERS,
+  type Runtime,
+  type RuntimeId,
+} from '@site/src/data/runtimes';
 import styles from './index.module.css';
 
 // Homepage <title>, written out instead of Layout's `title` prop (which would
@@ -181,7 +189,9 @@ function EcosystemCard({ runtime }: { runtime: Runtime }): ReactNode {
           </Link>
           <span className={styles.ecosystemMeta}>
             <Maturity runtime={runtime} />
-            <span>{runtime.version ? `v${runtime.version}` : 'from git'}</span>
+            <span>
+              {runtime.version ? `v${runtime.version}` : runtime.registry.kind === 'served' ? 'served' : 'from git'}
+            </span>
             <a href={runtime.registryUrl} target="_blank" rel="noopener noreferrer" className={styles.ecosystemRegistry}>
               {runtime.registryLabel} <ExternalIcon />
             </a>
@@ -199,37 +209,14 @@ function EcosystemCard({ runtime }: { runtime: Runtime }): ReactNode {
       </p>
       <div className={styles.ecosystemInstall}>
         <code>{runtime.command}</code>
-        <CopyButton text={runtime.command} label={`Copy the ${runtime.label} install command`} />
-      </div>
-    </div>
-  );
-}
-
-/** The one frontend that is not a package: the script the Node.js built-in UI serves. */
-function AuthJsCard(): ReactNode {
-  const snippet = '<script src="{API_ORIGIN}/auth/ui/auth.js"></script>';
-  return (
-    <div className={styles.ecosystemCard}>
-      <div className={styles.ecosystemCardHeader}>
-        <span className={styles.ecosystemEmoji} aria-hidden="true">
-          🌍
-        </span>
-        <div className={styles.ecosystemTitle}>
-          <Link to="/docs/advanced/browser-client" className={styles.ecosystemName}>
-            auth.js (served by the built-in UI)
-          </Link>
-          <span className={styles.ecosystemMeta}>
-            <span>any web framework</span>
-          </span>
-        </div>
-      </div>
-      <p className={styles.ecosystemDescription}>
-        Works with any web framework or library in the browser, in headful mode (built-in UI pages) or headless mode. Replace{' '}
-        <code>{'{API_ORIGIN}'}</code> with your auth backend origin (e.g. https://api.example.com).
-      </p>
-      <div className={styles.ecosystemInstall}>
-        <code>{snippet}</code>
-        <CopyButton text={snippet} label="Copy the auth.js script tag" />
+        <CopyButton
+          text={runtime.command}
+          label={
+            runtime.registry.kind === 'served'
+              ? `Copy the ${runtime.pkg} script tag`
+              : `Copy the ${runtime.label} install command`
+          }
+        />
       </div>
     </div>
   );
@@ -296,7 +283,9 @@ function MixAndMatch(): ReactNode {
             <span className={styles.mixComment}>{'// React: @awesome-lang-auth/react'}</span>
             {"\n<AwesomeAuthProvider options={{ apiPrefix: '/api/auth' }}>\n\n"}
             <span className={styles.mixComment}>{'// Flutter: awesome_flutter_auth'}</span>
-            {"\nAuthClient(AuthOptions(apiPrefix: '/api/auth'))"}
+            {"\nAuthClient(AuthOptions(apiPrefix: '/api/auth'))\n\n"}
+            <span className={styles.mixComment}>{'// Any web page: auth.js, served by the server itself'}</span>
+            {"\nAwesomeNodeAuth.init({ apiPrefix: '/api/auth' })"}
           </code>
         </pre>
         <p className={styles.mixNote}>
@@ -322,6 +311,179 @@ function MixAndMatch(): ReactNode {
   );
 }
 
+// ── auth.js ──────────────────────────────────────────────────────────────────
+
+// auth.js is one classic script that defines window.AwesomeNodeAuth, so
+// anything that runs in a browser page can call it.
+const AUTH_JS_WORKS_WITH = ['Plain HTML', 'Vue', 'Svelte', 'jQuery', 'any framework'];
+
+// The built-in UI's base path under the default prefix: /auth/ui.
+const UI_BASE = AUTH_JS_ROUTE.slice(0, AUTH_JS_ROUTE.lastIndexOf('/'));
+
+/**
+ * Every server serves auth.js at <apiPrefix>/ui/auth.js beside its built-in UI
+ * (on each default branch, 2026-10-08): Node.js, Go and Lambda once ui.enabled
+ * is set, Python once build_ui_router is mounted, Rust and Dart by default.
+ * The default prefix is /auth everywhere except Python (api_prefix "/api/auth").
+ */
+function AuthJsSection(): ReactNode {
+  const tag = AUTH_JS.command;
+  return (
+    <section id="authjs" className={styles.authjsSection} aria-labelledby="authjs-heading">
+      <div className={styles.container}>
+        <div className={styles.authjsGrid}>
+          <div>
+            <p className={styles.eyebrow}>Built into every server</p>
+            <h2 id="authjs-heading" className={styles.authjsHeading}>
+              Any frontend, one script tag
+            </h2>
+            <p className={styles.authjsLead}>
+              Every server in the family serves <strong>auth.js</strong>, a complete browser auth client, together with the
+              ready-made, customizable auth UI pages. Load it and any frontend gets login, token refresh, the CSRF header and
+              every auth flow, with no npm install and no build step.
+            </p>
+            <div className={styles.authjsTag}>
+              <code>{tag}</code>
+              <CopyButton text={tag} label="Copy the auth.js script tag" />
+            </div>
+            <p className={styles.authjsHint}>
+              The path is <code>&lt;apiPrefix&gt;/ui/auth.js</code>. <code>/auth</code> is the default prefix on every server
+              except Python (<code>/api/auth</code>); with another prefix, also call{' '}
+              <code>{'AwesomeNodeAuth.init({ apiPrefix })'}</code>. For an API on another origin, use its full URL in{' '}
+              <code>src</code> and in <code>apiPrefix</code> (
+              <Link to="/docs/advanced/browser-client/#headless-mode--loading-authjs-from-a-remote-spa">headless mode</Link>).
+            </p>
+            <div className={styles.authjsWorks}>
+              <span className={styles.authjsWorksLabel} id="authjs-works">
+                Works with
+              </span>
+              <ul aria-labelledby="authjs-works">
+                {AUTH_JS_WORKS_WITH.map((name) => (
+                  <li key={name}>{name}</li>
+                ))}
+              </ul>
+            </div>
+            <div className={styles.authjsLinks}>
+              <Link to="/docs/advanced/browser-client/">auth.js browser client →</Link>
+              <Link to="/docs/advanced/built-in-ui/">Built-in UI pages →</Link>
+            </div>
+          </div>
+          <div className={styles.authjsPanel}>
+            <h3 className={styles.authjsPanelHeading}>Served by every server</h3>
+            <ul className={styles.authjsServers}>
+              {SERVERS.map((r) => (
+                <li key={r.id}>
+                  <RuntimeIcon id={r.id} className={styles.authjsServerIcon} />
+                  <span>{r.label}</span>
+                </li>
+              ))}
+            </ul>
+            <dl className={styles.authjsRoutes}>
+              <div>
+                <dt>
+                  <code>{`GET ${AUTH_JS_ROUTE}`}</code>
+                </dt>
+                <dd>
+                  the browser client, <code>window.AwesomeNodeAuth</code>
+                </dd>
+              </div>
+              <div>
+                <dt>
+                  <code>{`GET ${UI_BASE}/login`}</code>
+                </dt>
+                <dd>the built-in UI pages</dd>
+              </div>
+            </dl>
+            <p className={styles.authjsPanelNote}>
+              Routes with the default prefix. Switch the built-in UI on: one setting in Node.js, Go and Lambda, one mounted router
+              in Python. Rust and Dart serve it by default.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Any database ─────────────────────────────────────────────────────────────
+
+// The user-store contract as each port's default branch names it (2026-10-08).
+// Dart's is an `abstract interface class`, shown as what it is used as: an interface.
+const STORE_CONTRACTS: { runtime: RuntimeId; lang: string; name: string; kind: string }[] = [
+  { runtime: 'node', lang: 'Node.js', name: 'IUserStore', kind: 'interface' },
+  { runtime: 'go', lang: 'Go', name: 'UserStore', kind: 'interface' },
+  { runtime: 'python', lang: 'Python', name: 'UserStore', kind: 'abstract class' },
+  { runtime: 'rust', lang: 'Rust', name: 'UserStore', kind: 'trait' },
+  { runtime: 'dart', lang: 'Dart', name: 'UserStore', kind: 'interface' },
+];
+
+// Only databases with a guide or an example on this site: the user-store
+// guides in docs/database/, and Redis as the session store in the write-through
+// example of docs/advanced/sessions.md.
+const DATABASE_GUIDES: { name: string; href: string }[] = [
+  { name: 'PostgreSQL', href: '/docs/database/postgresql/' },
+  { name: 'MySQL / MariaDB', href: '/docs/database/mysql/' },
+  { name: 'SQLite', href: '/docs/database/sqlite/' },
+  { name: 'MongoDB', href: '/docs/database/mongodb/' },
+  { name: 'PostgREST', href: '/docs/database/postgrest/' },
+  { name: 'PHP-CRUD-API', href: '/docs/database/php-crud-api/' },
+  { name: 'In-memory', href: '/docs/database/in-memory/' },
+  { name: 'Redis (sessions)', href: '/docs/advanced/sessions/#pattern-write-through-redis--database-l2--l3' },
+];
+
+function DatabaseSection(): ReactNode {
+  return (
+    <section className={styles.dbSection} aria-labelledby="db-heading">
+      <div className={styles.container}>
+        <h2 id="db-heading" className={styles.sectionHeading}>
+          Any database
+        </h2>
+        <p className={styles.sectionSubtitle}>
+          The libraries persist nothing on their own. Users go through one contract that your application implements for the
+          database it already has; optional contracts add features such as roles, API keys and telemetry.
+        </p>
+        <div className={styles.dbGrid}>
+          <div className={styles.dbCard}>
+            <h3 className={styles.dbCardHeading}>The user store, in each language</h3>
+            <ul className={styles.dbContracts}>
+              {STORE_CONTRACTS.map((c) => (
+                <li key={c.runtime}>
+                  <RuntimeIcon id={c.runtime} className={styles.dbIcon} />
+                  <span className={styles.dbLang}>{c.lang}</span>
+                  <span className={styles.dbImpl}>
+                    <code>{c.name}</code>
+                    <span className={styles.dbKind}>{c.kind}</span>
+                  </span>
+                </li>
+              ))}
+              <li>
+                <RuntimeIcon id="lambda" className={styles.dbIcon} />
+                <span className={styles.dbLang}>AWS Lambda</span>
+                <span className={styles.dbImpl}>
+                  <Link to="/docs/frameworks/lambda/">ships DynamoDB stores</Link>
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div className={styles.dbCard}>
+            <h3 className={styles.dbCardHeading}>Guides and examples (Node.js)</h3>
+            <ul className={styles.dbGuides}>
+              {DATABASE_GUIDES.map((d) => (
+                <li key={d.href}>
+                  <Link to={d.href}>{d.name}</Link>
+                </li>
+              ))}
+            </ul>
+            <Link to="/docs/database/" className={styles.dbMore}>
+              How the store contract works →
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Home(): ReactNode {
@@ -339,8 +501,15 @@ export default function Home(): ReactNode {
               magic links and two-factor authentication, on your own infrastructure, with no per-user pricing.
             </>
           }
+          footnote={{
+            href: '#authjs',
+            icon: AUTH_JS.id,
+            text: 'Every server also serves auth.js: any frontend, one script tag',
+          }}
         />
         <MixAndMatch />
+        <AuthJsSection />
+        <DatabaseSection />
 
         {/* ── Ecosystem ─────────────────────────────────────────────────── */}
         <section className={styles.ecosystemSection}>
@@ -362,7 +531,6 @@ export default function Home(): ReactNode {
               {CLIENTS.map((r) => (
                 <EcosystemCard key={r.id} runtime={r} />
               ))}
-              <AuthJsCard />
             </div>
             <dl className={styles.maturityLegend}>
               {(Object.keys(MATURITY_INFO) as (keyof typeof MATURITY_INFO)[]).map((m) => (

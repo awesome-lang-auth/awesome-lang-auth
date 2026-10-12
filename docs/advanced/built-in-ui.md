@@ -354,7 +354,7 @@ app.use('/auth/ui', buildUiRouter({ authConfig: config, routerOptions: routerOpt
 Customize both with `AwesomeNodeAuth.init()` in your own JS:
 
 ```html
-<script src="/auth/ui/assets/auth.js"></script>
+<script src="/auth/ui/auth.js"></script>
 <script>
   AwesomeNodeAuth.init({ homeUrl: '/dashboard' });
 </script>

@@ -8,13 +8,13 @@ sidebar_label: Browser Client (auth.js)
 
 # Browser Client — `window.AwesomeNodeAuth`
 
-`awesome-node-auth` ships a zero-config browser authentication client as a static asset served at `/auth/ui/assets/auth.js`.
+`awesome-node-auth` ships a zero-config browser authentication client as a static asset served at `/auth/ui/auth.js`.
 
 Include it once in your HTML to get a complete, framework-agnostic auth layer — no npm install, no build step, no configuration required.
 
 ```html
 <!-- Add to <head> — works with Express, NestJS, Next.js, or any server -->
-<script src="/auth/ui/assets/auth.js"></script>
+<script src="/auth/ui/auth.js"></script>
 ```
 
 > Replace `/auth` with your actual `apiPrefix` if different from the default.
@@ -221,7 +221,7 @@ await AwesomeNodeAuth.deleteAccount();
 ### Vanilla JS / HTML — no build step required
 
 ```html
-<script src="/auth/ui/assets/auth.js"></script>
+<script src="/auth/ui/auth.js"></script>
 <script>
   // Configure once (optional)
   AwesomeNodeAuth.init({ homeUrl: '/dashboard' });
@@ -244,7 +244,7 @@ await AwesomeNodeAuth.deleteAccount();
 ### React (without a build step)
 
 ```html
-<script src="/auth/ui/assets/auth.js"></script>
+<script src="/auth/ui/auth.js"></script>
 <script type="module">
   // AwesomeNodeAuth is available globally — use it from any module
   import { useState } from 'https://esm.sh/react';
@@ -266,7 +266,7 @@ await AwesomeNodeAuth.deleteAccount();
 ### Vue 3 (CDN / no build)
 
 ```html
-<script src="/auth/ui/assets/auth.js"></script>
+<script src="/auth/ui/auth.js"></script>
 <script type="module">
   import { createApp, ref } from 'https://esm.sh/vue';
 
@@ -292,7 +292,7 @@ Include `auth.js` in your layout and use the global in any client component:
 
 ```html
 <!-- app/layout.tsx or _app.tsx — add to <head> -->
-<Script src="/auth/ui/assets/auth.js" strategy="beforeInteractive" />
+<Script src="/auth/ui/auth.js" strategy="beforeInteractive" />
 ```
 
 ```javascript

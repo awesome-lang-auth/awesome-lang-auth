@@ -6,8 +6,10 @@
  * runtime marked `available`, asks its registry whether the package and the
  * version the page shows still resolve: npm, PyPI, pub.dev, crates.io, the Go
  * module proxy, or the GitHub repository for git installs. Exits 1 when one
- * does not. Runtimes marked `available: false` are queried too, but only
- * reported, so the day they start resolving is visible in the log.
+ * does not. A file the servers serve (auth.js) has no registry: like a git
+ * install, it is read from the default branch of the repository that ships
+ * it. Runtimes marked `available: false` are queried too, but only reported,
+ * so the day they start resolving is visible in the log.
  *
  * Runs weekly from .github/workflows/check-runtimes.yml, never on a build:
  * a registry outage must not break a deploy.
@@ -174,7 +176,31 @@ async function checkGit({ url, manifest }) {
   return pass(`git: ${owner}/${repo}, ${manifest.path} declares ${name}`);
 }
 
-const CHECKERS = { npm: checkNpm, pypi: checkPypi, pub: checkPub, go: checkGo, crates: checkCrates, git: checkGit };
+/**
+ * A file every server serves (auth.js): nothing is installed, so the check is
+ * the one a git install gets. The repository must be public and the file must
+ * still be on its default branch, still defining what the page says it does.
+ */
+async function checkServed({ url, path, defines }) {
+  if (!(await gitReachable(url))) return fail(`served: ${url} is not a public repository`);
+  const { owner, repo } = githubRepo(url);
+  const res = await get(`https://raw.githubusercontent.com/${owner}/${repo}/HEAD/${path}`, 'text/plain');
+  if (!res.ok) return fail(`served: ${path} is missing on the default branch of ${owner}/${repo}`);
+  if (!(await res.text()).includes(defines)) {
+    return fail(`served: ${owner}/${repo}/${path} no longer contains ${defines}`);
+  }
+  return pass(`served: ${owner}/${repo}/${path} contains ${defines}`);
+}
+
+const CHECKERS = {
+  npm: checkNpm,
+  pypi: checkPypi,
+  pub: checkPub,
+  go: checkGo,
+  crates: checkCrates,
+  git: checkGit,
+  served: checkServed,
+};
 
 /**
  * The command shown must install what the check queries, or the check proves
@@ -182,8 +208,16 @@ const CHECKERS = { npm: checkNpm, pypi: checkPypi, pub: checkPub, go: checkGo, c
  * match would let `pip install awesome-python-authx` pass for awesome-python-auth.
  * A command that pins a version (`npm i name@1.2.3`) must be expected in that
  * pinned form, as Go already is.
+ *
+ * A served file's command is a script tag, not words to split: it must load
+ * the route, and the route must end in the file's own name.
  */
 function commandDrift({ command, registry }) {
+  if (registry.kind === 'served') {
+    const file = registry.path.split('/').pop();
+    if (!registry.route.endsWith(`/${file}`)) return `the route ${registry.route} does not end in ${file}`;
+    return command.includes(`src="${registry.route}"`) ? null : `the command does not load ${registry.route}`;
+  }
   let expected;
   if (registry.kind === 'go') {
     expected = [`${registry.module}@${registry.version}`];
@@ -215,8 +249,9 @@ async function checkRuntime(runtime) {
   } catch (err) {
     result = fail(String(err?.message ?? err));
   }
-  // The page links the repository too; a git install already checked it.
-  if (runtime.registry.kind !== 'git' || runtime.registry.url !== runtime.repo) {
+  // The page links the repository too; a git install or a served file already checked it.
+  const checkedRepo = runtime.registry.kind === 'git' || runtime.registry.kind === 'served' ? runtime.registry.url : null;
+  if (checkedRepo !== runtime.repo) {
     try {
       if (!(await gitReachable(runtime.repo))) result = fail(`${result.detail}; repository ${runtime.repo} is not public`, result.warnings);
     } catch (err) {
