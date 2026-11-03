@@ -5,7 +5,7 @@
     "type": "individual",
     "role": "maintainer",
     "name": "Nicola Brecciaroli",
-    "email": "n0b0dj@mn.com",
+    "email": "n0b0dj@msn.com",
     "description": "Author and maintainer of awesome-lang-auth. 25 years in IT, currently CTO of two companies. The project is self-funded and was born from a real need: implementing the same authentication patterns over and over across different languages and frameworks, while being forced to adopt heavyweight identity platforms even for projects with a limited user base but no less demanding security requirements.",
     "webpageUrl": {
       "url": "https://awesomelangauth.com"
