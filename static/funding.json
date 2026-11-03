@@ -1,0 +1,92 @@
+{
+  "$schema": "https://fundingjson.org/schema/v1.1.0.json",
+  "version": "v1.1.0",
+  "entity": {
+    "type": "individual",
+    "role": "maintainer",
+    "name": "Nicola Brecciaroli",
+    "email": "n0b0dj@mn.com",
+    "description": "Author and maintainer of awesome-lang-auth. 25 years in IT, currently CTO of two companies. The project is self-funded and was born from a real need: implementing the same authentication patterns over and over across different languages and frameworks, while being forced to adopt heavyweight identity platforms even for projects with a limited user base but no less demanding security requirements.",
+    "webpageUrl": {
+      "url": "https://awesomelangauth.com"
+    }
+  },
+  "projects": [
+    {
+      "guid": "awesome-lang-auth",
+      "name": "awesome-lang-auth",
+      "description": "An open source suite of embeddable authentication libraries that defines a single shared protocol implemented natively in multiple languages. Developers get production-grade authentication (password, OAuth 2.0, magic links, TOTP 2FA, RBAC, sessions, API keys) inside their own application, with any database, and the same API, security model and client libraries (Angular, React, Flutter, vanilla JS) whatever their stack. The Node.js reference implementation and the Python port are published on npm and PyPI and used in production; Go, Rust and Dart ports are in progress. The goal is a universal, plug-and-play auth standard: a versioned protocol specification, a language-independent conformance test suite, and aligned implementations across ecosystems.",
+      "webpageUrl": {
+        "url": "https://awesomelangauth.com"
+      },
+      "repositoryUrl": {
+        "url": "https://github.com/awesome-lang-auth/awesome-lang-auth",
+        "wellKnown": "https://github.com/awesome-lang-auth/awesome-lang-auth/blob/main/.well-known/funding-manifest-urls"
+      },
+      "licenses": [
+        "spdx:MIT"
+      ],
+      "tags": [
+        "authentication",
+        "security",
+        "identity",
+        "oauth",
+        "jwt",
+        "nodejs",
+        "python",
+        "go",
+        "interoperability",
+        "self-hosted"
+      ]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "bank",
+        "type": "bank",
+        "description": "Bank transfer. Details provided on request."
+      },
+      {
+        "guid": "github-sponsors",
+        "type": "payment-provider",
+        "address": "https://github.com/sponsors/nik2208",
+        "description": "GitHub Sponsors"
+      }
+    ],
+    "plans": [
+      {
+        "guid": "development-grant",
+        "status": "active",
+        "name": "Development grant",
+        "description": "Funds a versioned protocol specification, a language-independent conformance test suite, full parity of the Python port, a 1.0 release of the Go port, a common security checklist and review, and multi-language CI and release coordination.",
+        "amount": 50000,
+        "currency": "USD",
+        "frequency": "yearly",
+        "channels": [
+          "bank"
+        ]
+      },
+      {
+        "guid": "sponsorship",
+        "status": "active",
+        "name": "Individual sponsorship",
+        "description": "Any amount, to support ongoing maintenance.",
+        "amount": 0,
+        "currency": "USD",
+        "frequency": "monthly",
+        "channels": [
+          "github-sponsors"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "year": 2026,
+        "currency": "EUR",
+        "income": 0,
+        "description": "No funding received so far; development entirely self-funded."
+      }
+    ]
+  }
+}
